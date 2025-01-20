@@ -1,0 +1,9 @@
+C:\Users\paulo\code\visual_studio\3d_visualizer\glad.c;C:\Users\paulo\code\visual_studio\3d_visualizer\3d_renderer\x64\Debug\glad.obj
+C:\Users\paulo\code\visual_studio\3d_visualizer\imgui\imgui.cpp;C:\Users\paulo\code\visual_studio\3d_visualizer\3d_renderer\x64\Debug\imgui.obj
+C:\Users\paulo\code\visual_studio\3d_visualizer\imgui\imgui_demo.cpp;C:\Users\paulo\code\visual_studio\3d_visualizer\3d_renderer\x64\Debug\imgui_demo.obj
+C:\Users\paulo\code\visual_studio\3d_visualizer\imgui\imgui_draw.cpp;C:\Users\paulo\code\visual_studio\3d_visualizer\3d_renderer\x64\Debug\imgui_draw.obj
+C:\Users\paulo\code\visual_studio\3d_visualizer\imgui\imgui_impl_glfw.cpp;C:\Users\paulo\code\visual_studio\3d_visualizer\3d_renderer\x64\Debug\imgui_impl_glfw.obj
+C:\Users\paulo\code\visual_studio\3d_visualizer\imgui\imgui_impl_opengl3.cpp;C:\Users\paulo\code\visual_studio\3d_visualizer\3d_renderer\x64\Debug\imgui_impl_opengl3.obj
+C:\Users\paulo\code\visual_studio\3d_visualizer\imgui\imgui_tables.cpp;C:\Users\paulo\code\visual_studio\3d_visualizer\3d_renderer\x64\Debug\imgui_tables.obj
+C:\Users\paulo\code\visual_studio\3d_visualizer\imgui\imgui_widgets.cpp;C:\Users\paulo\code\visual_studio\3d_visualizer\3d_renderer\x64\Debug\imgui_widgets.obj
+C:\Users\paulo\code\visual_studio\3d_visualizer\Main.cpp;C:\Users\paulo\code\visual_studio\3d_visualizer\3d_renderer\x64\Debug\Main.obj
