@@ -1,3 +1,4 @@
 .vs/*
 3d_renderer/*
 x64/*
+.vscode/*
