@@ -12,11 +12,11 @@ public:
 	VBO(GLfloat* vertices, GLsizeiptr size);
 
 	// Binds the VBO
-	void Bind();
+	void bind();
 	// Unbinds the VBO
-	void Unbind();
+	void unbind();
 	// Deletes the VBO
-	void Delete();
+	void destroy();
 };
 
 #endif
