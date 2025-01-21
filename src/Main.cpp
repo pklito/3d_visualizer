@@ -14,6 +14,7 @@
 #include"VBO.h"
 #include"EBO.h"
 #include"Camera.h"
+#include"GUI.h"
 
 #include"imgui.h"
 #include"imgui_impl_glfw.h"
@@ -141,52 +142,11 @@ int main()
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Tell OpenGL a new frame is about to begin
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		createGUI();
 
 		// Tell OpenGL which Shader Program we want to use
 		shaderProgram.Activate();
 
-		// ImGUI window creation
-		ImGui::Begin("My name is window, ImGUI window");
-		// Text that appears in the window
-		ImGui::Text("Hello there adventurer!");
-		// Checkbox that appears in the window
-		// ImGui::Checkbox("Draw Triangle", nullptr);
-		// // Slider that appears in the window
-		// ImGui::SliderFloat("Size", nullptr, 0.5f, 2.0f);
-		// // Fancy color editor that appears in the window
-		// ImGui::ColorEdit4("Color", nullptr);
-		// Ends the window
-		
-
-		if (ImGui::BeginMainMenuBar()) {
-
-				bool openpopuptemp = false;
-				if (ImGui::BeginMenu("Help")) {
-					if (ImGui::MenuItem("About"))
-						openpopuptemp = true;
-					ImGui::EndMenu();
-				}
-
-				if (openpopuptemp == true) {
-					ImGui::OpenPopup("About");
-					openpopuptemp = false;
-				}
-
-				if (ImGui::BeginPopupModal("About", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-					ImGui::Text("I'm a popup!");
-					if (ImGui::Button("Close", ImVec2(60, 0)))
-						ImGui::CloseCurrentPopup();
-					ImGui::EndPopup();
-				}
-
-				ImGui::EndMainMenuBar();
-		}
-
-		ImGui::End();
 		// Handles camera inputs
 		camera.Inputs(window);
 		// Updates and exports the camera matrix to the Vertex Shader
@@ -200,8 +160,7 @@ int main()
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 		// Swap the back buffer with the front buffer
 		
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		renderGUI();
 		
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
