@@ -2,3 +2,4 @@
 3d_renderer/*
 x64/*
 .vscode/*
+imgui.ini

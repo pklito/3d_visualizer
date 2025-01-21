@@ -160,8 +160,33 @@ int main()
 		// // Fancy color editor that appears in the window
 		// ImGui::ColorEdit4("Color", nullptr);
 		// Ends the window
-		ImGui::End();
+		
 
+		if (ImGui::BeginMainMenuBar()) {
+
+				bool openpopuptemp = false;
+				if (ImGui::BeginMenu("Help")) {
+					if (ImGui::MenuItem("About"))
+						openpopuptemp = true;
+					ImGui::EndMenu();
+				}
+
+				if (openpopuptemp == true) {
+					ImGui::OpenPopup("About");
+					openpopuptemp = false;
+				}
+
+				if (ImGui::BeginPopupModal("About", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+					ImGui::Text("I'm a popup!");
+					if (ImGui::Button("Close", ImVec2(60, 0)))
+						ImGui::CloseCurrentPopup();
+					ImGui::EndPopup();
+				}
+
+				ImGui::EndMainMenuBar();
+		}
+
+		ImGui::End();
 		// Handles camera inputs
 		camera.Inputs(window);
 		// Updates and exports the camera matrix to the Vertex Shader
