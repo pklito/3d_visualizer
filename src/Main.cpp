@@ -93,9 +93,9 @@ int main()
 	EBO EBO1(indices, sizeof(indices));
 
 	// Links VBO attributes such as coordinates and colors to VAO
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	VAO1.linkAttributes(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	VAO1.linkAttributes(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO1.linkAttributes(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	// Unbind all to prevent accidentally modifying them
 	VAO1.unbind();
 	VBO1.unbind();
@@ -123,12 +123,12 @@ int main()
 		createGUI();
 
 		// Tell OpenGL which Shader Program we want to use
-		shaderProgram.Activate();
+		shaderProgram.activate();
 
 		// Handles camera inputs
-		camera.Inputs(window);
+		camera.processInputs(window);
 		// Updates and exports the camera matrix to the Vertex Shader
-		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
+		camera.doMatrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
 
 		// Binds texture so that is appears in rendering
 		brickTex.bind();
@@ -149,11 +149,11 @@ int main()
 	deleteGUI();
 
 	// Delete all the objects we've created
-	VAO1.Delete();
-	VBO1.Delete();
-	EBO1.Delete();
+	VAO1.destroy();
+	VBO1.destroy();
+	EBO1.destroy();
 	brickTex.destroy();
-	shaderProgram.Delete();
+	shaderProgram.destroy();
 	// Delete window before ending the program
 	glfwDestroyWindow(window);
 	// Terminate GLFW before ending the program

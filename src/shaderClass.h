@@ -19,9 +19,9 @@ public:
 	Shader(const char* vertexFile, const char* fragmentFile);
 
 	// Activates the Shader Program
-	void Activate();
+	void activate();
 	// Deletes the Shader Program
-	void Delete();
+	void destroy();
 private:
 	// Checks if the different Shaders have compiled properly
 	void compileErrors(unsigned int shader, const char* type);
