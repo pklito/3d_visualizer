@@ -15,7 +15,9 @@
 #include"EBO.h"
 #include"Camera.h"
 
-
+#include"imgui.h"
+#include"imgui_impl_glfw.h"
+#include"imgui_impl_opengl3.h"
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -117,7 +119,13 @@ int main()
 	/*Texture brickTex("brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	brickTex.texUnit(shaderProgram, "tex0", 0);*/
 
-
+	// Initialize ImGUI
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 330");
 
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
@@ -132,9 +140,30 @@ int main()
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Tell OpenGL a new frame is about to begin
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
 		// Tell OpenGL which Shader Program we want to use
 		shaderProgram.Activate();
 
+		// ImGUI window creation
+		ImGui::Begin("My name is window, ImGUI window");
+		// Text that appears in the window
+		ImGui::Text("Hello there adventurer!");
+		// Checkbox that appears in the window
+		// ImGui::Checkbox("Draw Triangle", nullptr);
+		// // Slider that appears in the window
+		// ImGui::SliderFloat("Size", nullptr, 0.5f, 2.0f);
+		// // Fancy color editor that appears in the window
+		// ImGui::ColorEdit4("Color", nullptr);
+		// Ends the window
+		ImGui::End();
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		// Handles camera inputs
 		camera.Inputs(window);
 		// Updates and exports the camera matrix to the Vertex Shader
@@ -152,7 +181,10 @@ int main()
 		glfwPollEvents();
 	}
 
-
+	// Deletes all ImGUI instances
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	// Delete all the objects we've created
 	VAO1.Delete();
