@@ -8,11 +8,8 @@
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/type_ptr.hpp>
 
-#include"Texture.h"
 #include"shaderClass.h"
-#include"VAO.h"
-#include"VBO.h"
-#include"EBO.h"
+#include"Mesh.h"
 #include"Camera.h"
 #include"GUI.h"
 
@@ -83,23 +80,8 @@ int main()
 	Shader shaderProgram("resources/default.vert", "resources/default.frag");
 
 
-	// Generates Vertex Array Object and binds it
-	VAO VAO1;
-	VAO1.bind();
-
-	// Generates Vertex Buffer Object and links it to vertices
-	VBO VBO1(vertices, sizeof(vertices));
-	// Generates Element Buffer Object and links it to indices
-	EBO EBO1(indices, sizeof(indices));
-
-	// Links VBO attributes such as coordinates and colors to VAO
-	VAO1.linkAttributes(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-	VAO1.linkAttributes(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	VAO1.linkAttributes(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	// Unbind all to prevent accidentally modifying them
-	VAO1.unbind();
-	VBO1.unbind();
-	EBO1.unbind();
+	Model* mesh = new Primitive(PRIM_TETRAHEDRON);
+	mesh->setTexture("resources\\brick.png");
 
 	Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	brickTex.texUnit(shaderProgram, "tex0", 0);
@@ -130,13 +112,7 @@ int main()
 		// Updates and exports the camera matrix to the Vertex Shader
 		camera.doMatrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
 
-		// Binds texture so that is appears in rendering
-		brickTex.bind();
-		// Bind the VAO so OpenGL knows to use it
-		VAO1.bind();
-		// Draw primitives, number of indices, datatype of indices, index of indices
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
-		// Swap the back buffer with the front buffer
+		mesh->render();
 		
 		renderGUI();
 		
@@ -149,11 +125,9 @@ int main()
 	deleteGUI();
 
 	// Delete all the objects we've created
-	VAO1.destroy();
-	VBO1.destroy();
-	EBO1.destroy();
-	brickTex.destroy();
-	shaderProgram.destroy();
+	mesh->destroy();
+	delete mesh;
+
 	// Delete window before ending the program
 	glfwDestroyWindow(window);
 	// Terminate GLFW before ending the program
