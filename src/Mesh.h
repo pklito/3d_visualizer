@@ -1,6 +1,7 @@
 #include"VAO.h"
 #include"Texture.h"
 #include<string>
+#include"ShaderClass.h"
 
 class VertexData{
     public:
@@ -15,18 +16,20 @@ protected:
     VAO vao;
     VBO vbo;
     EBO ebo;
-    Texture* texture;
-    void generateMesh(VertexData& location, VertexData& normals, VertexData& textures);
+    Texture texture;
+    // Shader shader;
+    GLsizeiptr indices_count;
+    void generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_count);
 
 public:
     Model();
-    Model(std::string filedir, std::string texturedir);
-    void setModel(std::string filedir);
+    Model(const std::string& filedir, const std::string& texturedir);
+    void setModel(std::string& filedir);
     void setModel(int* vertexArray, int length);
-    void loadFile(std::string file);
+    void loadFile(const std::string& file);
 
-    void setTexture(std::string texturedir);
-    void setShader(std::string vertexdir, std::string fragmentdir);
+    void setTexture(const std::string& texturedir);
+    void setShader(const std::string& vertexdir, const std::string& fragmentdir);
     void render();
     void destroy();
 };
@@ -38,6 +41,9 @@ typedef enum
 } PRIM_MODEL;
 
 class Primitive : public Model {
+protected:
+    void Cube();
+    void Tetrahedron();
 public:
     Primitive(PRIM_MODEL model);
 };
