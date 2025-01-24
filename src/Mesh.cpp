@@ -33,7 +33,7 @@ void Model::setModel(std::string& modeldir){
     // Generates Vertex Array Object and binds it
 }
 void Model::setTexture(const std::string& texture_dir){
-    
+    texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
 void Model::render(){
