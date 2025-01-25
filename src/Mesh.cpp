@@ -66,6 +66,7 @@ struct FaceIdcs
 	int v[4];
 	int vn[4];
 	int vt[4];
+    bool is_quad;
 
 	FaceIdcs()
 	{
@@ -79,9 +80,17 @@ struct FaceIdcs
 			v[i] = vn[i] = vt[i] = 0;
 
 		char c;
-		for (int i = 0; i < 3; i++)
+        is_quad = false;
+		for (int i = 0; i < 4; i++)
 		{
-			aStream >> std::ws >> v[i] >> std::ws;
+            aStream >> std::ws;
+            if(aStream.peek() == EOF){
+                break;
+            }
+            if(i == 3){
+                is_quad = true;
+            }
+			aStream >> v[i] >> std::ws;
 			if (aStream.peek() != '/')
 				continue;
 			aStream >> c >> std::ws;
@@ -174,33 +183,51 @@ void Model::loadFile(const std::string& file){
 		}
 	}
     // Each face has 3 vertices, and 8 data floats
-    GLfloat *data_array = new GLfloat[faces.size() * 3 * 8];
+    bool is_quads = faces.back().is_quad;
+    int face_size = is_quads ? 4 : 3;
+    GLfloat *data_array = new GLfloat[faces.size() * face_size * 8];
     int face_index = 0;
     for (std::vector<FaceIdcs>::iterator it = faces.begin(); it != faces.end(); ++it)
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < face_size; i++)
 		{
             int temp = 0;
-            data_array[3*8*face_index + 8*i + 0] = vertices[it->v[i] - 1][0];
-            data_array[3*8*face_index + 8*i + 1] = vertices[it->v[i] - 1][1];
-            data_array[3*8*face_index + 8*i + 2] = vertices[it->v[i] - 1][2];
+            data_array[face_size*8*face_index + 8*i + 0] = vertices[it->v[i] - 1][0];
+            data_array[face_size*8*face_index + 8*i + 1] = vertices[it->v[i] - 1][1];
+            data_array[face_size*8*face_index + 8*i + 2] = vertices[it->v[i] - 1][2];
             temp = 0;
-            data_array[3*8*face_index + 8*i + 3] = vertex_normals[it->v[i] - 1][0];
-            data_array[3*8*face_index + 8*i + 4] = vertex_normals[it->v[i] - 1][1];
-            data_array[3*8*face_index + 8*i + 5] = vertex_normals[it->v[i] - 1][2];
+            data_array[face_size*8*face_index + 8*i + 3] = vertex_normals[it->v[i] - 1][0];
+            data_array[face_size*8*face_index + 8*i + 4] = vertex_normals[it->v[i] - 1][1];
+            data_array[face_size*8*face_index + 8*i + 5] = vertex_normals[it->v[i] - 1][2];
 
-            data_array[3*8*face_index + 8*i + 6] = vertex_textures[it->v[i] - 1][0];
-            data_array[3*8*face_index + 8*i + 7] = vertex_textures[it->v[i] - 1][1];
+            data_array[face_size*8*face_index + 8*i + 6] = vertex_textures[it->v[i] - 1][0];
+            data_array[face_size*8*face_index + 8*i + 7] = vertex_textures[it->v[i] - 1][1];
 		}
         face_index += 1;
 	}
 
     // create the slices, for now, its just the 0, 1, 2, 3, 4, 5 matrix
-    GLuint *indices_array = new GLuint[faces.size() * 3];
-    for(int i = 0; i < faces.size() * 3; i++){
-        indices_array[i] = i;
+    int indices_per_face = is_quads ? 6 : 3;
+    GLuint *indices_array = new GLuint[faces.size() * indices_per_face];
+    if(is_quads){
+        for(int i = 0; i < faces.size(); i++){
+            //Tri 1
+            indices_array[6*i + 0] = 4*i + 0;
+            indices_array[6*i + 1] = 4*i + 1;
+            indices_array[6*i + 2] = 4*i + 2;
+            //Tri 2
+            indices_array[6*i + 3] = 4*i + 2;
+            indices_array[6*i + 4] = 4*i + 3;
+            indices_array[6*i + 5] = 4*i + 0;
+
+        }
     }
-    generateMesh(data_array, faces.size()*3*8, indices_array, faces.size()*3);
+    else{
+        for(int i = 0; i < faces.size() * 3; i++){
+            indices_array[i] = i;
+        }
+    }
+    generateMesh(data_array, faces.size()*face_size*8, indices_array, faces.size() * indices_per_face);
     delete[] indices_array;
     delete[] data_array;
 }
