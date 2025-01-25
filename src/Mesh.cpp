@@ -28,8 +28,8 @@ void Model::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLui
     vbo.unbind();
 	ebo.unbind();
 }
-void Model::setModel(std::string& modeldir){
-
+void Model::setModel(const std::string& modeldir){
+    this->loadFile(modeldir);
     // Generates Vertex Array Object and binds it
 }
 void Model::setTexture(const std::string& texture_dir){
@@ -97,6 +97,14 @@ struct FaceIdcs
 			aStream >> c >> vn[i];
 		}
 	}
+friend std::ostream& operator<<(std::ostream& os, const FaceIdcs& face) {
+    for (int i = 0; i < 4; i++) {
+        os << "v" << i + 1 << ": " << face.v[i] << ", ";
+        os << "vn" << i + 1 << ": " << face.vn[i] << ", ";
+        os << "vt" << i + 1 << ": " << face.vt[i] << "; ";
+    }
+    return os;
+}
 };
 
 vec3 vec3fFromStream(std::istream &aStream)
@@ -114,18 +122,23 @@ vec2 vec2fFromStream(std::istream &aStream)
 }
 
 void Model::loadFile(const std::string& file){
-    std::ifstream ifile(file.c_str());
+    std::ifstream ifile;
+
+	ifile.open(file.c_str());
+    if(!ifile.is_open()){
+        std::cerr << "Failed to open file: " + file << std::endl;
+        exit(-1);
+    }
 	std::vector<FaceIdcs> faces;
 	std::vector<vec3> vertices;
 	std::vector<vec3> vertex_normals;
-	std::vector<vec3> vertex_textures;
+	std::vector<vec2> vertex_textures;
 	// while not end of file
 	while (!ifile.eof())
 	{
 		// get line
 		std::string curLine;
 		getline(ifile, curLine);
-
 		// read type of the line
 		std::istringstream issLine(curLine);
 		std::string lineType;
@@ -133,18 +146,23 @@ void Model::loadFile(const std::string& file){
 		issLine >> std::ws >> lineType;
 
 		// based on the type parse data
-		if (lineType == "v") // BUG FIXED
+		if (lineType == "v")
+        {
 			vertices.push_back(vec3fFromStream(issLine));
-		else if (lineType == "f") // BUG FIXED
+        }
+		else if (lineType == "f"){
 			faces.push_back(issLine);
+        }
 		else if (lineType == "vn")
 		{
 			// normal to vertices
 			vertex_normals.push_back(vec3fFromStream(issLine));
+
 		}
 		else if (lineType == "vt")
 		{
-			vertex_textures.push_back(vec3fFromStream(issLine));
+			vertex_textures.push_back(vec2fFromStream(issLine));
+
 		}
 		else if (lineType == "#" || lineType == "")
 		{
@@ -155,8 +173,36 @@ void Model::loadFile(const std::string& file){
 			std::cerr << "Found unknown line Type \"" << lineType << "\"";
 		}
 	}
+    // Each face has 3 vertices, and 8 data floats
+    GLfloat *data_array = new GLfloat[faces.size() * 3 * 8];
+    int face_index = 0;
+    for (std::vector<FaceIdcs>::iterator it = faces.begin(); it != faces.end(); ++it)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+            int temp = 0;
+            data_array[3*8*face_index + 8*i + 0] = vertices[it->v[i] - 1][0];
+            data_array[3*8*face_index + 8*i + 1] = vertices[it->v[i] - 1][1];
+            data_array[3*8*face_index + 8*i + 2] = vertices[it->v[i] - 1][2];
+            temp = 0;
+            data_array[3*8*face_index + 8*i + 3] = vertex_normals[it->v[i] - 1][0];
+            data_array[3*8*face_index + 8*i + 4] = vertex_normals[it->v[i] - 1][1];
+            data_array[3*8*face_index + 8*i + 5] = vertex_normals[it->v[i] - 1][2];
 
+            data_array[3*8*face_index + 8*i + 6] = vertex_textures[it->v[i] - 1][0];
+            data_array[3*8*face_index + 8*i + 7] = vertex_textures[it->v[i] - 1][1];
+		}
+        face_index += 1;
+	}
 
+    // create the slices, for now, its just the 0, 1, 2, 3, 4, 5 matrix
+    GLuint *indices_array = new GLuint[faces.size() * 3];
+    for(int i = 0; i < faces.size() * 3; i++){
+        indices_array[i] = i;
+    }
+    generateMesh(data_array, faces.size()*3*8, indices_array, faces.size()*3);
+    delete[] indices_array;
+    delete[] data_array;
 }
 
 void Primitive::Cube(){

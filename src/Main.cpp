@@ -56,7 +56,8 @@ int main()
 	Shader shaderProgram("resources/default.vert", "resources/default.frag");
 
 
-	Model* mesh = new Primitive(PRIM_TETRAHEDRON);
+	Model* mesh = new Model();
+	mesh->setModel("meshes\\fox.obj");
 	mesh->setTexture("resources\\brick.png");
 
 	Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);

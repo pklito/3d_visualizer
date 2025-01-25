@@ -24,7 +24,7 @@ protected:
 public:
     Model();
     Model(const std::string& filedir, const std::string& texturedir);
-    void setModel(std::string& filedir);
+    void setModel(const std::string& modeldir);
     void setModel(int* vertexArray, int length);
     void loadFile(const std::string& file);
 
