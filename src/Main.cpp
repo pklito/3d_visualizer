@@ -57,7 +57,7 @@ int main()
 
 
 	Model* mesh = new Model();
-	mesh->setModel("meshes\\default_cube_quad.obj");
+	mesh->setModel("meshes\\fox.obj");
 	mesh->setTexture("resources\\brick.png");
 
 	Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);

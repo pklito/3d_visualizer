@@ -136,7 +136,7 @@ void Model::loadFile(const std::string& file){
 	ifile.open(file.c_str());
     if(!ifile.is_open()){
         std::cerr << "Failed to open file: " + file << std::endl;
-        exit(-1);
+        return;
     }
 	std::vector<FaceIdcs> faces;
 	std::vector<vec3> vertices;
