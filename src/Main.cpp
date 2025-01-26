@@ -44,20 +44,23 @@ int main()
 	}
 	// Introduce the window into the current context
 	glfwMakeContextCurrent(window);
-
+	// Enable backface culling
 	//Load GLAD so it configures OpenGL
 	gladLoadGL();
 	// Specify the viewport of OpenGL in the Window
 	// In this case the viewport goes from x = 0, y = 0, to x = 800, y = 800
 	glViewport(0, 0, width, height);
 
-
+	// Enable backface culling
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("resources/default.vert", "resources/default.frag");
 
 
 	Model* mesh = new Model();
-	mesh->setModel("meshes\\fox.obj");
+	mesh->setModel("meshes\\bunny.obj");
 	mesh->setTexture("resources\\brick.png");
 
 	Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
