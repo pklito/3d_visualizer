@@ -79,7 +79,12 @@ int main()
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		createGUI();
+		GUIParameters parameters;
+		createGUI(parameters);
+
+		if(parameters.path_name.length() > 0){
+			mesh->setModel(parameters.path_name);
+		}
 
 		// Tell OpenGL which Shader Program we want to use
 		shaderProgram.activate();

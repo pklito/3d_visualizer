@@ -1,3 +1,4 @@
+#pragma once
 #include"VAO.h"
 #include"Texture.h"
 #include<string>

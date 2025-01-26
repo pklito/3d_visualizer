@@ -1,10 +1,17 @@
 
+#include "GUI.h"
+
 #include"imgui.h"
 #include"imgui_impl_glfw.h"
 #include"imgui_impl_opengl3.h"
-#include "GUI.h"
+#include"stdafx.h"
 
 void createGUI(){
+	GUIParameters params;
+	createGUI(params);
+}
+
+void createGUI(GUIParameters& params){
     
 		// Tell OpenGL a new frame is about to begin
 		ImGui_ImplOpenGL3_NewFrame();
@@ -25,24 +32,31 @@ void createGUI(){
 		
 
 		if (ImGui::BeginMainMenuBar()) {
-
+				// help
 				bool openpopuptemp = false;
 				if (ImGui::BeginMenu("Help")) {
 					if (ImGui::MenuItem("About"))
 						openpopuptemp = true;
 					ImGui::EndMenu();
 				}
-
 				if (openpopuptemp == true) {
 					ImGui::OpenPopup("About");
 					openpopuptemp = false;
 				}
 
-				if (ImGui::BeginPopupModal("About", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-					ImGui::Text("I'm a popup!");
-					if (ImGui::Button("Close", ImVec2(60, 0)))
-						ImGui::CloseCurrentPopup();
-					ImGui::EndPopup();
+				//edit
+				if (ImGui::BeginMenu("Edit")) {
+					if (ImGui::MenuItem("Set mesh")){
+						CFileDialog dlg(TRUE, _T(".obj"), NULL, NULL, _T("*.obj|*.*"));
+						if (dlg.DoModal() == IDOK)
+						{
+							CT2CA pszConvertedAnsiString (dlg.GetPathName());
+							// construct a std::string using the LPCSTR input
+							std::string strStd (pszConvertedAnsiString);
+							params.path_name = strStd;
+						}
+					}
+					ImGui::EndMenu();
 				}
 
 				ImGui::EndMainMenuBar();
@@ -57,7 +71,7 @@ void renderGUI(){
 }
 
 void deleteGUI(){
-
+	
     
     ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
