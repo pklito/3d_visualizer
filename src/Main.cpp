@@ -13,6 +13,7 @@
 #include"Camera.h"
 #include"GUI.h"
 #include"Renderer.h"
+#include"Scene.h"
 
 #include"imgui.h"
 #include"imgui_impl_glfw.h"
@@ -37,46 +38,31 @@ int main()
 	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
 	Renderer renderer = Renderer(width, height);
 	// Generates Shader object using shaders default.vert and default.frag
-	Shader shaderProgram("resources/default.vert", "resources/default.frag");
 
+	Scene scene = Scene();
 
-	Model* mesh = new Model();
-	mesh->setModel("resources\\bunny.obj");
-	mesh->setTexture("resources\\UVMap.png");
-
-	Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	brickTex.texUnit(shaderProgram, "tex0", 0);
+	//Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	//brickTex.texUnit(shaderProgram, "tex0", 0);
 
 	initGUI(renderer.getWindow());
 
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
 
-	// Creates camera object
-	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
-
 	// Main while loop
 	while (!glfwWindowShouldClose(renderer.getWindow()))
 	{
-		// Specify the color of the background
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-		// Clean the back buffer and depth buffer
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		renderer.clearFrame();
 
 		GUIParameters parameters;
 		createGUI(parameters);
-
 		if(parameters.path_name.length() > 0){
-			mesh->setModel(parameters.path_name);
+			scene.getSelectedModel()->setModel(parameters.path_name);
 		}
 
-		// Tell OpenGL which Shader Program we want to use
-		shaderProgram.activate();
 
 		// Handles camera inputs
-		camera.processInputs(renderer.getWindow());
-		// Updates and exports the camera matrix to the Vertex Shader
-		camera.doMatrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
+		
 
 		mesh->render();
 		

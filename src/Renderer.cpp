@@ -1,7 +1,7 @@
 #include"Renderer.h"
 #include <stdexcept>
 
-Renderer::Renderer(int width, int height){
+Renderer::Renderer(int width, int height) : main_shader("resources/default.vert", "resources/default.frag"), background_color(0.07f, 0.13f, 0.17f, 1.0f){
     this->window = glfwCreateWindow(width, height, "Visualizer", NULL, NULL);
 
     if (window == NULL)
@@ -24,4 +24,13 @@ Renderer::Renderer(int width, int height){
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
+}
+
+
+void Renderer::clearFrame()
+{
+	// Specify the color of the background
+	glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
+	// Clean the back buffer and depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

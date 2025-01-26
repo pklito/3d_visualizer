@@ -2,14 +2,14 @@
 
 
 
-Camera::Camera(int width, int height, glm::vec3 position)
+Camera::Camera()
 {
-	Camera::width = width;
-	Camera::height = height;
-	Position = position;
 }
 
-void Camera::doMatrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform)
+/**
+ * fovWidth is degrees, aspect ratio is width/height
+ */
+void Camera::doPerspective(const float FOVWidth, const float aspect, const float nearPlane, const float farPlane)
 {
 	// Initializes matrices since otherwise they will be the null matrix
 	glm::mat4 view = glm::mat4(1.0f);
@@ -18,15 +18,10 @@ void Camera::doMatrix(float FOVdeg, float nearPlane, float farPlane, Shader& sha
 	// Makes camera look in the right direction from the right position
 	view = glm::lookAt(Position, Position + Orientation, Up);
 	// Adds perspective to the scene
-	projection = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane);
-
-	// Exports the camera matrix to the Vertex Shader
-	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(projection * view));
+	projection = glm::perspective(glm::radians(FOVWidth), aspect, nearPlane, farPlane);
 }
 
-
-
-void Camera::processInputs(GLFWwindow* window)
+void Camera::processInputs(GLFWwindow* window, int width, int height)
 {
 	// Handles key inputs
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -61,7 +56,6 @@ void Camera::processInputs(GLFWwindow* window)
 	{
 		speed = 0.1f;
 	}
-
 
 	// Handles mouse inputs
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)

@@ -15,27 +15,23 @@ class Camera
 {
 public:
 	// Stores the main vectors of the camera
-	glm::vec3 Position;
+	glm::vec3 Position = glm::vec3(0,0,2);
 	glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	// Prevents the camera from jumping around when first clicking left click
 	bool firstClick = true;
 
-	// Stores the width and height of the window
-	int width;
-	int height;
-
 	// Adjust the speed of the camera and it's sensitivity when looking around
 	float speed = 0.1f;
 	float sensitivity = 100.0f;
 
 	// Camera constructor to set up initial values
-	Camera(int width, int height, glm::vec3 position);
+	Camera();
 
 	// Updates and exports the camera matrix to the Vertex Shader
-	void doMatrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform);
+	void doPerspective(const float fovx, const float aspect, const float zNear, const float zFar);
 	// Handles camera inputs
-	void processInputs(GLFWwindow* window);
+	void processInputs(GLFWwindow* window, int width, int height);
 };
 #endif
