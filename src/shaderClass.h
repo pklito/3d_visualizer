@@ -7,6 +7,8 @@
 #include<sstream>
 #include<iostream>
 #include<cerrno>
+#include<glm/glm.hpp>
+#include"util.h"
 
 std::string get_file_contents(const char* filename);
 
@@ -22,6 +24,8 @@ public:
 	void activate();
 	// Deletes the Shader Program
 	void destroy();
+
+	void setMat4(const std::string& name, const glm::mat4& mat);
 private:
 	// Checks if the different Shaders have compiled properly
 	void compileErrors(unsigned int shader, const char* type);

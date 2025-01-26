@@ -10,7 +10,6 @@
 #include<glm/gtx/vector_angle.hpp>
 
 #include"shaderClass.h"
-#include"Renderer.h"
 
 class Camera
 {
@@ -41,7 +40,6 @@ public:
 	// Updates and exports the camera matrix to the Vertex Shader
 	void doPerspective(const float fovx, const float aspect, const float zNear, const float zFar);
 	// Handles camera inputs
-	void processInputs(Renderer& renderer);
 	void processInputs(GLFWwindow* window, int window_width, int window_height);
 
 	glm::vec3 getPosition() {return Position;};

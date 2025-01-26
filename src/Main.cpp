@@ -18,6 +18,7 @@
 #include"imgui.h"
 #include"imgui_impl_glfw.h"
 #include"imgui_impl_opengl3.h"
+#include <stdexcept>
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -35,8 +36,22 @@ int main()
 	// So that means we only have the modern functions
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+	GLFWwindow* window = glfwCreateWindow(width, height, "Visualizer", NULL, NULL);
+    if (window == NULL)
+	{
+		glfwTerminate();
+        throw std::runtime_error("Failed to create GLFW window");
+	}
+    
+	// Error check if the window fails to create
+	// Introduce the window into the current context
+	glfwMakeContextCurrent(window);
+	// Enable backface culling
+	//Load GLAD so it configures OpenGL
+	gladLoadGL();
+
 	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
-	Renderer renderer = Renderer(width, height);
+	Renderer renderer = Renderer(window, width, height);
 	// Generates Shader object using shaders default.vert and default.frag
 
 	Scene scene = Scene();
@@ -60,11 +75,9 @@ int main()
 			scene.getSelectedModel()->setModel(parameters.path_name);
 		}
 
-
+		scene.handleInputs(renderer);
 		// Handles camera inputs
-		
-
-		mesh->render();
+		scene.render(renderer);
 		
 		renderGUI();
 		
@@ -77,8 +90,7 @@ int main()
 	deleteGUI();
 
 	// Delete all the objects we've created
-	mesh->destroy();
-	delete mesh;
+	scene.destroy();
 
 	// Delete window before ending the program
 	glfwDestroyWindow(renderer.getWindow());

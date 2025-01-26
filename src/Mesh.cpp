@@ -28,6 +28,14 @@ void Model::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLui
 	ebo.unbind();
 }
 void Model::setModel(const std::string& modeldir){
+	int i = 0;
+	if(modeldir.length() < 1){
+		std::cerr << "Invalid model file: " + modeldir << std::endl;
+		return;
+	}
+	else {
+		i = 2;
+	}
     this->loadFile(modeldir);
     // Generates Vertex Array Object and binds it
 }

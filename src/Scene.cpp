@@ -11,11 +11,13 @@ Scene::Scene() : camera(){
 
         //Define the camera intrinsics I want.
         camera.doPerspective(45.0f, 800.0f/800.0f, 0.1f, 100.0f);
-        camera.lookAt(glm::vec3(0,0,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
+        camera.lookAt(glm::vec3(2,0,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
     }
 
+static volatile int FORCE_COMPILE = 0;
 Model* Scene::getSelectedModel(){
-    if (selected_model == -1 || models.size() > selected_model){
+    FORCE_COMPILE += 1;
+    if (selected_model == -1 || models.size() <= selected_model){
         return nullptr;
     }
     return models[selected_model];
@@ -24,11 +26,22 @@ Model* Scene::getSelectedModel(){
 
 void Scene::handleInputs(Renderer& renderer){
     camera.processInputs(renderer.getWindow(), renderer.getWindowShape().x, renderer.getWindowShape().y);
+
+    //Set the uniforms of the shader program to the new camera position/orientation
+    renderer.updateCamera(camera);
 }
 
 
-void Scene::render(){
+void Scene::render(Renderer& renderer){
+    renderer.getMainShader().activate();
     for(Model* model : models){
         model->render();
+    }
+}
+
+void Scene::destroy(){
+    for(Model* model : models){
+        model->destroy();
+        delete model;
     }
 }

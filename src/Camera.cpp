@@ -26,9 +26,10 @@ void Camera::lookAt(glm::vec3 position, glm::vec3 target, glm::vec3 up){
 	ProjectionViewMatrix = ProjectionMatrix * ViewMatrix;
 }
 
-void Camera::processInputs(Renderer& renderer){
-	processInputs(renderer.getWindow(), renderer.getWindowShape().x, renderer.getWindowShape().y);
-}
+
+// void Camera::processInputs(Renderer& renderer){
+// 	processInputs(renderer.getWindow(), renderer.getWindowShape().x, renderer.getWindowShape().y);
+// }
 
 void Camera::processInputs(GLFWwindow* window, int width, int height)
 {
@@ -104,6 +105,7 @@ void Camera::processInputs(GLFWwindow* window, int width, int height)
 
 		// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
 		glfwSetCursorPos(window, (width / 2), (height / 2));
+
 	}
 	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
 	{
@@ -112,4 +114,8 @@ void Camera::processInputs(GLFWwindow* window, int width, int height)
 		// Makes sure the next time the camera looks around it doesn't jump
 		firstClick = true;
 	}
+
+	
+	ViewMatrix = glm::lookAt(Position, Position + Orientation, Up);
+	ProjectionViewMatrix = ProjectionMatrix * ViewMatrix;
 }

@@ -18,6 +18,7 @@ Camera camera;
     Model* getSelectedModel();
 
     void handleInputs(Renderer& renderer);
-    void render();
+    void render(Renderer& renderer);
+    void destroy();
 
 };
