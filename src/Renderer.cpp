@@ -1,7 +1,8 @@
 #include"Renderer.h"
 #include <stdexcept>
 
-Renderer::Renderer(int width, int height) : main_shader("resources/default.vert", "resources/default.frag"), background_color(0.07f, 0.13f, 0.17f, 1.0f){
+Renderer::Renderer(int width, int height) : main_shader("resources/default.vert", "resources/default.frag"), background_color(0.07f, 0.13f, 0.17f, 1.0f)
+, width(width), height(height){
     this->window = glfwCreateWindow(width, height, "Visualizer", NULL, NULL);
 
     if (window == NULL)

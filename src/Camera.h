@@ -10,6 +10,7 @@
 #include<glm/gtx/vector_angle.hpp>
 
 #include"shaderClass.h"
+#include"Renderer.h"
 
 class Camera
 {
@@ -18,6 +19,14 @@ public:
 	glm::vec3 Position = glm::vec3(0,0,2);
 	glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	glm::mat4 ProjectionMatrix;
+	glm::mat4 ViewMatrix;
+
+	// For projecting normals
+	glm::mat4 InvProjectionMatrix;
+	// In order to not recalculate every frame
+	glm::mat4 ProjectionViewMatrix;
 
 	// Prevents the camera from jumping around when first clicking left click
 	bool firstClick = true;
@@ -32,6 +41,16 @@ public:
 	// Updates and exports the camera matrix to the Vertex Shader
 	void doPerspective(const float fovx, const float aspect, const float zNear, const float zFar);
 	// Handles camera inputs
-	void processInputs(GLFWwindow* window, int width, int height);
+	void processInputs(Renderer& renderer);
+	void processInputs(GLFWwindow* window, int window_width, int window_height);
+
+	glm::vec3 getPosition() {return Position;};
+	glm::vec3 getOrientation() {return Orientation;};
+	void lookAt(glm::vec3 position, glm::vec3 target, glm::vec3 up);
+	
+	glm::mat4 getProjectionMatrix() {return ProjectionMatrix;};
+	glm::mat4 getViewMatrix() {return ProjectionMatrix;};
+	glm::mat4 getProjectionViewMatrix() {return ProjectionViewMatrix;};
+
 };
 #endif

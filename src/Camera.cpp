@@ -4,6 +4,8 @@
 
 Camera::Camera()
 {
+	ViewMatrix = glm::lookAt(Position, Position + Orientation, Up);
+	ProjectionViewMatrix = ProjectionMatrix * ViewMatrix;
 }
 
 /**
@@ -11,14 +13,21 @@ Camera::Camera()
  */
 void Camera::doPerspective(const float FOVWidth, const float aspect, const float nearPlane, const float farPlane)
 {
-	// Initializes matrices since otherwise they will be the null matrix
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
+	ProjectionMatrix = glm::perspective(glm::radians(FOVWidth), aspect, nearPlane, farPlane);
+	InvProjectionMatrix = glm::inverse(ProjectionMatrix);
+	ProjectionViewMatrix = ProjectionMatrix * ViewMatrix;
+}
 
-	// Makes camera look in the right direction from the right position
-	view = glm::lookAt(Position, Position + Orientation, Up);
-	// Adds perspective to the scene
-	projection = glm::perspective(glm::radians(FOVWidth), aspect, nearPlane, farPlane);
+void Camera::lookAt(glm::vec3 position, glm::vec3 target, glm::vec3 up){
+	Position = position;
+	Orientation = glm::normalize(target - position);
+	Up = up;
+	ViewMatrix = glm::lookAt(Position, Position + Orientation, Up);
+	ProjectionViewMatrix = ProjectionMatrix * ViewMatrix;
+}
+
+void Camera::processInputs(Renderer& renderer){
+	processInputs(renderer.getWindow(), renderer.getWindowShape().x, renderer.getWindowShape().y);
 }
 
 void Camera::processInputs(GLFWwindow* window, int width, int height)

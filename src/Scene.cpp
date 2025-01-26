@@ -1,12 +1,17 @@
 #include"Scene.h"
 
-Scene::Scene() : camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f)){
+Scene::Scene() : camera(){
         
         Model* mesh = new Model();
         mesh->setModel("resources\\bunny.obj");
         mesh->setTexture("resources\\UVMap.png");
 
+        //
         models.push_back(mesh);
+
+        //Define the camera intrinsics I want.
+        camera.doPerspective(45.0f, 800.0f/800.0f, 0.1f, 100.0f);
+        camera.lookAt(glm::vec3(0,0,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
     }
 
 Model* Scene::getSelectedModel(){
@@ -18,9 +23,7 @@ Model* Scene::getSelectedModel(){
 
 
 void Scene::handleInputs(Renderer& renderer){
-    camera.processInputs(renderer.getWindow());
-    // Updates and exports the camera matrix to the Vertex Shader
-    camera.doMatrix(45.0f, 0.1f, 100.0f, renderer.getShader(), "camMatrix");
+    camera.processInputs(renderer.getWindow(), renderer.getWindowShape().x, renderer.getWindowShape().y);
 }
 
 
