@@ -12,6 +12,7 @@
 #include"Mesh.h"
 #include"Camera.h"
 #include"GUI.h"
+#include"Renderer.h"
 
 #include"imgui.h"
 #include"imgui_impl_glfw.h"
@@ -34,39 +35,19 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
-	GLFWwindow* window = glfwCreateWindow(width, height, "YoutubeOpenGL", NULL, NULL);
-	// Error check if the window fails to create
-	if (window == NULL)
-	{
-		std::cout << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-	// Introduce the window into the current context
-	glfwMakeContextCurrent(window);
-	// Enable backface culling
-	//Load GLAD so it configures OpenGL
-	gladLoadGL();
-	// Specify the viewport of OpenGL in the Window
-	// In this case the viewport goes from x = 0, y = 0, to x = 800, y = 800
-	glViewport(0, 0, width, height);
-
-	// Enable backface culling
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
+	Renderer renderer = Renderer(width, height);
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("resources/default.vert", "resources/default.frag");
 
 
 	Model* mesh = new Model();
 	mesh->setModel("meshes\\bunny.obj");
-	mesh->setTexture("resources\\brick.png");
+	mesh->setTexture("meshes\\UVMap.png");
 
 	Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	brickTex.texUnit(shaderProgram, "tex0", 0);
 
-	initGUI(window);
+	initGUI(renderer.getWindow());
 
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
@@ -75,7 +56,7 @@ int main()
 	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
 	// Main while loop
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(renderer.getWindow()))
 	{
 		// Specify the color of the background
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -93,7 +74,7 @@ int main()
 		shaderProgram.activate();
 
 		// Handles camera inputs
-		camera.processInputs(window);
+		camera.processInputs(renderer.getWindow());
 		// Updates and exports the camera matrix to the Vertex Shader
 		camera.doMatrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
 
@@ -101,7 +82,7 @@ int main()
 		
 		renderGUI();
 		
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(renderer.getWindow());
 		// Take care of all GLFW events
 		glfwPollEvents();
 	}
@@ -114,7 +95,7 @@ int main()
 	delete mesh;
 
 	// Delete window before ending the program
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(renderer.getWindow());
 	// Terminate GLFW before ending the program
 	glfwTerminate();
 	return 0;
