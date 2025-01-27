@@ -14,9 +14,7 @@ Scene::Scene() : camera(){
         camera.lookAt(glm::vec3(2,0,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
     }
 
-static volatile int FORCE_COMPILE = 0;
 Model* Scene::getSelectedModel(){
-    FORCE_COMPILE += 1;
     if (selected_model == -1 || models.size() <= selected_model){
         return nullptr;
     }
