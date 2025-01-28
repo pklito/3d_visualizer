@@ -21,6 +21,5 @@ void Renderer::clearFrame()
 }
 
 void Renderer::updateCamera(Camera& camera){
-	main_shader.activate();
-	main_shader.setMat4("camMatrix", camera.getProjectionViewMatrix());
+	main_shader.setMat4("cameraTransform", camera.getProjectionViewMatrix());
 }

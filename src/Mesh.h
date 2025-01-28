@@ -3,6 +3,7 @@
 #include"Texture.h"
 #include<string>
 #include"ShaderClass.h"
+#include<glm/glm.hpp>
 
 class VertexData{
     public:
@@ -22,6 +23,16 @@ protected:
     GLsizeiptr indices_count;
     void generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_count);
 
+	glm::mat4 _world_transform;
+	glm::mat4 _model_transform;
+	glm::mat4 _world_normal_transform;
+	glm::mat4 _model_normal_transform;
+
+    void applyWorldTransformation(const glm::mat4 &transformation);
+	void applyModelTransformation(const glm::mat4 &transformation);
+	void applyWorldNormalTransformation(const glm::mat4 &transformation_inv);
+	void applyModelNormalTransformation(const glm::mat4 &transformation_inv);
+
 public:
     Model();
     Model(const std::string& filedir, const std::string& texturedir);
@@ -33,6 +44,14 @@ public:
     void setShader(const std::string& vertexdir, const std::string& fragmentdir);
     void render();
     void destroy();
+
+    glm::mat4 getFullTransformation();
+    glm::mat4 getFullNormalTransformation();
+
+	void translate(GLfloat x_trans, GLfloat y_trans, GLfloat z_trans, bool isWorld = false);
+	void rotate(GLfloat theta_angle, int mode, bool isWorld = false);
+	void scale(GLfloat x_scale, GLfloat y_scale, GLfloat z_scale, bool isWorld = false);
+
 };
 
 typedef enum

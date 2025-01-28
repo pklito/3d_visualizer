@@ -75,6 +75,9 @@ int main()
 			scene.getSelectedModel()->setModel(parameters.path_name);
 		}
 
+		//test move around the object
+		scene.getSelectedModel()->translate(sin(glfwGetTime()) * 0.01f, 0, 0, true);
+
 		scene.handleInputs(renderer);
 		// Handles camera inputs
 		scene.render(renderer);

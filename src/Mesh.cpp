@@ -209,3 +209,80 @@ Primitive::Primitive(PRIM_MODEL model){
             Cube();
     }
 }
+
+//
+// Transforms
+//
+
+mat4 Model::getFullTransformation()
+{
+	return _world_transform * _model_transform;
+}
+
+mat4 Model::getFullNormalTransformation()
+{
+	return _world_normal_transform * _model_normal_transform;
+}
+
+void Model::translate(GLfloat x_trans, GLfloat y_trans, GLfloat z_trans, bool isWorld)
+{
+	if (isWorld)
+	{
+		applyWorldTransformation(Translate(x_trans, y_trans, z_trans));
+		applyWorldNormalTransformation(Translate(-x_trans, -y_trans, -z_trans)); // Normal Matrix = (M^-1)^T, we give it the inverse and the function will transform it
+	}
+	else
+	{
+		applyModelTransformation(Translate(x_trans, y_trans, z_trans));
+		applyModelNormalTransformation(Translate(-x_trans, -y_trans, -z_trans));
+	}
+}
+
+// TODO: Implement this function
+void Model::rotate(GLfloat theta_angle, int mode, bool isWorld)
+{
+	if (isWorld)
+	{
+		applyWorldTransformation(RotateAxis(theta_angle, mode));
+		applyWorldNormalTransformation(RotateAxis(-theta_angle, mode));
+	}
+	else
+	{
+		applyModelTransformation(RotateAxis(theta_angle, mode));
+		applyModelNormalTransformation(RotateAxis(-theta_angle, mode));
+	}
+}
+
+// TODO: Implement this function
+void Model::scale(GLfloat x_scale, GLfloat y_scale, GLfloat z_scale, bool isWorld)
+{
+	if (isWorld)
+	{
+		applyWorldTransformation(Scale(x_scale, y_scale, z_scale));
+		applyWorldNormalTransformation(Scale(1 / x_scale, 1 / y_scale, 1 / z_scale));
+	}
+	else
+	{
+		applyModelTransformation(Scale(x_scale, y_scale, z_scale));
+		applyModelNormalTransformation(Scale(1 / x_scale, 1 / y_scale, 1 / z_scale));
+	}
+}
+
+void Model::applyWorldTransformation(const mat4 &transformation)
+{
+	_world_transform = transformation * _world_transform;
+}
+
+void Model::applyModelTransformation(const mat4 &transformation)
+{
+	_model_transform = transformation * _model_transform;
+}
+
+void Model::applyWorldNormalTransformation(const mat4 &transformation_inv)
+{
+	_world_normal_transform = transpose(transformation_inv) * _world_normal_transform;
+}
+void Model::applyModelNormalTransformation(const mat4 &transformation_inv)
+{
+	_model_normal_transform = transpose(transformation_inv) * _model_normal_transform;
+}

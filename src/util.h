@@ -65,14 +65,14 @@ friend std::ostream& operator<<(std::ostream& os, const FaceIdcs& face) {
     return os;
 }
 };
-
+inline
 glm::vec3 vec3fFromStream(std::istream &aStream)
 {
 	float x, y, z;
 	aStream >> x >> std::ws >> y >> std::ws >> z;
 	return glm::vec3(x, y, z);
 }
-
+inline
 glm::vec2 vec2fFromStream(std::istream &aStream)
 {
 	float x, y;
@@ -80,3 +80,111 @@ glm::vec2 vec2fFromStream(std::istream &aStream)
 	return glm::vec2(x, y);
 }
 
+//
+// Matrices
+//
+
+
+//----------------------------------------------------------------------------
+//
+//  Rotation matrix generators
+//
+inline
+float Radians(float degrees) 
+{
+	return glm::radians(degrees);
+}
+
+inline
+glm::mat4 RotateX(const GLfloat theta)
+{
+    //GLfloat angle = (M_PI / 180.0) * theta;
+    GLfloat angle = Radians(theta);
+
+    glm::mat4 c;
+    c[2][2] = c[1][1] = cos(angle);
+    c[2][1] = sin(angle);
+    c[1][2] = -c[2][1];
+    return glm::transpose(c);
+}
+
+inline
+glm::mat4 RotateY(GLfloat theta_angle) {
+	glm::mat4 rotation_matrix;
+    theta_angle = Radians(theta_angle);
+	rotation_matrix[0].x = cos(theta_angle);
+	rotation_matrix[0].z = sin(theta_angle);
+	rotation_matrix[2].x = -sin(theta_angle);
+	rotation_matrix[2].z = cos(theta_angle);
+	/*((cos(theta_angle), 0, sin(theta_angle), 0),
+		(0, 1, 0, 0),
+		(-sin(theta_angle), 0, cos(theta_angle), 0),
+		(0, 0, 0, 1));*/
+	return glm::transpose(rotation_matrix);
+}
+
+inline
+glm::mat4 RotateZ(GLfloat theta_angle) {
+	glm::mat4 rotation_matrix;
+    theta_angle = Radians(theta_angle);
+	rotation_matrix[0].x = cos(theta_angle);
+	rotation_matrix[0].y = -sin(theta_angle);
+	rotation_matrix[1].x = sin(theta_angle);
+	rotation_matrix[1].y = cos(theta_angle);
+	/*((cos(theta_angle), -sin(theta_angle), 0, 0),
+		(sin(theta_angle), cos(theta_angle), 0, 0),
+		(0, 0, 1, 0),
+		(0, 0, 0, 1));*/
+	return glm::transpose(rotation_matrix);
+}
+
+inline glm::mat4 RotateAxis(GLfloat theta_angle, int axis){
+	return glm::transpose((axis == 0 ? RotateX(theta_angle) : (axis == 1 ? RotateY(theta_angle) : RotateZ(theta_angle))));
+}
+//----------------------------------------------------------------------------
+//
+//  Translation matrix generators
+//
+
+inline
+glm::mat4 Translate(const GLfloat x, const GLfloat y, const GLfloat z)
+{
+    glm::mat4 c;
+    c[0][3] += x;
+    c[1][3] += y;  /*there was a BUG here*/
+    c[2][3] += z;
+    return glm::transpose(c);
+}
+
+inline
+glm::mat4 Translate(const glm::vec3& v)
+{
+    return glm::transpose(Translate(v.x, v.y, v.z));
+}
+
+inline
+glm::mat4 Translate(const glm::vec4& v)
+{
+    return glm::transpose(Translate(v.x, v.y, v.z));
+}
+
+//----------------------------------------------------------------------------
+//
+//  Scale matrix generators
+//
+
+inline
+glm::mat4 Scale(const GLfloat x, const GLfloat y, const GLfloat z)
+{
+    glm::mat4 c;
+    c[0] *= x;
+    c[1] *= y; /*there was a BUG*/
+    c[2] *= z;
+    return glm::transpose(c);
+}
+
+inline
+glm::mat4 Scale(const glm::vec3& v)
+{
+    return glm::transpose(Scale(v.x, v.y, v.z));
+}

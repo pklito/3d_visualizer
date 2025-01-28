@@ -33,6 +33,8 @@ void Scene::handleInputs(Renderer& renderer){
 void Scene::render(Renderer& renderer){
     renderer.getMainShader().activate();
     for(Model* model : models){
+        renderer.getMainShader().setMat4("modelTransform", model->getFullTransformation());
+        renderer.getMainShader().setMat4("normalTransform", model->getFullNormalTransformation());
         model->render();
     }
 }
