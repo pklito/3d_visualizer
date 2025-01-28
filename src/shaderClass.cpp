@@ -74,6 +74,11 @@ void Shader::destroy()
 	glDeleteProgram(ID);
 }
 
+void Shader::setMat4(const std::string& name, const glm::mat4& mat)
+{
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
 // Checks if the different Shaders have compiled properly
 void Shader::compileErrors(unsigned int shader, const char* type)
 {
