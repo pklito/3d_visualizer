@@ -6,8 +6,7 @@
 #include <sstream>
 #include <vector>
 using namespace glm;
-Model::Model(){
-    
+Model::Model() : _world_transform(1.0f), _model_transform(1.0f), _world_normal_transform(1.0f), _model_normal_transform(1.0f){
 }
 
 void Model::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_c){

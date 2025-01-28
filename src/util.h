@@ -101,7 +101,7 @@ glm::mat4 RotateX(const GLfloat theta)
     //GLfloat angle = (M_PI / 180.0) * theta;
     GLfloat angle = Radians(theta);
 
-    glm::mat4 c;
+    glm::mat4 c(1.0f);
     c[2][2] = c[1][1] = cos(angle);
     c[2][1] = sin(angle);
     c[1][2] = -c[2][1];
@@ -110,7 +110,7 @@ glm::mat4 RotateX(const GLfloat theta)
 
 inline
 glm::mat4 RotateY(GLfloat theta_angle) {
-	glm::mat4 rotation_matrix;
+	glm::mat4 rotation_matrix(1.0f);
     theta_angle = Radians(theta_angle);
 	rotation_matrix[0].x = cos(theta_angle);
 	rotation_matrix[0].z = sin(theta_angle);
@@ -125,7 +125,7 @@ glm::mat4 RotateY(GLfloat theta_angle) {
 
 inline
 glm::mat4 RotateZ(GLfloat theta_angle) {
-	glm::mat4 rotation_matrix;
+	glm::mat4 rotation_matrix(1.0f);
     theta_angle = Radians(theta_angle);
 	rotation_matrix[0].x = cos(theta_angle);
 	rotation_matrix[0].y = -sin(theta_angle);
@@ -149,7 +149,7 @@ inline glm::mat4 RotateAxis(GLfloat theta_angle, int axis){
 inline
 glm::mat4 Translate(const GLfloat x, const GLfloat y, const GLfloat z)
 {
-    glm::mat4 c;
+    glm::mat4 c(1.0f);
     c[0][3] += x;
     c[1][3] += y;  /*there was a BUG here*/
     c[2][3] += z;
@@ -176,7 +176,7 @@ glm::mat4 Translate(const glm::vec4& v)
 inline
 glm::mat4 Scale(const GLfloat x, const GLfloat y, const GLfloat z)
 {
-    glm::mat4 c;
+    glm::mat4 c(1.0f);
     c[0] *= x;
     c[1] *= y; /*there was a BUG*/
     c[2] *= z;
