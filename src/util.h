@@ -139,7 +139,7 @@ glm::mat4 RotateZ(GLfloat theta_angle) {
 }
 
 inline glm::mat4 RotateAxis(GLfloat theta_angle, int axis){
-	return glm::transpose((axis == 0 ? RotateX(theta_angle) : (axis == 1 ? RotateY(theta_angle) : RotateZ(theta_angle))));
+	return (axis == 0 ? RotateX(theta_angle) : (axis == 1 ? RotateY(theta_angle) : RotateZ(theta_angle)));
 }
 //----------------------------------------------------------------------------
 //
@@ -159,13 +159,13 @@ glm::mat4 Translate(const GLfloat x, const GLfloat y, const GLfloat z)
 inline
 glm::mat4 Translate(const glm::vec3& v)
 {
-    return glm::transpose(Translate(v.x, v.y, v.z));
+    return Translate(v.x, v.y, v.z);
 }
 
 inline
 glm::mat4 Translate(const glm::vec4& v)
 {
-    return glm::transpose(Translate(v.x, v.y, v.z));
+    return Translate(v.x, v.y, v.z);
 }
 
 //----------------------------------------------------------------------------
@@ -186,5 +186,5 @@ glm::mat4 Scale(const GLfloat x, const GLfloat y, const GLfloat z)
 inline
 glm::mat4 Scale(const glm::vec3& v)
 {
-    return glm::transpose(Scale(v.x, v.y, v.z));
+    return Scale(v.x, v.y, v.z);
 }
