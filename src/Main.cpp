@@ -76,7 +76,7 @@ int main()
 		}
 
 		//test move around the object
-		scene.getSelectedModel()->translate(sin(glfwGetTime()) * 0.01f, 0, 0, true);
+		scene.getSelectedModel()->setPosition(glm::vec3(sin(glfwGetTime()),0,0));
 
 		scene.handleInputs(renderer);
 		// Handles camera inputs

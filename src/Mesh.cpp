@@ -5,8 +5,9 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include<glm/gtc/matrix_transform.hpp>
 using namespace glm;
-Model::Model() : _world_transform(1.0f), _model_transform(1.0f), _world_normal_transform(1.0f), _model_normal_transform(1.0f){
+Model::Model() : _world_transform(1.0f), _model_transform(1.0f), _world_normal_transform(1.0f), _model_normal_transform(1.0f), size(1.0f,1.0f,1.0f){
 }
 
 void Model::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_c){
@@ -284,4 +285,47 @@ void Model::applyWorldNormalTransformation(const mat4 &transformation_inv)
 void Model::applyModelNormalTransformation(const mat4 &transformation_inv)
 {
 	_model_normal_transform = transpose(transformation_inv) * _model_normal_transform;
+}
+// Setters
+void Model::setWorldTransformation(const mat4 &transformation)
+{
+	_world_transform = transformation;
+}
+
+void Model::setModelTransformation(const mat4 &transformation)
+{
+	_model_transform = transformation;
+}
+
+void Model::setWorldNormalTransformation(const mat4 &transformation_inv)
+{
+	_world_normal_transform = transpose(transformation_inv);
+}
+void Model::setModelNormalTransformation(const mat4 &transformation_inv)
+{
+	_model_normal_transform = transpose(transformation_inv);
+}
+//
+//
+//
+
+void Model::setPosition(const glm::vec3& position){
+	this->position = position;
+	updateTransform();
+}
+void Model::setOrientation(const glm::vec3& orientation){
+	this->orientation = orientation;
+	updateTransform();
+}
+void Model::setScale(const glm::vec3& scale){
+	this->size = scale;
+	updateTransform();
+}
+
+void Model::updateTransform(){
+	setWorldTransformation(glm::lookAt(position,position + glm::vec3(1,0,0), glm::vec3(0,1,0)));
+	setWorldNormalTransformation(glm::inverse(glm::lookAt(position,position + glm::vec3(1,0,0), glm::vec3(0,1,0))));
+
+	//setModelTransformation(Scale(size) * RotateAxis(orientation.x, 0) * RotateAxis(orientation.y, 1) * RotateAxis(orientation.z, 2));
+	//setModelNormalTransformation(Scale(1.0f / size) * RotateAxis(-orientation.x, 0) * RotateAxis(-orientation.y, 1) * RotateAxis(-orientation.z, 2));
 }

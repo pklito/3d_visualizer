@@ -28,10 +28,25 @@ protected:
 	glm::mat4 _world_normal_transform;
 	glm::mat4 _model_normal_transform;
 
+    glm::vec3 position;
+    glm::vec3 orientation;
+    glm::vec3 size;
+
     void applyWorldTransformation(const glm::mat4 &transformation);
 	void applyModelTransformation(const glm::mat4 &transformation);
 	void applyWorldNormalTransformation(const glm::mat4 &transformation_inv);
 	void applyModelNormalTransformation(const glm::mat4 &transformation_inv);
+
+    void setWorldTransformation(const glm::mat4 &transformation);
+	void setModelTransformation(const glm::mat4 &transformation);
+	void setWorldNormalTransformation(const glm::mat4 &transformation_inv);
+	void setModelNormalTransformation(const glm::mat4 &transformation_inv);
+
+    void translate(GLfloat x_trans, GLfloat y_trans, GLfloat z_trans, bool isWorld = false);
+	void rotate(GLfloat theta_angle, int mode, bool isWorld = false);
+	void scale(GLfloat x_scale, GLfloat y_scale, GLfloat z_scale, bool isWorld = false);
+
+    void updateTransform();
 
 public:
     Model();
@@ -48,10 +63,12 @@ public:
     glm::mat4 getFullTransformation();
     glm::mat4 getFullNormalTransformation();
 
-	void translate(GLfloat x_trans, GLfloat y_trans, GLfloat z_trans, bool isWorld = false);
-	void rotate(GLfloat theta_angle, int mode, bool isWorld = false);
-	void scale(GLfloat x_scale, GLfloat y_scale, GLfloat z_scale, bool isWorld = false);
-
+    void setPosition(const glm::vec3& position);
+    void setOrientation(const glm::vec3& orientation);
+    void setScale(const glm::vec3& scale);
+    glm::vec3 getPosition() {return position;};
+    glm::vec3 getOrientation() {return orientation;};
+    glm::vec3 getScale() {return size;};
 };
 
 typedef enum
