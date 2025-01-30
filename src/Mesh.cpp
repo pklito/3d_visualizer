@@ -48,7 +48,7 @@ void Model::render(){
 		// Bind the VAO so OpenGL knows to use it
 		vao.bind();
 		// Draw primitives, number of indices, datatype of indices, index of indices
-		glDrawElements(GL_TRIANGLES, this->indices_count, GL_UNSIGNED_INT, 0);
+		glDrawElements(this->render_type, this->indices_count, GL_UNSIGNED_INT, 0);
 }
 
 void Model::destroy(){
@@ -201,12 +201,56 @@ void Primitive::Tetrahedron(){
     this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 }
 
+void Primitive::Grid(){
+	GLfloat vertices[] = {
+-0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,                -0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+-0.4f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.1f, 0.5f,                -0.4f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.1f, 0.5f,
+-0.3f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.2f, 0.5f,                -0.3f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.2f, 0.5f,
+-0.2f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.3f, 0.5f,                -0.2f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.3f, 0.5f,
+-0.1f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.4f, 0.5f,                -0.1f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.4f, 0.5f,
+0.0f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.5f, 0.5f,                 0.0f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.5f, 0.5f,
+0.1f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.6f, 0.5f,                 0.1f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.6f, 0.5f,
+0.2f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.7f, 0.5f,                 0.2f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.7f, 0.5f,
+0.3f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.8f, 0.5f,                 0.3f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.8f, 0.5f,
+0.4f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.9f, 0.5f,                 0.4f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.9f, 0.5f,
+0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                 0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,
+0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                -0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, -0.4f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                -0.5f, 0.0f, -0.4f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, -0.3f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                -0.5f, 0.0f, -0.3f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, -0.2f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                -0.5f, 0.0f, -0.2f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, -0.1f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                -0.5f, 0.0f, -0.1f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                 -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, 0.1f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                 -0.5f, 0.0f, 0.1f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, 0.2f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                 -0.5f, 0.0f, 0.2f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, 0.3f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                 -0.5f, 0.0f, 0.3f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, 0.4f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                 -0.5f, 0.0f, 0.4f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f,
+0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f,                 -0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f
+};
+GLuint indices[] = {
+0, 1, 3, 2,
+4, 5, 7, 6,
+8, 9, 11, 10,
+12, 13, 15, 14,
+16, 17, 19, 18,
+20, 21, 23, 22,
+24, 25, 27, 26,
+28, 29, 31, 30,
+32, 33, 35, 34,
+36, 37, 39, 38,
+40, 41, 43, 42
+};
+	this->setRenderType(GL_LINES);
+    this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
+}
+
 Primitive::Primitive(PRIM_MODEL model){
     switch(model){
         case PRIM_TETRAHEDRON:
             Tetrahedron();
         case PRIM_CUBE:
             Cube();
+		case PRIM_GRID:
+			Grid();
     }
 }
 

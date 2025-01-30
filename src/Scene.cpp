@@ -5,9 +5,19 @@ Scene::Scene() : camera(){
         Model* mesh = new Model();
         mesh->setModel("resources\\bunny.obj");
         mesh->setTexture("resources\\UVMap.png");
+        mesh->setRenderType(GL_TRIANGLES);
+
+        Model* mesh_2 = new Primitive(PRIM_GRID);
+        Model* mesh_3 = new Primitive(PRIM_GRID);
+        mesh_3->setScale(glm::vec3(10,10,10));
+
 
         //
         models.push_back(mesh);
+        models.push_back(mesh_2);
+        models.push_back(mesh_3);
+
+
 
         //Define the camera intrinsics I want.
         camera.doPerspective(45.0f, 800.0f/800.0f, 0.1f, 100.0f);

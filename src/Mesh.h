@@ -32,6 +32,8 @@ protected:
     glm::vec3 orientation;
     glm::vec3 size;
 
+    GLuint render_type = GL_TRIANGLES;
+
     void applyWorldTransformation(const glm::mat4 &transformation);
 	void applyModelTransformation(const glm::mat4 &transformation);
 	void applyWorldNormalTransformation(const glm::mat4 &transformation_inv);
@@ -54,7 +56,7 @@ public:
     void setModel(const std::string& modeldir);
     void setModel(int* vertexArray, int length);
     void loadFile(const std::string& file);
-
+    void setRenderType(GLuint new_type) {render_type = new_type;};
     void setTexture(const std::string& texturedir);
     void setShader(const std::string& vertexdir, const std::string& fragmentdir);
     void render();
@@ -74,13 +76,15 @@ public:
 typedef enum
 {
 	PRIM_CUBE,
-	PRIM_TETRAHEDRON
+	PRIM_TETRAHEDRON,
+    PRIM_GRID
 } PRIM_MODEL;
 
 class Primitive : public Model {
 protected:
     void Cube();
     void Tetrahedron();
+    void Grid();
 public:
     Primitive(PRIM_MODEL model);
 };
