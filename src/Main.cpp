@@ -59,7 +59,7 @@ int main()
 	//Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	//brickTex.texUnit(shaderProgram, "tex0", 0);
 
-	initGUI(renderer.getWindow());
+	GUI gui(renderer.getWindow(), &scene);
 
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
@@ -69,11 +69,7 @@ int main()
 	{
 		renderer.clearFrame();
 
-		GUIParameters parameters;
-		createGUI(parameters);
-		if(parameters.path_name.length() > 0){
-			scene.getSelectedModel()->setModel(parameters.path_name);
-		}
+		gui.build();
 
 		//test move around the object
 		scene.getSelectedModel()->setPosition(glm::vec3(sin(glfwGetTime()),0,0));
@@ -84,7 +80,7 @@ int main()
 		// Handles camera inputs
 		scene.render(renderer);
 		
-		renderGUI();
+		gui.render();
 		
 		glfwSwapBuffers(renderer.getWindow());
 		// Take care of all GLFW events
@@ -92,7 +88,7 @@ int main()
 	}
 
 	// Deletes all ImGUI instances
-	deleteGUI();
+	gui.destroy();
 
 	// Delete all the objects we've created
 	scene.destroy();

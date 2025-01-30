@@ -6,13 +6,11 @@
 #include"imgui_impl_opengl3.h"
 #include"stdafx.h"
 
-void createGUI(){
-	GUIParameters params;
-	createGUI(params);
-}
-
-void createGUI(GUIParameters& params){
-    
+void GUI::build(){
+    if(scene == nullptr){
+		//No scene attached!
+		return;
+	}
 		// Tell OpenGL a new frame is about to begin
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -53,7 +51,8 @@ void createGUI(GUIParameters& params){
 							CT2CA pszConvertedAnsiString (dlg.GetPathName());
 							// construct a std::string using the LPCSTR input
 							std::string strStd (pszConvertedAnsiString);
-							params.path_name = strStd;
+							scene->getSelectedModel()->setModel(strStd);
+							
 						}
 					}
 					ImGui::EndMenu();
@@ -65,20 +64,21 @@ void createGUI(GUIParameters& params){
 		ImGui::End();
 }
 
-void renderGUI(){
+void GUI::render(){
+	if(scene == nullptr){
+		return;
+	}
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void deleteGUI(){
-	
-    
+void GUI::destroy(){
     ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
 
-void initGUI(GLFWwindow* window)
+GUI::GUI(GLFWwindow* window, Scene* scene) : scene(scene)
 {   
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -86,4 +86,8 @@ void initGUI(GLFWwindow* window)
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
+}
+
+void GUI::setScene(Scene* scene){
+	this->scene = scene;
 }
