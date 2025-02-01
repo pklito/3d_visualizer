@@ -33,17 +33,45 @@ void GUI::buildMenuBar(){
 
 void GUI::buildEditWindow(){
 	ImGui::Begin("Edit Window", &show_edit_window);
-	if (ImGui::MenuItem("Set mesh")){
-		CFileDialog dlg(TRUE, _T(".obj"), NULL, NULL, _T("*.obj|*.*"));
-		if (dlg.DoModal() == IDOK)
-		{
-			CT2CA pszConvertedAnsiString (dlg.GetPathName());
-			// construct a std::string using the LPCSTR input
-			std::string strStd (pszConvertedAnsiString);
-			scene->getSelectedModel()->setModel(strStd);
-			
+	//Model
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags)){
+		//TAB 1
+		if (ImGui::BeginTabItem("Model")){
+			// Forward backwards buttons
+			if (ImGui::Button("<")){
+				scene->cycleSelectedModel(-1);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button(">")){
+				scene->cycleSelectedModel(1);
+				
+			}
+			ImGui::SameLine();
+			ImGui::Text("Selected Model: %d", scene->selected_model);
+
+			if (ImGui::Button("Set mesh")){
+				CFileDialog dlg(TRUE, _T(".obj"), NULL, NULL, _T("*.obj|*.*"));
+				if (dlg.DoModal() == IDOK)
+				{
+					CT2CA pszConvertedAnsiString (dlg.GetPathName());
+					// construct a std::string using the LPCSTR input
+					std::string strStd (pszConvertedAnsiString);
+					scene->getSelectedModel()->setModel(strStd);
+					
+				}
+			}
+		}
+
+		if (ImGui::BeginTabItem("Camera")){
+			ImGui::InputFloat3("Position", glm::value_ptr(scene->getActiveCamera()->Position));
+			ImGui::InputFloat3("Orientation", glm::value_ptr(scene->getActiveCamera()->Orientation));
+			ImGui::InputFloat3("Up", glm::value_ptr(scene->getActiveCamera()->Up));
+
+
 		}
 	}
+	
 	ImGui::End();
 }
 

@@ -31,6 +31,20 @@ Model* Scene::getSelectedModel(){
     return models[selected_model];
 }
 
+void Scene::cycleSelectedModel(int amount){
+    if (models.size() == 0){
+        return;
+    }
+    selected_model += amount;
+    selected_model %= models.size();
+    selected_model += models.size();
+    selected_model %= models.size();
+}
+
+Camera* Scene::getActiveCamera(){
+    return &camera;
+}
+
 
 void Scene::handleInputs(Renderer& renderer){
     camera.processInputs(renderer.getWindow(), renderer.getWindowShape().x, renderer.getWindowShape().y);

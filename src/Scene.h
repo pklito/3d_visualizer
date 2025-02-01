@@ -21,4 +21,9 @@ Camera camera;
     void render(Renderer& renderer);
     void destroy();
 
+    //For GUI
+    Camera* getActiveCamera();
+
+    void cycleSelectedModel(int amount = 1);
+    friend class GUI;
 };
