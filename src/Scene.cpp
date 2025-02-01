@@ -1,23 +1,20 @@
 #include"Scene.h"
 
 Scene::Scene() : camera(){
-        
+        Model* grid1 = new Primitive(PRIM_GRID);
+        Model* grid2 = new Primitive(PRIM_GRID);
+        grid2->setScale(glm::vec3(10,10,10));
+
+        const_models.push_back(grid1);
+        const_models.push_back(grid2);
+
+
         Model* mesh = new Model();
         mesh->setModel("resources\\bunny.obj");
         mesh->setTexture("resources\\UVMap.png");
         mesh->setRenderType(GL_TRIANGLES);
 
-        Model* mesh_2 = new Primitive(PRIM_GRID);
-        Model* mesh_3 = new Primitive(PRIM_GRID);
-        mesh_3->setScale(glm::vec3(10,10,10));
-
-
-        //
         models.push_back(mesh);
-        models.push_back(mesh_2);
-        models.push_back(mesh_3);
-
-
 
         //Define the camera intrinsics I want.
         camera.doPerspective(45.0f, 800.0f/800.0f, 0.1f, 100.0f);
@@ -61,10 +58,26 @@ void Scene::render(Renderer& renderer){
         renderer.getMainShader().setMat4("normalTransform", model->getFullNormalTransformation());
         model->render();
     }
+
+    int i = 0;
+    for(Model* model : const_models){
+        if((i == 0 || i == 1) && !render_grid){
+            i++;
+            continue;
+        }
+        renderer.getMainShader().setMat4("modelTransform", model->getFullTransformation());
+        renderer.getMainShader().setMat4("normalTransform", model->getFullNormalTransformation());
+        model->render();
+    }
 }
 
 void Scene::destroy(){
     for(Model* model : models){
+        model->destroy();
+        delete model;
+    }
+
+    for(Model* model : const_models){
         model->destroy();
         delete model;
     }

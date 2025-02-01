@@ -10,6 +10,9 @@ class Scene{
     protected:
 std::vector<Model*> models;
 int selected_model;
+std::vector<Model*> const_models;
+
+bool render_grid = true;
 Camera camera;
 
     public:

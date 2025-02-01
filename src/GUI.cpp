@@ -6,6 +6,28 @@
 #include"imgui_impl_opengl3.h"
 #include"stdafx.h"
 
+LPCTSTR stringToLPCTSTR(const std::string& str) {
+	#ifdef UNICODE
+	std::wstring wstr(str.begin(), str.end());
+	return wstr.c_str();
+	#else
+	return str.c_str();
+	#endif
+}
+
+//Expects ".obj", or ".png|.jpg", no spaces, split by vertical line.		
+std::string popupExplorer(const std::string& file_type){
+	CFileDialog dlg(TRUE, stringToLPCTSTR(file_type), NULL, NULL, _T("*.*"));
+	if (dlg.DoModal() == IDOK)
+	{
+		CT2CA pszConvertedAnsiString (dlg.GetPathName());
+		// construct a std::string using the LPCSTR input
+		std::string strStd (pszConvertedAnsiString);
+		return strStd;
+	}
+	return "";
+}
+
 void GUI::buildMenuBar(){
 	if (ImGui::BeginMainMenuBar()) {
 		// help
@@ -17,13 +39,26 @@ void GUI::buildMenuBar(){
 		}
 		//windows
 		if (ImGui::BeginMenu("Windows")) {
-			ImGui::MenuItem("Edit Window", NULL, &show_edit_window);
-			ImGui::MenuItem("Output Window", NULL, &show_output_window);
+			ImGui::Checkbox("Edit Window", &show_edit_window);
+			ImGui::Checkbox("Output Window", &show_output_window);
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("New")) {
+			if(ImGui::MenuItem("Model", NULL)){
+				Model* mesh = new Model();
+				mesh->setModel(popupExplorer(".obj"));
+				mesh->setTexture(popupExplorer(".png|.jpg"));
+				mesh->setRenderType(GL_TRIANGLES);
+				scene->models.push_back(mesh);
+			}
+			if(ImGui::MenuItem("Camera")){
+
+			}
 			ImGui::EndMenu();
 		}
 		//edit
 		if (ImGui::BeginMenu("Render")) {
-			// Open OBJ file to read
+			ImGui::Checkbox("Render Grid", &scene->render_grid);
 			
 			ImGui::EndMenu();
 		}
@@ -51,15 +86,7 @@ void GUI::buildEditWindow(){
 			ImGui::Text("Selected Model: %d/%d", scene->selected_model+1, scene->models.size());
 
 			if (ImGui::Button("Set mesh")){
-				CFileDialog dlg(TRUE, _T(".obj"), NULL, NULL, _T("*.obj|*.*"));
-				if (dlg.DoModal() == IDOK)
-				{
-					CT2CA pszConvertedAnsiString (dlg.GetPathName());
-					// construct a std::string using the LPCSTR input
-					std::string strStd (pszConvertedAnsiString);
-					scene->getSelectedModel()->setModel(strStd);
-					
-				}
+				scene->getSelectedModel()->setModel(popupExplorer(".obj"));
 			}
 			ImGui::EndTabItem();
 		}
