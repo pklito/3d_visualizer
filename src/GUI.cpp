@@ -105,9 +105,15 @@ void GUI::buildEditWindow(){
 		}
 
 		if (ImGui::BeginTabItem("Camera")){
+			ImGui::DragFloatRange2("Camera FOV", &scene->getActiveCamera()->slow_speed, &scene->getActiveCamera()->fast_speed, 0.001f, 0.f, 100.0f);
+			ImGui::Separator();
 			ImGui::DragFloat3("Position", glm::value_ptr(scene->getActiveCamera()->Position), 0.02f, -100.0f, 100.0f);
-			ImGui::DragFloat3("Orientation", glm::value_ptr(scene->getActiveCamera()->Orientation), 0.02f, -100.0f, 100.0f);
-			ImGui::DragFloat3("Up", glm::value_ptr(scene->getActiveCamera()->Up), 0.02f, -100.0f, 100.0f);
+			if(ImGui::DragFloat3("Orientation", glm::value_ptr(scene->getActiveCamera()->Orientation), 0.02f, -100.0f, 100.0f)){
+				scene->getActiveCamera()->Orientation = glm::normalize(scene->getActiveCamera()->Orientation);
+			}
+			if(ImGui::DragFloat3("Up", glm::value_ptr(scene->getActiveCamera()->Up), 0.02f, -100.0f, 100.0f)){
+				scene->getActiveCamera()->Up = glm::normalize(scene->getActiveCamera()->Up);
+			};
 
 			ImGui::EndTabItem();
 		}
