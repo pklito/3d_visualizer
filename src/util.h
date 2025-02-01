@@ -174,6 +174,19 @@ glm::mat4 Translate(const glm::vec4& v)
 //  Scale matrix generators
 //
 
+inline glm::mat4 Orient(const glm::vec3& facing, const glm::vec3& up)
+{
+	glm::vec3 f = glm::normalize(facing);
+	glm::vec3 r = glm::normalize(glm::cross(up, f));
+	glm::vec3 u = glm::cross(f, r);
+	glm::mat4 c(1.0f);
+	c[0] = glm::vec4(r, 0.0f);
+	c[1] = glm::vec4(u, 0.f);
+	c[2] = glm::vec4(f, 0.0f);
+
+	return c;
+}
+
 inline
 glm::mat4 Scale(const GLfloat x, const GLfloat y, const GLfloat z)
 {
