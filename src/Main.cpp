@@ -72,8 +72,8 @@ int main()
 		gui.build();
 
 		//test move around the object
-		scene.getSelectedModel()->setPosition(glm::vec3(sin(glfwGetTime()),0,0));
-		scene.getSelectedModel()->setScale(+glm::vec3(1.+cos(0.3*glfwGetTime())/4.));
+		// scene.getSelectedModel()->setPosition(glm::vec3(sin(glfwGetTime()),0,0));
+		// scene.getSelectedModel()->setScale(+glm::vec3(1.+cos(0.3*glfwGetTime())/4.));
 
 
 		scene.handleInputs(renderer);

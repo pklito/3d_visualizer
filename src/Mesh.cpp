@@ -358,7 +358,7 @@ void Model::setPosition(const glm::vec3& position){
 	updateTransform();
 }
 void Model::setOrientation(const glm::vec3& orientation){
-	this->orientation = orientation;
+	this->orientation = glm::normalize(orientation);
 	updateTransform();
 }
 void Model::setScale(const glm::vec3& scale){
@@ -368,7 +368,7 @@ void Model::setScale(const glm::vec3& scale){
 
 void Model::updateTransform(){
 	setWorldTransformation(Translate(position));
-	setWorldNormalTransformation(glm::inverse(glm::lookAt(position,position + glm::vec3(1,0,0), glm::vec3(0,1,0))));
+	setWorldNormalTransformation(glm::inverse(glm::lookAt(position,position + orientation, glm::vec3(0,1,0))));
 
 	setModelTransformation(Scale(size));
 	setModelNormalTransformation(Scale(1.0f / size));

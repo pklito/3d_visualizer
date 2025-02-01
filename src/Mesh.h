@@ -29,7 +29,7 @@ protected:
 	glm::mat4 _model_normal_transform;
 
     glm::vec3 position;
-    glm::vec3 orientation;
+    glm::vec3 orientation = glm::vec3(1.0f, 0.0f, 0.0f);
     glm::vec3 size;
 
     GLuint render_type = GL_TRIANGLES;
