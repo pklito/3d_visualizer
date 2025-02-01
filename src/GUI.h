@@ -9,11 +9,16 @@
 class GUI{
     protected:
         Scene* scene;
-
+        bool show_edit_window = true;
+        bool show_output_window = false;
+        void buildMenuBar();
+        void buildEditWindow();
+        void buildOutputWindow();
     public:
         GUI(GLFWwindow* window, Scene* scene = nullptr);
         void setScene(Scene* scene);
         void render();
         void build();
         void destroy();
+
 };

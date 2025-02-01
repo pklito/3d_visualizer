@@ -21,7 +21,7 @@ Scene::Scene() : camera(){
 
         //Define the camera intrinsics I want.
         camera.doPerspective(45.0f, 800.0f/800.0f, 0.1f, 100.0f);
-        camera.lookAt(glm::vec3(2,0,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
+        camera.lookAt(glm::vec3(2,1,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
     }
 
 Model* Scene::getSelectedModel(){
