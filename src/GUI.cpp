@@ -85,9 +85,6 @@ void GUI::buildEditWindow(){
 			ImGui::SameLine();
 			ImGui::Text("Selected Model: %d/%d", scene->selected_model+1, scene->models.size());
 			ImGui::Separator();
-			if (ImGui::Button("Set mesh")){
-				scene->getSelectedModel()->setModel(popupExplorer(".obj"));
-			}
 			//Update position without friend class
 			glm::vec3 position = scene->getSelectedModel()->getPosition();
 			if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.02f, -100.0f, 100.0f)){
@@ -100,6 +97,14 @@ void GUI::buildEditWindow(){
 			glm::vec3 scale = scene->getSelectedModel()->getScale();
 			if(ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.02f, -100.0f, 100.0f)){
 				scene->getSelectedModel()->setScale(scale);
+			}
+			ImGui::Separator();
+			if (ImGui::Button("Set mesh")){
+				scene->getSelectedModel()->setModel(popupExplorer(".obj"));
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Set texture")){
+				scene->getSelectedModel()->setTexture(popupExplorer(".jpg"));
 			}
 			ImGui::EndTabItem();
 		}
