@@ -47,7 +47,7 @@ void GUI::buildMenuBar(){
 			if(ImGui::MenuItem("Model", NULL)){
 				Model* mesh = new Model();
 				mesh->setModel(popupExplorer(".obj"));
-				mesh->setTexture(popupExplorer(".png|.jpg"));
+				mesh->setTexture(popupExplorer(".jpg"));
 				mesh->setRenderType(GL_TRIANGLES);
 				scene->models.push_back(mesh);
 			}
@@ -92,9 +92,9 @@ void GUI::buildEditWindow(){
 		}
 
 		if (ImGui::BeginTabItem("Camera")){
-			ImGui::InputFloat3("Position", glm::value_ptr(scene->getActiveCamera()->Position));
-			ImGui::InputFloat3("Orientation", glm::value_ptr(scene->getActiveCamera()->Orientation));
-			ImGui::InputFloat3("Up", glm::value_ptr(scene->getActiveCamera()->Up));
+			ImGui::DragFloat3("Position", glm::value_ptr(scene->getActiveCamera()->Position), 0.02f, -100.0f, 100.0f);
+			ImGui::DragFloat3("Orientation", glm::value_ptr(scene->getActiveCamera()->Orientation), 0.02f, -100.0f, 100.0f);
+			ImGui::DragFloat3("Up", glm::value_ptr(scene->getActiveCamera()->Up), 0.02f, -100.0f, 100.0f);
 
 			ImGui::EndTabItem();
 		}
