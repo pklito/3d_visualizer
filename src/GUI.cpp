@@ -48,7 +48,7 @@ void GUI::buildEditWindow(){
 				
 			}
 			ImGui::SameLine();
-			ImGui::Text("Selected Model: %d", scene->selected_model);
+			ImGui::Text("Selected Model: %d/%d", scene->selected_model+1, scene->models.size());
 
 			if (ImGui::Button("Set mesh")){
 				CFileDialog dlg(TRUE, _T(".obj"), NULL, NULL, _T("*.obj|*.*"));
@@ -61,6 +61,7 @@ void GUI::buildEditWindow(){
 					
 				}
 			}
+			ImGui::EndTabItem();
 		}
 
 		if (ImGui::BeginTabItem("Camera")){
@@ -68,7 +69,7 @@ void GUI::buildEditWindow(){
 			ImGui::InputFloat3("Orientation", glm::value_ptr(scene->getActiveCamera()->Orientation));
 			ImGui::InputFloat3("Up", glm::value_ptr(scene->getActiveCamera()->Up));
 
-
+			ImGui::EndTabItem();
 		}
 	}
 	
