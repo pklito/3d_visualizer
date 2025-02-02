@@ -65,10 +65,36 @@ void GUI::buildMenuBar(){
 		ImGui::EndMainMenuBar();
 	}
 }
-void _LockableFloat3(const char* label, glm::vec3& value, bool lock){
-	ImGui::DragFloat3(label, glm::value_ptr(value), 0.02f, -100.0f, 100.0f);
+
+bool _DragFloat3LockAspect(const char* label, glm::vec3& value, bool& lock){
+	// Saving values
+	glm::vec3 copy = value;
+	bool changed = false;
+
+	if(ImGui::DragFloat3(label, glm::value_ptr(value), 0.02f, -100.0f, 100.0f)){
+		changed = true;
+		if(lock){
+			if(copy.x != value.x){
+				float change = copy.x == 0 ? 1 : value.x / copy.x;
+				value.y *= change;
+				value.z *= change;
+			}
+			else if(copy.y != value.y){
+				float change = copy.y == 0 ? 1 : value.y / copy.y;
+				value.x *= change;
+				value.z *= change;
+			}
+			else if(copy.z != value.z){
+				float change = copy.z == 0 ? 1 : value.z / copy.z;
+				value.x *= change;
+				value.y *= change;
+			}
+		}
+	}
+
 	ImGui::SameLine();
 	ImGui::Checkbox(" ", &lock);
+	return changed;
 }
 
 void GUI::buildEditWindow(){
@@ -100,26 +126,9 @@ void GUI::buildEditWindow(){
 				scene->getSelectedModel()->setOrientation(orientation);
 			}
 			glm::vec3 scale = scene->getSelectedModel()->getScale();
-			glm::vec3 scale_same = glm::vec3(scale.x,scale.x,scale.x);
-			
-			if(!lock_model_scale && ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.02f, -100.0f, 100.0f)){
+			if (_DragFloat3LockAspect("Scale", scale, lock_model_scale)){
 				scene->getSelectedModel()->setScale(scale);
 			}
-			if(lock_model_scale && ImGui::DragFloat3("Scale", glm::value_ptr(scale_same), 0.02f, -100.0f, 100.0f)){
-
-				if(scale_same.x != scale_same.y && scale_same.x != scale_same.z){
-					scale_same = glm::vec3(scale_same.x,scale_same.x,scale_same.x);
-				}
-				else if(scale_same.x == scale_same.z){
-					scale_same = glm::vec3(scale_same.y,scale_same.y,scale_same.y);
-				}
-				else if(scale_same.y == scale_same.y){
-					scale_same = glm::vec3(scale_same.z,scale_same.z,scale_same.z);
-				}
-				scene->getSelectedModel()->setScale(scale_same);
-			}
-			ImGui::SameLine();
-			ImGui::Checkbox(" ", &lock_model_scale);
 
 			ImGui::Separator();
 			if (ImGui::Button("Set mesh")){
