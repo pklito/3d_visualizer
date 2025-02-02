@@ -65,6 +65,11 @@ void GUI::buildMenuBar(){
 		ImGui::EndMainMenuBar();
 	}
 }
+void _LockableFloat3(const char* label, glm::vec3& value, bool lock){
+	ImGui::DragFloat3(label, glm::value_ptr(value), 0.02f, -100.0f, 100.0f);
+	ImGui::SameLine();
+	ImGui::Checkbox(" ", &lock);
+}
 
 void GUI::buildEditWindow(){
 	ImGui::Begin("Edit Window", &show_edit_window);
@@ -95,9 +100,27 @@ void GUI::buildEditWindow(){
 				scene->getSelectedModel()->setOrientation(orientation);
 			}
 			glm::vec3 scale = scene->getSelectedModel()->getScale();
-			if(ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.02f, -100.0f, 100.0f)){
+			glm::vec3 scale_same = glm::vec3(scale.x,scale.x,scale.x);
+			
+			if(!lock_model_scale && ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.02f, -100.0f, 100.0f)){
 				scene->getSelectedModel()->setScale(scale);
 			}
+			if(lock_model_scale && ImGui::DragFloat3("Scale", glm::value_ptr(scale_same), 0.02f, -100.0f, 100.0f)){
+
+				if(scale_same.x != scale_same.y && scale_same.x != scale_same.z){
+					scale_same = glm::vec3(scale_same.x,scale_same.x,scale_same.x);
+				}
+				else if(scale_same.x == scale_same.z){
+					scale_same = glm::vec3(scale_same.y,scale_same.y,scale_same.y);
+				}
+				else if(scale_same.y == scale_same.y){
+					scale_same = glm::vec3(scale_same.z,scale_same.z,scale_same.z);
+				}
+				scene->getSelectedModel()->setScale(scale_same);
+			}
+			ImGui::SameLine();
+			ImGui::Checkbox(" ", &lock_model_scale);
+
 			ImGui::Separator();
 			if (ImGui::Button("Set mesh")){
 				scene->getSelectedModel()->setModel(popupExplorer(".obj"));
