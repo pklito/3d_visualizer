@@ -71,6 +71,8 @@ public:
     glm::vec3 getPosition() {return position;};
     glm::vec3 getOrientation() {return orientation;};
     glm::vec3 getScale() {return size;};
+
+    friend class GUI;
 };
 
 typedef enum

@@ -138,6 +138,13 @@ void GUI::buildEditWindow(){
 			if (ImGui::Button("Set texture")){
 				scene->getSelectedModel()->setTexture(popupExplorer(".jpg"));
 			}
+			ImGui::Separator();
+
+			int render_type = scene->getSelectedModel()->render_type;
+			ImGui::RadioButton("TRIANGLES", &render_type, GL_TRIANGLES); ImGui::SameLine();
+			ImGui::RadioButton("LINES", &render_type, GL_LINES); ImGui::SameLine();
+			ImGui::RadioButton("LINE_STRIP", &render_type, GL_LINE_STRIP);
+			scene->getSelectedModel()->render_type = render_type;
 			ImGui::EndTabItem();
 		}
 
