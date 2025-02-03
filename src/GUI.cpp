@@ -17,7 +17,7 @@ LPCTSTR stringToLPCTSTR(const std::string& str) {
 
 //Expects ".obj", or ".png|.jpg", no spaces, split by vertical line.		
 std::string popupExplorer(const std::string& file_type){
-	CFileDialog dlg(TRUE, stringToLPCTSTR(file_type), NULL, NULL, _T("*.*"));
+	CFileDialog dlg(TRUE, stringToLPCTSTR(file_type), NULL, NULL, stringToLPCTSTR(file_type+"|"+"*.*"));
 	if (dlg.DoModal() == IDOK)
 	{
 		CT2CA pszConvertedAnsiString (dlg.GetPathName());
