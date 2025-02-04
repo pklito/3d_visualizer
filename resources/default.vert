@@ -16,14 +16,15 @@ out vec4 normal;
 // Imports the camera matrix from the main function
 uniform mat4 cameraTransform;
 uniform mat4 modelTransform;
-uniform mat4 normalTransform;
 
 void main()
 {
 	// Outputs the positions/coordinates of all vertices
 	gl_Position = cameraTransform * (modelTransform * vec4(vPosition, 1.0));
 
-	normal = normalize((normalTransform * vec4(vNormal,1.0)));
+	vec4 p1 = modelTransform * vec4(vPosition, 1.0);
+	vec4 p2 = modelTransform * vec4(vPosition + vNormal, 1.0);
+	normal = cameraTransform * p1 - cameraTransform * p2;
 	// Assigns the colors from the Vertex Data to "color"
 	// Assigns the texture coordinates from the Vertex Data to "texCoord"
 	texCoord = vTexture;

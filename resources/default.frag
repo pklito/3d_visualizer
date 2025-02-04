@@ -11,9 +11,9 @@ in vec4 normal;
 // Gets the Texture Unit from the main function
 uniform sampler2D tex0;
 
-
+uniform mat4 cameraTransform;
 void main()
 {
 	vec4 textureColor = texture(tex0, texCoord);
-	FragColor = textureColor;
+	FragColor = dot(normal, vec4(0.,0.,1.,0.)) * textureColor;
 }

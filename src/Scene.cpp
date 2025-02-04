@@ -10,7 +10,7 @@ Scene::Scene() : camera(){
 
 
         Model* mesh = new Model();
-        mesh->setModel("resources\\bunny.obj");
+        mesh->setModel("resources\\fox.obj");
         mesh->setTexture("resources\\UVMap.png");
         mesh->setRenderType(GL_TRIANGLES);
 
