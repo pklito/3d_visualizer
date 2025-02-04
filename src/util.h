@@ -192,9 +192,12 @@ inline glm::mat4 Angles(const glm::vec3& yaw_pitch_roll)
 	float yaw = yaw_pitch_roll.x;
 	float pitch = yaw_pitch_roll.y;
 	float roll = yaw_pitch_roll.z;
-	glm::vec3 f = glm::vec3(cos(yaw) * cos(pitch), sin(pitch), sin(yaw) * cos(pitch));
-	glm::vec3 r = glm::vec3(sin(yaw), 0, -cos(yaw));
-	glm::vec3 u = glm::cross(f, r);
+	glm::vec3 f = glm::vec3(-sin(yaw) * cos(pitch), sin(pitch), cos(yaw) * cos(pitch));
+	glm::vec3 _r = glm::vec3(cos(yaw), 0, sin(yaw));
+	glm::vec3 _u = glm::vec3(sin(yaw) * sin(pitch), cos(pitch), -cos(yaw) * sin(pitch));
+	// do roll
+	glm::vec3 r = _r * cos(roll) + _u * sin(roll);
+	glm::vec3 u = -_r * sin(roll) + _u * cos(roll);
 	glm::mat4 c(1.0f);
 	c[0] = glm::vec4(r, 0.0f);
 	c[1] = glm::vec4(u, 0.f);
