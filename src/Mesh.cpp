@@ -14,9 +14,8 @@ void Model::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLui
     vao = VAO().generate();
     vao.bind();
 
-
     vbo = VBO().generate(vertices_data, vertices_count * sizeof(GLfloat));
-	ebo = EBO().generate(indices, indices_c * sizeof(GLsizeiptr));
+	ebo = EBO().generate(indices, indices_c * sizeof(GLuint));
     this->indices_count = indices_c;
 	// Links VBO attributes such as coordinates and colors to VAO
 	vao.linkAttributes(vbo, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
