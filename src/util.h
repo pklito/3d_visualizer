@@ -187,6 +187,22 @@ inline glm::mat4 Orient(const glm::vec3& facing, const glm::vec3& up)
 	return c;
 }
 
+inline glm::mat4 Angles(const glm::vec3& yaw_pitch_roll)
+{
+	float yaw = yaw_pitch_roll.x;
+	float pitch = yaw_pitch_roll.y;
+	float roll = yaw_pitch_roll.z;
+	glm::vec3 f = glm::vec3(cos(yaw) * cos(pitch), sin(pitch), sin(yaw) * cos(pitch));
+	glm::vec3 r = glm::vec3(sin(yaw), 0, -cos(yaw));
+	glm::vec3 u = glm::cross(f, r);
+	glm::mat4 c(1.0f);
+	c[0] = glm::vec4(r, 0.0f);
+	c[1] = glm::vec4(u, 0.f);
+	c[2] = glm::vec4(f, 0.0f);
+
+	return c;
+}
+
 inline
 glm::mat4 Scale(const GLfloat x, const GLfloat y, const GLfloat z)
 {

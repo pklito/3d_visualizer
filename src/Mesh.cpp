@@ -381,8 +381,8 @@ void Model::setPosition(const glm::vec3& position){
 	this->position = position;
 	updateTransform();
 }
-void Model::setOrientation(const glm::vec3& orientation){
-	this->orientation = glm::normalize(orientation);
+void Model::setAngles(const glm::vec3& yaw_pitch_roll){
+	this->yaw_pitch_roll = yaw_pitch_roll;
 	updateTransform();
 }
 void Model::setScale(const glm::vec3& scale){
@@ -395,6 +395,6 @@ void Model::updateTransform(){
 	setWorldNormalTransformation(glm::inverse(glm::lookAt(position,position + glm::vec3(1,0,0), glm::vec3(0,1,0))));
 
 
-	setModelTransformation(Orient(orientation, glm::vec3(0,1,0)) * Scale(size));
+	setModelTransformation(Angles(yaw_pitch_roll) * Scale(size));
 	setModelNormalTransformation(Scale(1.0f / size));
 }

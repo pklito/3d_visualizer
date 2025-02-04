@@ -121,9 +121,9 @@ void GUI::buildEditWindow(){
 			if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.02f, -100.0f, 100.0f)){
 				scene->getSelectedModel()->setPosition(position);
 			}
-			glm::vec3 orientation = scene->getSelectedModel()->getOrientation();
-			if(ImGui::DragFloat3("Orientation", glm::value_ptr(orientation), 0.02f, -100.0f, 100.0f)){
-				scene->getSelectedModel()->setOrientation(orientation);
+			glm::vec3 orientation = scene->getSelectedModel()->getAngles();
+			if(ImGui::DragFloat3("Yaw Pitch Roll", glm::value_ptr(orientation), 0.01f, -glm::pi<float>(), glm::pi<float>())){
+				scene->getSelectedModel()->setAngles(orientation);
 			}
 			glm::vec3 scale = scene->getSelectedModel()->getScale();
 			if (_DragFloat3LockAspect("Scale", scale, lock_model_scale)){

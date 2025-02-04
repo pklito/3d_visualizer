@@ -29,7 +29,9 @@ protected:
 	glm::mat4 _model_normal_transform;
 
     glm::vec3 position;
-    glm::vec3 orientation = glm::vec3(0.0f, 0.0f, 1.0f);
+    // pitch: -pi/2 to pi/2, yaw: -pi to pi, roll: -pi to pi
+    // yaw = 0, facing +z
+    glm::vec3 yaw_pitch_roll = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 size;
 
     GLuint render_type = GL_TRIANGLES;
@@ -66,10 +68,10 @@ public:
     glm::mat4 getFullNormalTransformation();
 
     void setPosition(const glm::vec3& position);
-    void setOrientation(const glm::vec3& orientation);
+    void setAngles(const glm::vec3& orientation);
     void setScale(const glm::vec3& scale);
     glm::vec3 getPosition() {return position;};
-    glm::vec3 getOrientation() {return orientation;};
+    glm::vec3 getAngles() {return yaw_pitch_roll;};
     glm::vec3 getScale() {return size;};
 
     friend class GUI;
