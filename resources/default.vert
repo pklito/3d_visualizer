@@ -23,7 +23,7 @@ void main()
 	// Outputs the positions/coordinates of all vertices
 	gl_Position = cameraTransform * (modelTransform * vec4(vPosition, 1.0));
 
-	normal = cameraTransform * normalTransform * vec4(vNormal, 0.0);
+	normal = normalize((normalTransform * vec4(vNormal,1.0)));
 	// Assigns the colors from the Vertex Data to "color"
 	// Assigns the texture coordinates from the Vertex Data to "texCoord"
 	texCoord = vTexture;

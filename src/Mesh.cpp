@@ -144,6 +144,30 @@ void Model::loadFile(const std::string& file){
 				data_array[face_size*8*face_index + 8*i + 7] = vertex_textures[it->v[i] - 1][1];
 			}
 		}
+		// Generate normals if not existing in obj file.
+		if(vertex_normals.size() == 0){
+			vec3 p1 = vec3(data_array[face_size*8*face_index + 0], data_array[face_size*8*face_index + 1], data_array[face_size*8*face_index + 2]);
+			vec3 p2 = vec3(data_array[face_size*8*face_index + 8], data_array[face_size*8*face_index + 9], data_array[face_size*8*face_index + 10]);
+			vec3 p3 = vec3(data_array[face_size*8*face_index + 16], data_array[face_size*8*face_index + 17], data_array[face_size*8*face_index + 18]);
+			vec3 normal = glm::normalize(glm::cross(p2 - p1, p3 - p1));
+			for (int i = 0; i < face_size; i++)
+			{
+				data_array[face_size*8*face_index + 8*i + 3] = normal[0];
+				data_array[face_size*8*face_index + 8*i + 4] = normal[1];
+				data_array[face_size*8*face_index + 8*i + 5] = normal[2];
+			}
+		}
+		// Generate texture coordinates if not existing in obj file.
+		if(vertex_textures.size() == 0){
+			for (int i = 0; i < face_size; i++)
+			{
+				vec3 coord = vec3(data_array[face_size*8*face_index + 8*i + 0], data_array[face_size*8*face_index + 8*i + 1], data_array[face_size*8*face_index + 8*i + 2]);
+				vec2 tex_coord = vec2((0.5*(atan2(coord.z, coord.x))/glm::pi<float>()), coord.y);
+				data_array[face_size*8*face_index + 8*i + 6] = tex_coord[0];
+				data_array[face_size*8*face_index + 8*i + 7] = tex_coord[1];
+			}
+		}
+		// Increment to next (3 or 4) * 8 data floats
         face_index += 1;
 	}
 
