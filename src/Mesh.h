@@ -54,13 +54,16 @@ protected:
 
 public:
     Model();
-    Model(const std::string& filedir, const std::string& texturedir);
+    Model(const std::string& filedir, const std::string& texturedir) : Model() {
+        loadFile(filedir);
+        setTexture(texturedir);
+    }
     void setModel(const std::string& modeldir);
     void setModel(int* vertexArray, int length);
     void loadFile(const std::string& file);
     void setRenderType(GLuint new_type) {render_type = new_type;};
     void setTexture(const std::string& texturedir);
-    void setShader(const std::string& vertexdir, const std::string& fragmentdir);
+    
     void render();
     void destroy();
 

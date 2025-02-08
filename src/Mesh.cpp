@@ -196,6 +196,10 @@ void Model::loadFile(const std::string& file){
     delete[] data_array;
 }
 
+//		--------------------	//
+// 			PRIMITIVES			//
+//		--------------------	//
+
 void Primitive::Cube(){
 
 }
@@ -270,10 +274,13 @@ Primitive::Primitive(PRIM_MODEL model){
     switch(model){
         case PRIM_TETRAHEDRON:
             Tetrahedron();
+			break;
         case PRIM_CUBE:
             Cube();
+			break;
 		case PRIM_GRID:
 			Grid();
+			break;
     }
 }
 
