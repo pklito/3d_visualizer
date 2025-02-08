@@ -28,11 +28,11 @@ protected:
 	glm::mat4 _world_normal_transform;
 	glm::mat4 _model_normal_transform;
 
-    glm::vec3 position;
+    glm::vec3 position = glm::vec3(0, 0, 0);
     // pitch: -pi/2 to pi/2, yaw: -pi to pi, roll: -pi to pi
     // yaw = 0, facing +z
     glm::vec3 yaw_pitch_roll = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 size;
+    glm::vec3 size= glm::vec3(1,1,1);
 
     GLuint render_type = GL_TRIANGLES;
 
