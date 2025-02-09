@@ -134,13 +134,13 @@ void Model::loadFile(const std::string& file){
             data_array[face_size*8*face_index + 8*i + 2] = vertices[it->v[i] - 1][2];
             temp = 0;
 			if(vertex_normals.size() > 0){
-				data_array[face_size*8*face_index + 8*i + 3] = vertex_normals[it->v[i] - 1][0];
-				data_array[face_size*8*face_index + 8*i + 4] = vertex_normals[it->v[i] - 1][1];
-				data_array[face_size*8*face_index + 8*i + 5] = vertex_normals[it->v[i] - 1][2];
+				data_array[face_size*8*face_index + 8*i + 3] = vertex_normals[it->vn[i] - 1][0];
+				data_array[face_size*8*face_index + 8*i + 4] = vertex_normals[it->vn[i] - 1][1];
+				data_array[face_size*8*face_index + 8*i + 5] = vertex_normals[it->vn[i] - 1][2];
 			}
 			if(vertex_textures.size() > 0){
-				data_array[face_size*8*face_index + 8*i + 6] = vertex_textures[it->v[i] - 1][0];
-				data_array[face_size*8*face_index + 8*i + 7] = vertex_textures[it->v[i] - 1][1];
+				data_array[face_size*8*face_index + 8*i + 6] = vertex_textures[it->vt[i] - 1][0];
+				data_array[face_size*8*face_index + 8*i + 7] = vertex_textures[it->vt[i] - 1][1];
 			}
 		}
 		// Generate normals if not existing in obj file.
@@ -201,12 +201,12 @@ void Model::loadFile(const std::string& file){
 //		--------------------	//
 
 void Primitive::Cube(){
-
+	this->loadFile("resources/primitives/cube.obj");
 }
 
 void Primitive::Tetrahedron(){
         GLfloat vertices[] =
-    { //     COORDINATES     /        COLORS      /   TexCoord  //
+    { //     COORDINATES     /        NORMALS      /   TexCoord  //
         -0.5f, 0.0f,  0.5f,     -1.f, 0.0f,  0.5f,	0.0f, 0.0f,
         -0.5f, 0.0f, -0.5f,     -1.f, 0.0f, -0.5f,	5.0f, 0.0f,
         0.5f, 0.0f, -0.5f,     0.5f, 0.0f, -1.f,	0.0f, 0.0f,
