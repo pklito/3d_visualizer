@@ -1,4 +1,3 @@
-
 #include "GUI.h"
 
 #include"imgui.h"
@@ -17,13 +16,37 @@ LPCTSTR stringToLPCTSTR(const std::string& str) {
 
 //Expects ".obj", or ".png|.jpg", no spaces, split by vertical line.		
 std::string popupExplorer(const std::string& file_type){
-	CFileDialog dlg(TRUE, stringToLPCTSTR(file_type), NULL, NULL, stringToLPCTSTR(file_type+"|"+"*.*"));
-	if (dlg.DoModal() == IDOK)
-	{
-		CT2CA pszConvertedAnsiString (dlg.GetPathName());
-		// construct a std::string using the LPCSTR input
-		std::string strStd (pszConvertedAnsiString);
-		return strStd;
+	OPENFILENAME ofn;       // common dialog box structure
+	#ifdef UNICODE
+	wchar_t szFile[260];    // buffer for file name
+	#else
+	char szFile[260];       // buffer for file name
+	#endif
+
+	// Initialize OPENFILENAME
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = NULL;
+	ofn.lpstrFile = szFile;
+	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
+	// use the contents of szFile to initialize itself.
+	ofn.lpstrFile[0] = '\0';
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = stringToLPCTSTR(file_type);
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+	// Display the Open dialog box 
+	if (GetOpenFileName(&ofn) == TRUE) {
+		#ifdef UNICODE
+			std::wstring ws(ofn.lpstrFile);
+			return std::string(ws.begin(), ws.end());
+		#else
+			return ofn.lpstrFile;
+		#endif
 	}
 	return "";
 }
@@ -68,18 +91,15 @@ void GUI::buildMenuBar(){
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();
-			}
-			
-			
+				}
 			if(ImGui::MenuItem("Camera")){
-
+				// ...existing code...
 			}
 			ImGui::EndMenu();
 		}
 		//edit
 		if (ImGui::BeginMenu("Render")) {
 			ImGui::Checkbox("Render Grid", &scene->render_grid);
-			
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -177,12 +197,11 @@ void GUI::buildEditWindow(){
 			}
 			if(ImGui::DragFloat3("Up", glm::value_ptr(scene->getActiveCamera()->Up), 0.02f, -100.0f, 100.0f)){
 				scene->getActiveCamera()->Up = glm::normalize(scene->getActiveCamera()->Up);
-			};
-
+			}
 			ImGui::EndTabItem();
 		}
+		ImGui::EndTabBar();
 	}
-	
 	ImGui::End();
 }
 
