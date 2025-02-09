@@ -15,5 +15,5 @@ uniform mat4 cameraTransform;
 void main()
 {
 	vec4 textureColor = texture(tex0, texCoord);
-	FragColor = dot(normal, vec4(0.,0.,1.,0.)) * textureColor;
+	FragColor = min(max(dot(normal, vec4(0.,0.,1.,0.)),0.1),1.) * textureColor;
 }
