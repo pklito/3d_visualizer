@@ -72,20 +72,20 @@ void GUI::buildMenuBar(){
 					mesh->setModel(popupExplorer(".obj"));
 					mesh->setTexture(popupExplorer(".jpg"));
 					mesh->setRenderType(GL_TRIANGLES);
-					scene->addModel(mesh);
+					scene->models.push_back(mesh);
 				}
 				if(ImGui::BeginMenu("Primitives ")){
 					if(ImGui::MenuItem("Cube")){
 						Model* mesh = new Primitive(PRIM_CUBE);
-						scene->addModel(mesh);
+						scene->models.push_back(mesh);
 					}
 					if(ImGui::MenuItem("Tetrahedron")){
 						Model* mesh = new Primitive(PRIM_TETRAHEDRON);
-						scene->addModel(mesh);
+						scene->models.push_back(mesh);
 					}
 					if(ImGui::MenuItem("Grid")){
 						Model* mesh = new Primitive(PRIM_GRID);
-						scene->addModel(mesh);
+						scene->models.push_back(mesh);
 					}
 					ImGui::EndMenu();
 				}
