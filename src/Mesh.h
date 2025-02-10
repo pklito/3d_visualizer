@@ -84,20 +84,26 @@ typedef enum
 {
 	PRIM_CUBE,
 	PRIM_TETRAHEDRON,
-    PRIM_GRID
+    PRIM_GRID,
+    PRIM_CONE,
+    PRIM_CYLINDER,
+    PRIM_SPHERE
 } PRIM_MODEL;
 
 #include <map>
 
 const std::map<PRIM_MODEL, std::string> PRIM_MODEL_NAMES = {
-    {PRIM_CUBE, "Cube"},
-    {PRIM_TETRAHEDRON, "Tetrahedron"},
-    {PRIM_GRID, "Grid"}
+    {PRIM_CUBE, "cube"},
+    {PRIM_TETRAHEDRON, "tetrahedron"},
+    {PRIM_GRID, "grid"},
+    {PRIM_CONE, "cone"},
+    {PRIM_CYLINDER, "cylinder"},
+    {PRIM_SPHERE, "sphere"}
 };
 
 class Primitive : public Model {
 protected:
-    void Cube();
+    void FromFile(const std::string file);
     void Tetrahedron();
     void Grid();
 public:

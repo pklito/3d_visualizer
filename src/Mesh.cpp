@@ -200,8 +200,8 @@ void Model::loadFile(const std::string& file){
 // 			PRIMITIVES			//
 //		--------------------	//
 
-void Primitive::Cube(){
-	this->loadFile("resources/primitives/cube.obj");
+void Primitive::FromFile(const std::string file){
+	this->loadFile("resources/primitives/" + file);
 }
 
 void Primitive::Tetrahedron(){
@@ -275,11 +275,14 @@ Primitive::Primitive(PRIM_MODEL model){
         case PRIM_TETRAHEDRON:
             Tetrahedron();
 			break;
-        case PRIM_CUBE:
-            Cube();
-			break;
 		case PRIM_GRID:
 			Grid();
+			break;
+		case PRIM_CONE:
+		case PRIM_SPHERE:
+		case PRIM_CYLINDER:
+		case PRIM_CUBE:
+            FromFile(PRIM_MODEL_NAMES.at(model) + ".obj");
 			break;
     }
 }

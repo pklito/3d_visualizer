@@ -75,17 +75,14 @@ void GUI::buildMenuBar(){
 					scene->addModel(mesh);
 				}
 				if(ImGui::BeginMenu("Primitives ")){
-					if(ImGui::MenuItem("Cube")){
-						Model* mesh = new Primitive(PRIM_CUBE);
-						scene->addModel(mesh);
-					}
-					if(ImGui::MenuItem("Tetrahedron")){
-						Model* mesh = new Primitive(PRIM_TETRAHEDRON);
-						scene->addModel(mesh);
-					}
-					if(ImGui::MenuItem("Grid")){
-						Model* mesh = new Primitive(PRIM_GRID);
-						scene->addModel(mesh);
+					//Iterate over all the defined primitives, add all the buttons
+					for(auto pair : PRIM_MODEL_NAMES){
+						std::string name = pair.second.c_str();
+						name[0] = toupper(name[0]);
+						if(ImGui::MenuItem(name.c_str())){
+							Model* mesh = new Primitive((PRIM_MODEL)pair.first);
+							scene->addModel(mesh);
+						}
 					}
 					ImGui::EndMenu();
 				}
