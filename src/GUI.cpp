@@ -13,8 +13,7 @@ LPCTSTR stringToLPCTSTR(const std::string& str) {
 	return str.c_str();
 	#endif
 }
-
-//Expects ".obj", or ".png|.jpg", no spaces, split by vertical line.		
+		
 std::string popupExplorer(const std::string& file_type){
 	OPENFILENAME ofn;       // common dialog box structure
 	#ifdef UNICODE
@@ -73,20 +72,20 @@ void GUI::buildMenuBar(){
 					mesh->setModel(popupExplorer(".obj"));
 					mesh->setTexture(popupExplorer(".jpg"));
 					mesh->setRenderType(GL_TRIANGLES);
-					scene->models.push_back(mesh);
+					scene->addModel(mesh);
 				}
 				if(ImGui::BeginMenu("Primitives ")){
 					if(ImGui::MenuItem("Cube")){
 						Model* mesh = new Primitive(PRIM_CUBE);
-						scene->models.push_back(mesh);
+						scene->addModel(mesh);
 					}
 					if(ImGui::MenuItem("Tetrahedron")){
 						Model* mesh = new Primitive(PRIM_TETRAHEDRON);
-						scene->models.push_back(mesh);
+						scene->addModel(mesh);
 					}
 					if(ImGui::MenuItem("Grid")){
 						Model* mesh = new Primitive(PRIM_GRID);
-						scene->models.push_back(mesh);
+						scene->addModel(mesh);
 					}
 					ImGui::EndMenu();
 				}

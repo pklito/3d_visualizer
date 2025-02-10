@@ -21,6 +21,11 @@ Scene::Scene() : camera(){
         camera.lookAt(glm::vec3(2,1,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
     }
 
+void Scene::addModel(Model* model){
+    models.push_back(model);
+    selected_model = models.size()-1;
+}
+
 Model* Scene::getSelectedModel(){
     if (selected_model == -1 || models.size() <= selected_model){
         return nullptr;
