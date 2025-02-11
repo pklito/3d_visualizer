@@ -68,11 +68,14 @@ void GUI::buildMenuBar(){
 		if (ImGui::BeginMenu("New")) {
 			if (ImGui::BeginMenu("Model")){
 				if(ImGui::MenuItem("Load from file...", NULL)){
-					Model* mesh = new Model();
-					mesh->setModel(popupExplorer(".obj"));
-					mesh->setTexture(popupExplorer(".jpg"));
-					mesh->setRenderType(GL_TRIANGLES);
-					scene->addModel(mesh);
+					std::string file = popupExplorer(".obj");
+					if(file != ""){
+						Model* mesh = new Model();
+						mesh->setModel(file);
+						mesh->setTexture(popupExplorer(".jpg"));
+						mesh->setRenderType(GL_TRIANGLES);
+						scene->addModel(mesh);
+					}
 				}
 				if(ImGui::BeginMenu("Primitives ")){
 					//Iterate over all the defined primitives, add all the buttons
@@ -152,36 +155,42 @@ void GUI::buildEditWindow(){
 			ImGui::SameLine();
 			ImGui::Text("Selected Model: %d/%d", scene->selected_model+1, scene->models.size());
 			ImGui::Separator();
-			//Update position without friend class
-			glm::vec3 position = scene->getSelectedModel()->getPosition();
-			if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.02f, -100.0f, 100.0f)){
-				scene->getSelectedModel()->setPosition(position);
+			if(scene->getSelectedModel() == nullptr){
+				ImGui::Text("No models in scene");
 			}
-			glm::vec3 orientation = scene->getSelectedModel()->getAngles();
-			if(ImGui::DragFloat3("Yaw Pitch Roll", glm::value_ptr(orientation), 0.01f, -glm::pi<float>(), glm::pi<float>())){
-				scene->getSelectedModel()->setAngles(orientation);
-			}
-			glm::vec3 scale = scene->getSelectedModel()->getScale();
-			if (_DragFloat3LockAspect("Scale", scale, lock_model_scale)){
-				scene->getSelectedModel()->setScale(scale);
-			}
+			else{
+				//Update position without friend class
+				glm::vec3 position = scene->getSelectedModel()->getPosition();
+				if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.02f, -100.0f, 100.0f)){
+					scene->getSelectedModel()->setPosition(position);
+				}
+				glm::vec3 orientation = scene->getSelectedModel()->getAngles();
+				if(ImGui::DragFloat3("Yaw Pitch Roll", glm::value_ptr(orientation), 0.01f, -glm::pi<float>(), glm::pi<float>())){
+					scene->getSelectedModel()->setAngles(orientation);
+				}
+				glm::vec3 scale = scene->getSelectedModel()->getScale();
+				if (_DragFloat3LockAspect("Scale", scale, lock_model_scale)){
+					scene->getSelectedModel()->setScale(scale);
+				}
 
-			ImGui::Separator();
-			if (ImGui::Button("Set mesh")){
-				scene->getSelectedModel()->setModel(popupExplorer(".obj"));
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Set texture")){
-				scene->getSelectedModel()->setTexture(popupExplorer(".jpg"));
-			}
-			ImGui::Separator();
+				ImGui::Separator();
+				if (ImGui::Button("Set mesh")){
+					scene->getSelectedModel()->setModel(popupExplorer(".obj"));
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Set texture")){
+					scene->getSelectedModel()->setTexture(popupExplorer(".jpg"));
+				}
+				ImGui::Separator();
 
-			int render_type = scene->getSelectedModel()->render_type;
-			ImGui::RadioButton("TRIANGLES", &render_type, GL_TRIANGLES); ImGui::SameLine();
-			ImGui::RadioButton("LINES", &render_type, GL_LINES); ImGui::SameLine();
-			ImGui::RadioButton("LINE_STRIP", &render_type, GL_LINE_STRIP);
-			scene->getSelectedModel()->render_type = render_type;
+				int render_type = scene->getSelectedModel()->render_type;
+				ImGui::RadioButton("TRIANGLES", &render_type, GL_TRIANGLES); ImGui::SameLine();
+				ImGui::RadioButton("LINES", &render_type, GL_LINES); ImGui::SameLine();
+				ImGui::RadioButton("LINE_STRIP", &render_type, GL_LINE_STRIP);
+				scene->getSelectedModel()->render_type = render_type;
+			}
 			ImGui::EndTabItem();
+			
 		}
 
 		if (ImGui::BeginTabItem("Camera")){
