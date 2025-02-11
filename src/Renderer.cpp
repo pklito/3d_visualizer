@@ -23,3 +23,10 @@ void Renderer::clearFrame()
 void Renderer::updateCamera(Camera& camera){
 	main_shader.setMat4("cameraTransform", camera.getProjectionViewMatrix());
 }
+
+void Renderer::renderModel(Model* model){
+    main_shader.activate();
+	main_shader.setMat4("modelTransform", model->getFullTransformation());
+	main_shader.setMat4("normalTransform", model->getFullNormalTransformation());
+	model->render();
+}

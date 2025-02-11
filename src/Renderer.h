@@ -4,7 +4,9 @@
 #include"imgui_impl_opengl3.h"
 #include "shaderClass.h"
 #include<glm/glm.hpp>
+
 #include"Camera.h"
+#include"Mesh.h"
 
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
@@ -19,6 +21,8 @@ public:
     GLFWwindow* getWindow() {return window;};
     glm::vec2 getWindowShape() {return glm::vec2(width, height);};
     Shader& getMainShader() {return main_shader;};
+
+    void renderModel(Model* model);
 
     void updateCamera(Camera& camera);
     void updateCamera(const glm::mat4& projection, const glm::mat4& view);

@@ -63,6 +63,7 @@ public:
     void loadFile(const std::string& file);
     void setRenderType(GLuint new_type) {render_type = new_type;};
     void setTexture(const std::string& texturedir);
+    bool hasTexture() {return texture.exists();};
     
     void render();
     void destroy();
@@ -108,4 +109,8 @@ protected:
     void Grid();
 public:
     Primitive(PRIM_MODEL model);
+};
+
+class GroupModel : public Model {
+
 };

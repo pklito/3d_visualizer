@@ -48,6 +48,8 @@ void Model::render(){
 		vao.bind();
 		// Draw primitives, number of indices, datatype of indices, index of indices
 		glDrawElements(this->render_type, this->indices_count, GL_UNSIGNED_INT, 0);
+		texture.unbind();
+		vao.unbind();
 }
 
 void Model::destroy(){

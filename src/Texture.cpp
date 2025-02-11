@@ -66,3 +66,7 @@ void Texture::destroy()
 {
 	glDeleteTextures(1, &ID);
 }
+
+bool Texture::exists(){
+	return ID != 0;
+}

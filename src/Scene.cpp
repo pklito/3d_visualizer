@@ -58,11 +58,8 @@ void Scene::handleInputs(Renderer& renderer){
 
 
 void Scene::render(Renderer& renderer){
-    renderer.getMainShader().activate();
     for(Model* model : models){
-        renderer.getMainShader().setMat4("modelTransform", model->getFullTransformation());
-        renderer.getMainShader().setMat4("normalTransform", model->getFullNormalTransformation());
-        model->render();
+        renderer.renderModel(model);
     }
 
     int i = 0;
@@ -71,9 +68,7 @@ void Scene::render(Renderer& renderer){
             i++;
             continue;
         }
-        renderer.getMainShader().setMat4("modelTransform", model->getFullTransformation());
-        renderer.getMainShader().setMat4("normalTransform", model->getFullNormalTransformation());
-        model->render();
+        renderer.renderModel(model);
     }
 }
 

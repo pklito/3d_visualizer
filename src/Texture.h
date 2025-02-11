@@ -9,8 +9,8 @@
 class Texture
 {
 public:
-	GLuint ID;
-	GLenum type;
+	GLuint ID = 0;
+	GLenum type = 0;
 	Texture() {};
 	Texture(const std::string& path, GLenum texType, GLenum slot, GLenum format, GLenum pixelType) {generate(path, texType, slot, format, pixelType);};
 	void generate(const std::string& path, GLenum texType, GLenum slot, GLenum format, GLenum pixelType);
@@ -22,5 +22,8 @@ public:
 	void unbind();
 	// Deletes a texture
 	void destroy();
+
+	// Returns if this texture has been initialized.
+	bool exists();
 };
 #endif
