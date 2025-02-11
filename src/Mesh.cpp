@@ -207,11 +207,11 @@ void Primitive::FromFile(const std::string file){
 void Primitive::Tetrahedron(){
         GLfloat vertices[] =
     { //     COORDINATES     /        NORMALS      /   TexCoord  //
-        -0.5f, 0.0f,  0.5f,     -1.f, 0.0f,  0.5f,	0.0f, 0.0f,
-        -0.5f, 0.0f, -0.5f,     -1.f, 0.0f, -0.5f,	5.0f, 0.0f,
-        0.5f, 0.0f, -0.5f,     0.5f, 0.0f, -1.f,	0.0f, 0.0f,
-        0.5f, 0.0f,  0.5f,     0.5f, 0.0f, 1.f,	5.0f, 0.0f,
-        0.0f, 1.f,  0.0f,     0.f, 1.f, 0.f,	2.5f, 5.0f
+        -0.5f, -0.5f,  0.5f,     -1.f, 0.0f,  0.5f,	0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,     -1.f, 0.0f, -0.5f,	5.0f, 0.0f,
+        0.5f, -0.5f, -0.5f,     0.5f, 0.0f, -1.f,	0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,     0.5f, 0.0f, 1.f,	5.0f, 0.0f,
+        0.0f, 0.5f,  0.0f,     0.f, 1.f, 0.f,	2.5f, 5.0f
     };
 
     // Indices for vertices order
