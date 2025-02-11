@@ -55,6 +55,7 @@ int main()
 	// Generates Shader object using shaders default.vert and default.frag
 
 	Scene scene = Scene();
+	scene.setupDemo();
 
 	//Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	//brickTex.texUnit(shaderProgram, "tex0", 0);

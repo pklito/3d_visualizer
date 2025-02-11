@@ -8,18 +8,19 @@ Scene::Scene() : camera(){
         const_models.push_back(grid1);
         const_models.push_back(grid2);
 
-
-        Model* mesh = new Model();
-        mesh->setModel("resources\\fox.obj");
-        mesh->setTexture("resources\\UVMap.png");
-        mesh->setRenderType(GL_TRIANGLES);
-
-        models.push_back(mesh);
-
         //Define the camera intrinsics I want.
         camera.doPerspective(45.0f, 800.0f/800.0f, 0.1f, 100.0f);
         camera.lookAt(glm::vec3(2,1,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
     }
+
+void Scene::setupDemo(){
+    Model* mesh = new Model();
+    mesh->setModel("resources\\fox.obj");
+    mesh->setTexture("resources\\UVMap.png");
+    mesh->setRenderType(GL_TRIANGLES);
+
+    models.push_back(mesh);
+}
 
 void Scene::addModel(Model* model){
     models.push_back(model);

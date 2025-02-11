@@ -17,6 +17,7 @@ Camera camera;
 
     public:
     Scene();
+    void setupDemo();
 
     Model* getSelectedModel();
 
