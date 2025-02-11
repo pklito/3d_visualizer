@@ -1,5 +1,5 @@
 #include"Renderer.h"
-Renderer::Renderer(GLFWwindow* window, int width, int height) : main_shader("resources/default.vert", "resources/default.frag"), background_color(0.07f, 0.13f, 0.17f, 1.0f)
+Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("resources/default.vert", "resources/default.frag"), no_tex_shader("resources/default.vert", "resources/default_no_tex.frag"), background_color(0.07f, 0.13f, 0.17f, 1.0f)
 , width(width), height(height), window(window){
 	// Specify the viewport of OpenGL in the Window
 	// In this case the viewport goes from x = 0, y = 0, to x = 800, y = 800
@@ -21,12 +21,25 @@ void Renderer::clearFrame()
 }
 
 void Renderer::updateCamera(Camera& camera){
-	main_shader.setMat4("cameraTransform", camera.getProjectionViewMatrix());
+	tex_shader.activate();
+	tex_shader.setMat4("cameraTransform", camera.getProjectionViewMatrix());
+	no_tex_shader.activate();
+	no_tex_shader.setMat4("cameraTransform", camera.getProjectionViewMatrix());
+	glUseProgram(0);
 }
 
 void Renderer::renderModel(Model* model){
-    main_shader.activate();
-	main_shader.setMat4("modelTransform", model->getFullTransformation());
-	main_shader.setMat4("normalTransform", model->getFullNormalTransformation());
-	model->render();
+
+	if(model->hasTexture()){
+		tex_shader.activate();
+		tex_shader.setMat4("modelTransform", model->getFullTransformation());
+		tex_shader.setMat4("normalTransform", model->getFullNormalTransformation());
+		model->render();
+	}
+	else{
+		no_tex_shader.activate();
+		no_tex_shader.setMat4("modelTransform", model->getFullTransformation());
+		no_tex_shader.setMat4("normalTransform", model->getFullNormalTransformation());
+		model->render();
+	}
 }

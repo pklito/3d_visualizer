@@ -13,14 +13,16 @@
 class Renderer{
 protected:
     GLFWwindow* window;
-	Shader main_shader;
+	Shader tex_shader;
+	Shader no_tex_shader;
+
     glm::vec4 background_color;
     int width, height;
 public:
     Renderer(GLFWwindow* window, int width, int height);
     GLFWwindow* getWindow() {return window;};
     glm::vec2 getWindowShape() {return glm::vec2(width, height);};
-    Shader& getMainShader() {return main_shader;};
+    //Shader& getMainShader() {return tex_shader;};
 
     void renderModel(Model* model);
 

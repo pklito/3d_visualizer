@@ -82,6 +82,7 @@ int main()
 		scene.render(renderer);
 		
 		gui.render();
+		glUseProgram(0);
 		
 		glfwSwapBuffers(renderer.getWindow());
 		// Take care of all GLFW events
