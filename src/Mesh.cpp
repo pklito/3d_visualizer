@@ -42,14 +42,8 @@ void Model::setTexture(const std::string& texture_dir){
     texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
-void Model::render(){
-		texture.bind();
-		// Bind the VAO so OpenGL knows to use it
-		vao.bind();
-		// Draw primitives, number of indices, datatype of indices, index of indices
-		glDrawElements(this->render_type, this->indices_count, GL_UNSIGNED_INT, 0);
-		texture.unbind();
-		vao.unbind();
+void Model::render(Renderer& renderer){
+	renderer.renderModel(&this->vao, &this->texture, getFullTransformation(), getFullNormalTransformation(), this->render_type, this->indices_count);
 }
 
 void Model::destroy(){

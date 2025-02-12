@@ -4,6 +4,7 @@
 #include<string>
 #include"ShaderClass.h"
 #include<glm/glm.hpp>
+#include"Renderer.h"
 
 class VertexData{
     public:
@@ -65,7 +66,7 @@ public:
     void setTexture(const std::string& texturedir);
     bool hasTexture() {return texture.exists();};
     
-    void render();
+    void render(Renderer& renderer);
     void destroy();
 
     glm::mat4 getFullTransformation();

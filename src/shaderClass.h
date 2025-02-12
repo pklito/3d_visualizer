@@ -26,6 +26,9 @@ public:
 	void destroy();
 
 	void setMat4(const std::string& name, const glm::mat4& mat);
+	
+	// Deactivates shaders
+	static void deactivate();
 private:
 	// Checks if the different Shaders have compiled properly
 	void compileErrors(unsigned int shader, const char* type);

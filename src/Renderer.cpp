@@ -28,18 +28,21 @@ void Renderer::updateCamera(Camera& camera){
 	glUseProgram(0);
 }
 
-void Renderer::renderModel(Model* model){
+void Renderer::renderModel(VAO* vao, Texture* texture, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode, GLsizeiptr indices_count){
+	//Decide which shader to use
+	bool use_texture = texture != nullptr && texture->exists();
+	Shader& shader = use_texture ? tex_shader : no_tex_shader;
 
-	if(model->hasTexture()){
-		tex_shader.activate();
-		tex_shader.setMat4("modelTransform", model->getFullTransformation());
-		tex_shader.setMat4("normalTransform", model->getFullNormalTransformation());
-		model->render();
-	}
-	else{
-		no_tex_shader.activate();
-		no_tex_shader.setMat4("modelTransform", model->getFullTransformation());
-		no_tex_shader.setMat4("normalTransform", model->getFullNormalTransformation());
-		model->render();
-	}
+	//Pass model transforms
+	shader.activate();
+	shader.setMat4("modelTransform", model_transform);
+	shader.setMat4("normalTransform", normal_transform);
+
+	//Draw.
+	vao->bind();
+	if (texture != nullptr)	texture->bind();
+	glDrawArrays(render_mode, 0, indices_count);
+	vao->unbind();
+	if (texture != nullptr)	texture->unbind();
+	shader.deactivate();
 }

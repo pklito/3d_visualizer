@@ -59,7 +59,7 @@ void Scene::handleInputs(Renderer& renderer){
 
 void Scene::render(Renderer& renderer){
     for(Model* model : models){
-        renderer.renderModel(model);
+        model->render(renderer);
     }
 
     int i = 0;
@@ -68,7 +68,7 @@ void Scene::render(Renderer& renderer){
             i++;
             continue;
         }
-        renderer.renderModel(model);
+        model->render(renderer);
     }
 }
 
