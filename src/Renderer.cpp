@@ -41,7 +41,7 @@ void Renderer::renderModel(VAO* vao, Texture* texture, const glm::mat4& model_tr
 	//Draw.
 	vao->bind();
 	if (texture != nullptr)	texture->bind();
-	glDrawArrays(render_mode, 0, indices_count);
+	glDrawElements(render_mode, indices_count, GL_UNSIGNED_INT, 0);
 	vao->unbind();
 	if (texture != nullptr)	texture->unbind();
 	shader.deactivate();
