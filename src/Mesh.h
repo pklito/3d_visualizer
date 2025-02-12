@@ -5,6 +5,7 @@
 #include"ShaderClass.h"
 #include<glm/glm.hpp>
 #include"Renderer.h"
+#include<vector>
 
 class VertexData{
     public:
@@ -66,7 +67,7 @@ public:
     void setTexture(const std::string& texturedir);
     bool hasTexture() {return texture.exists();};
     
-    void render(Renderer& renderer);
+    virtual void render(Renderer& renderer);
     void destroy();
 
     glm::mat4 getFullTransformation();
@@ -81,6 +82,10 @@ public:
 
     friend class GUI;
 };
+
+// --------------------
+//      PRIMITIVE
+// --------------------
 
 typedef enum
 {
@@ -114,4 +119,21 @@ public:
 
 class GroupModel : public Model {
 
+};
+
+// --------------------
+//      MODEL GROUP
+// --------------------
+
+class GroupModel : public Model {
+protected:
+std::vector<Model*> models;
+
+public:
+    GroupModel();
+    GroupModel(const std::vector<Model*>& models);
+
+    void addModel(Model* model);
+    void addCopy(const Model* const model);
+    void render(Renderer& renderer) override;
 };

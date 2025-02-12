@@ -403,3 +403,31 @@ void Model::updateTransform(){
 	setModelTransformation(Angles(yaw_pitch_roll) * Scale(size));
 	setModelNormalTransformation(Scale(1.0f / size));
 }
+
+// --------------------
+//  GroupModel
+// --------------------
+
+GroupModel::GroupModel(){
+
+}
+
+GroupModel::GroupModel(const std::vector<Model*>& models){
+	this->models = models; //? works?
+}
+
+void GroupModel::addModel(Model* model){
+	models.push_back(model);
+}
+
+void GroupModel::addCopy(const Model* const model){
+	Model* new_model = new Model(*model);
+	models.push_back(new_model);
+}
+
+void GroupModel::render(Renderer& renderer){
+	for(Model* model : models){
+		model->render(renderer);
+	}
+}
+
