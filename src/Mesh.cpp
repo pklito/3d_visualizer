@@ -452,7 +452,7 @@ void GroupModel::addCopy(const Model* const model){
 
 void GroupModel::render(Renderer& renderer){
 	for(Model* model : models){
-		model->render(renderer, getFullTransformation(), getFullNormalTransformation());
+		model->render(renderer, getFullTransformation(), getFullNormalTransformation(), render_type);
 	}
 }
 
@@ -461,7 +461,7 @@ void GroupModel::render(Renderer& renderer, const glm::mat4& model_transform, co
 		render_mode = this->render_type;
 	}
 	for(Model* model : models){
-		model->render(renderer, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation());
+		model->render(renderer, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
 	}
 }
 
