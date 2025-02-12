@@ -87,6 +87,9 @@ void GUI::buildMenuBar(){
 							scene->addModel(mesh);
 						}
 					}
+					if(ImGui::MenuItem("Axis")){
+						scene->addModel(demoAxis());
+					}
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();
