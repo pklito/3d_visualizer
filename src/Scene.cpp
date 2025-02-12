@@ -18,8 +18,19 @@ void Scene::setupDemo(){
     mesh->setModel("resources\\fox.obj");
     mesh->setTexture("resources\\UVMap.png");
     mesh->setRenderType(GL_TRIANGLES);
+    mesh->setScale(glm::vec3(1.,0.5,1.));
+    mesh->setPosition(glm::vec3(0.0,0,0));
 
-    models.push_back(mesh);
+    Model* mesh_2 = new Primitive(PRIM_CONE);
+    mesh_2->setPosition(glm::vec3(0,1.2,0));
+    mesh_2->setScale(glm::vec3(0.3));
+    mesh_2->setAnglesDegrees(glm::vec3(0,-30,0));
+
+    GroupModel* group = new GroupModel();
+    group->addModel(mesh_2);
+    group->addModel(mesh);
+
+    models.push_back(group);
 }
 
 void Scene::addModel(Model* model){

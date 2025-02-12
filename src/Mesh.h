@@ -77,6 +77,7 @@ public:
 
     void setPosition(const glm::vec3& position);
     void setAngles(const glm::vec3& orientation);
+    void setAnglesDegrees(const glm::vec3& yaw_pitch_roll);
     void setScale(const glm::vec3& scale);
     glm::vec3 getPosition() {return position;};
     glm::vec3 getAngles() {return yaw_pitch_roll;};
@@ -117,10 +118,6 @@ protected:
     void Grid();
 public:
     Primitive(PRIM_MODEL model);
-};
-
-class GroupModel : public Model {
-
 };
 
 // --------------------

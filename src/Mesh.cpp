@@ -390,10 +390,23 @@ void Model::setPosition(const glm::vec3& position){
 	this->position = position;
 	updateTransform();
 }
+
+/**
+ * @brief Sets the rotation angles of the model.
+ * 
+ * This function sets the yaw, pitch, and roll angles of the model and updates the model's transformation matrix accordingly.
+ * 
+ * @param yaw_pitch_roll glm::vec3 in radians, contains yaw, pitch, roll.
+ */
 void Model::setAngles(const glm::vec3& yaw_pitch_roll){
 	this->yaw_pitch_roll = yaw_pitch_roll;
 	updateTransform();
 }
+
+void Model::setAnglesDegrees(const glm::vec3& yaw_pitch_roll){
+	setAngles(glm::vec3(glm::pi<float>()/180.) * yaw_pitch_roll);
+}
+
 void Model::setScale(const glm::vec3& scale){
 	this->size = scale;
 	updateTransform();
