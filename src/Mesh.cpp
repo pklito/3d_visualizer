@@ -46,6 +46,10 @@ void Model::render(Renderer& renderer){
 	renderer.renderModel(&this->vao, &this->texture, getFullTransformation(), getFullNormalTransformation(), this->render_type, this->indices_count);
 }
 
+void Model::render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform){
+	renderer.renderModel(&this->vao, &this->texture, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), this->render_type, this->indices_count);
+}
+
 void Model::destroy(){
 	vao.destroy();
 	vbo.destroy();
@@ -427,7 +431,7 @@ void GroupModel::addCopy(const Model* const model){
 
 void GroupModel::render(Renderer& renderer){
 	for(Model* model : models){
-		model->render(renderer);
+		model->render(renderer, getFullTransformation(), getFullNormalTransformation());
 	}
 }
 

@@ -68,6 +68,8 @@ public:
     bool hasTexture() {return texture.exists();};
     
     virtual void render(Renderer& renderer);
+    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform);
+
     void destroy();
 
     glm::mat4 getFullTransformation();
