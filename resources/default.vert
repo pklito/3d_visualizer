@@ -24,7 +24,7 @@ void main()
 
 	vec4 p1 = modelTransform * vec4(vPosition, 1.0);
 	vec4 p2 = modelTransform * vec4(vPosition + vNormal, 1.0);
-	normal = cameraTransform * p1 - cameraTransform * p2;
+	normal = normalize(cameraTransform * p1 - cameraTransform * p2);
 	// Assigns the colors from the Vertex Data to "color"
 	// Assigns the texture coordinates from the Vertex Data to "texCoord"
 	texCoord = vTexture;
