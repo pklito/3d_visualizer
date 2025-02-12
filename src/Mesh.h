@@ -17,13 +17,8 @@ class VertexData{
 
 class Model {
 protected:
-    VAO vao;
-    VBO vbo;
-    EBO ebo;
     Texture texture;
     // Shader shader;
-    GLsizeiptr indices_count;
-    void generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_count);
 
 	glm::mat4 _world_transform;
 	glm::mat4 _model_transform;
@@ -54,23 +49,22 @@ protected:
 
     void updateTransform();
 
+    void buildGUI();
+
+
 public:
     Model();
-    Model(const std::string& filedir, const std::string& texturedir) : Model() {
-        loadFile(filedir);
-        setTexture(texturedir);
-    }
-    void setModel(const std::string& modeldir);
-    void setModel(int* vertexArray, int length);
-    void loadFile(const std::string& file);
+
     void setRenderType(GLuint new_type) {render_type = new_type;};
     void setTexture(const std::string& texturedir);
+    void setTexture(const Texture& texture) {this->texture = texture;};
     bool hasTexture() {return texture.exists();};
     
-    virtual void render(Renderer& renderer);
-    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1);
+    virtual void render(Renderer& renderer) = 0;
+    //applies transforms on the render, changes the set render_mode
+    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) = 0;
 
-    void destroy();
+    virtual void destroy();
 
     glm::mat4 getFullTransformation();
     glm::mat4 getFullNormalTransformation();
@@ -84,8 +78,42 @@ public:
     glm::vec3 getScale() {return size;};
 
     friend class GUI;
+    virtual Model* copy() const = 0;
 };
 
+class ObjModel : public Model{
+    protected:
+        VAO vao;
+        VBO vbo;
+        EBO ebo;
+        Texture texture;
+        // Shader shader;
+        GLsizeiptr indices_count;
+        void generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_count);
+        
+    public:
+    void setModel(const std::string& modeldir);
+    void loadFile(const std::string& file);
+
+    ObjModel() : Model() {};
+    ObjModel(const std::string& filedir) : Model() {
+        setModel(filedir);
+    };
+    ObjModel(const std::string& filedir, const std::string& texturedir) : Model() {
+        loadFile(filedir);
+        setTexture(texturedir);
+    };
+
+    virtual void render(Renderer& renderer) override;
+    //applies transforms on the render, changes the set render_mode
+    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
+
+    virtual void destroy() override;
+
+    virtual Model* copy() const override {return new ObjModel(*this);};
+
+
+};
 // --------------------
 //      PRIMITIVE
 // --------------------
@@ -111,7 +139,7 @@ const std::map<PRIM_MODEL, std::string> PRIM_MODEL_NAMES = {
     {PRIM_SPHERE, "sphere"}
 };
 
-class Primitive : public Model {
+class Primitive : public ObjModel {
 protected:
     void FromFile(const std::string file);
     void Tetrahedron();
@@ -137,6 +165,9 @@ public:
     void addCopy(const Model* const model);
     virtual void render(Renderer& renderer) override;
     virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
+    virtual void destroy() override;
+
+    virtual Model* copy() const override {return new GroupModel(*this);};
 
 };
 

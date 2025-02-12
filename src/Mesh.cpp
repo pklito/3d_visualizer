@@ -10,7 +10,7 @@ using namespace glm;
 Model::Model() : _world_transform(1.0f), _model_transform(1.0f), _world_normal_transform(1.0f), _model_normal_transform(1.0f), size(1.0f,1.0f,1.0f){
 }
 
-void Model::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_c){
+void ObjModel::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_c){
     vao = VAO().generate();
     vao.bind();
 
@@ -26,7 +26,7 @@ void Model::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLui
     vbo.unbind();
 	ebo.unbind();
 }
-void Model::setModel(const std::string& modeldir){
+void ObjModel::setModel(const std::string& modeldir){
 	int i = 0;
 	if(modeldir.length() < 1){
 		std::cerr << "Invalid model file: " + modeldir << std::endl;
@@ -42,11 +42,11 @@ void Model::setTexture(const std::string& texture_dir){
     texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
-void Model::render(Renderer& renderer){
+void ObjModel::render(Renderer& renderer){
 	renderer.renderModel(&this->vao, &this->texture, getFullTransformation(), getFullNormalTransformation(), this->render_type, this->indices_count);
 }
 
-void Model::render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void ObjModel::render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
 		render_mode = this->render_type;
 	}
@@ -54,6 +54,11 @@ void Model::render(Renderer& renderer, const glm::mat4& model_transform, const g
 }
 
 void Model::destroy(){
+	texture.destroy();
+	//shader.destroy();
+}
+
+void ObjModel::destroy(){
 	vao.destroy();
 	vbo.destroy();
 	ebo.destroy();
@@ -61,6 +66,11 @@ void Model::destroy(){
 	//shader.destroy();
 }
 
+void GroupModel::destroy(){
+	for(Model* model : models){
+		model->destroy();
+	}
+}
 
 /// -----------------
 //
@@ -70,7 +80,7 @@ void Model::destroy(){
 //
 /// ----------------
 
-void Model::loadFile(const std::string& file){
+void ObjModel::loadFile(const std::string& file){
     std::ifstream ifile;
 
 	ifile.open(file.c_str());
@@ -446,7 +456,7 @@ void GroupModel::addModel(Model* model){
 }
 
 void GroupModel::addCopy(const Model* const model){
-	Model* new_model = new Model(*model);
+	Model* new_model = model->copy();
 	models.push_back(new_model);
 }
 
@@ -466,9 +476,7 @@ void GroupModel::render(Renderer& renderer, const glm::mat4& model_transform, co
 }
 
 GroupModel* demoFoxHat(){
-	Model* mesh = new Model();
-    mesh->setModel("resources\\fox.obj");
-    mesh->setTexture("resources\\UVMap.png");
+	Model* mesh = new ObjModel("resources\\fox.obj", "resources\\UVMap.png");
     mesh->setRenderType(GL_TRIANGLES);
     mesh->setScale(glm::vec3(1.,0.5,1.));
     mesh->setPosition(glm::vec3(0.0,0,0));

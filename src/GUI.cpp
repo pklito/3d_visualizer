@@ -70,8 +70,7 @@ void GUI::buildMenuBar(){
 				if(ImGui::MenuItem("Load from file...", NULL)){
 					std::string file = popupExplorer(".obj");
 					if(file != ""){
-						Model* mesh = new Model();
-						mesh->setModel(file);
+						Model* mesh = new ObjModel(file);
 						mesh->setTexture(popupExplorer(".jpg"));
 						mesh->setRenderType(GL_TRIANGLES);
 						scene->addModel(mesh);
@@ -177,8 +176,21 @@ void GUI::buildEditWindow(){
 				}
 
 				ImGui::Separator();
+				bool is_obj = dynamic_cast<ObjModel*>(scene->getSelectedModel()) != nullptr;
+				if(!is_obj){
+					ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.0f, 0.3f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.0f, 0.0f, 0.3f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.0f, 0.3f));
+
+
+				}
 				if (ImGui::Button("Set mesh")){
-					scene->getSelectedModel()->setModel(popupExplorer(".obj"));
+					if(is_obj)
+						dynamic_cast<ObjModel*>(scene->getSelectedModel())->setModel(popupExplorer(".obj"));
+				}
+				
+				if(!is_obj){
+					ImGui::PopStyleColor(3);
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("Set texture")){

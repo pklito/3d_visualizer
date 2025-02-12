@@ -14,7 +14,6 @@ Scene::Scene() : camera(){
     }
 
 void Scene::setupDemo(){
-    Model* mesh = new Model();
     GroupModel* group = demoAxis();
     models.push_back(group);
 }
