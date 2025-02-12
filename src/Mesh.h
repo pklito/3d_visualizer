@@ -68,7 +68,7 @@ public:
     bool hasTexture() {return texture.exists();};
     
     virtual void render(Renderer& renderer);
-    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform);
+    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1);
 
     void destroy();
 
@@ -131,8 +131,15 @@ std::vector<Model*> models;
 public:
     GroupModel();
     GroupModel(const std::vector<Model*>& models);
+    GroupModel(const GroupModel& _that);
 
     void addModel(Model* model);
     void addCopy(const Model* const model);
-    void render(Renderer& renderer) override;
+    virtual void render(Renderer& renderer) override;
+    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
+
 };
+
+GroupModel* demoFoxHat();
+
+GroupModel* demoAxis();

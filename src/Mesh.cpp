@@ -46,8 +46,11 @@ void Model::render(Renderer& renderer){
 	renderer.renderModel(&this->vao, &this->texture, getFullTransformation(), getFullNormalTransformation(), this->render_type, this->indices_count);
 }
 
-void Model::render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform){
-	renderer.renderModel(&this->vao, &this->texture, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), this->render_type, this->indices_count);
+void Model::render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+	if(render_mode == -1){
+		render_mode = this->render_type;
+	}
+	renderer.renderModel(&this->vao, &this->texture, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode, this->indices_count);
 }
 
 void Model::destroy(){
@@ -425,7 +428,7 @@ void Model::updateTransform(){
 //  GroupModel
 // --------------------
 
-GroupModel::GroupModel(){
+GroupModel::GroupModel() : models(){
 
 }
 
@@ -433,6 +436,11 @@ GroupModel::GroupModel(const std::vector<Model*>& models){
 	this->models = models; //? works?
 }
 
+GroupModel::GroupModel(const GroupModel& _that){
+	for(Model* model : _that.models){
+		addCopy(model);
+	}
+}
 void GroupModel::addModel(Model* model){
 	models.push_back(model);
 }
@@ -448,3 +456,77 @@ void GroupModel::render(Renderer& renderer){
 	}
 }
 
+void GroupModel::render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+	if(render_mode == -1){
+		render_mode = this->render_type;
+	}
+	for(Model* model : models){
+		model->render(renderer, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation());
+	}
+}
+
+GroupModel* demoFoxHat(){
+	Model* mesh = new Model();
+    mesh->setModel("resources\\fox.obj");
+    mesh->setTexture("resources\\UVMap.png");
+    mesh->setRenderType(GL_TRIANGLES);
+    mesh->setScale(glm::vec3(1.,0.5,1.));
+    mesh->setPosition(glm::vec3(0.0,0,0));
+
+    Model* mesh_2 = new Primitive(PRIM_CONE);
+    mesh_2->setPosition(glm::vec3(0,1.2,0));
+    mesh_2->setScale(glm::vec3(0.3));
+    mesh_2->setAnglesDegrees(glm::vec3(0,-30,0));
+
+    GroupModel* group = new GroupModel();
+    group->addModel(mesh_2);
+    group->addModel(mesh);
+	return group;
+}
+
+GroupModel* demoAxis(){
+
+	float offset = 0.48;
+	//x
+	Model* mesh_x = new Primitive(PRIM_CYLINDER);
+	mesh_x->setPosition(glm::vec3(offset,0,0));
+	mesh_x->setScale(glm::vec3(0.1,1,0.1));
+	mesh_x->setAnglesDegrees(glm::vec3(0,0,90));
+
+	Model* arrow_x = new Primitive(PRIM_CONE);
+	arrow_x->setPosition(glm::vec3(offset+0.6,0,0));
+	arrow_x->setScale(glm::vec3(0.2,0.3,0.2));
+	arrow_x->setAnglesDegrees(glm::vec3(0,0,-90));
+
+	//y
+	Model* mesh_y = new Primitive(PRIM_CYLINDER);
+	mesh_y->setPosition(glm::vec3(0,offset,0));
+	mesh_y->setScale(glm::vec3(0.1,1,0.1));
+	mesh_y->setAnglesDegrees(glm::vec3(0,0,0));
+
+	Model* arrow_y = new Primitive(PRIM_CONE);
+	arrow_y->setPosition(glm::vec3(0,offset+0.6,0));
+	arrow_y->setScale(glm::vec3(0.2,0.3,0.2));
+	arrow_y->setAnglesDegrees(glm::vec3(0,0,0));
+
+	//z
+	Model* mesh_z = new Primitive(PRIM_CYLINDER);
+	mesh_z->setPosition(glm::vec3(0,0,offset));
+	mesh_z->setScale(glm::vec3(0.1,1,0.1));
+	mesh_z->setAnglesDegrees(glm::vec3(0,90,0));
+
+	Model* arrow_z = new Primitive(PRIM_CONE);
+	arrow_z->setPosition(glm::vec3(0,0,offset+0.6));
+	arrow_z->setScale(glm::vec3(0.2,0.3,0.2));
+	arrow_z->setAnglesDegrees(glm::vec3(0,-90,0));
+
+	GroupModel* group = new GroupModel();
+	group->addModel(mesh_x);
+	group->addModel(mesh_y);
+	group->addModel(mesh_z);
+	group->addModel(arrow_x);
+	group->addModel(arrow_y);
+	group->addModel(arrow_z);
+
+	return group;
+}
