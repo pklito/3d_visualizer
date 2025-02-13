@@ -494,12 +494,8 @@ GroupModel* demoFoxHat(){
 	return group;
 }
 
-GroupModel* demoAxis(){
-
-	float bar_radius = 0.1;
-	float bar_length = 0.5;
-	float arrow_radius = 0.2;
-	float arrow_length = 1 - bar_length;
+GroupModel* demoAxis(float bar_radius, float bar_length, float arrow_radius, float size){
+	float arrow_length = size - bar_length;
 	//x
 	Model* mesh_x = new Primitive(PRIM_CYLINDER);
 	mesh_x->setPosition(glm::vec3(bar_length/2,0,0));
