@@ -12,7 +12,6 @@ class GUI{
         bool show_edit_window = true;
         bool show_output_window = false;
         
-        bool lock_model_scale = false;
         void buildMenuBar();
         void buildEditWindow();
         void buildOutputWindow();

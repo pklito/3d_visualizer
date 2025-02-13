@@ -4,51 +4,7 @@
 #include"imgui_impl_glfw.h"
 #include"imgui_impl_opengl3.h"
 #include"stdafx.h"
-
-LPCTSTR stringToLPCTSTR(const std::string& str) {
-	#ifdef UNICODE
-	std::wstring wstr(str.begin(), str.end());
-	return wstr.c_str();
-	#else
-	return str.c_str();
-	#endif
-}
-		
-std::string popupExplorer(const std::string& file_type){
-	OPENFILENAME ofn;       // common dialog box structure
-	#ifdef UNICODE
-	wchar_t szFile[260];    // buffer for file name
-	#else
-	char szFile[260];       // buffer for file name
-	#endif
-
-	// Initialize OPENFILENAME
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = NULL;
-	ofn.lpstrFile = szFile;
-	// Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
-	// use the contents of szFile to initialize itself.
-	ofn.lpstrFile[0] = '\0';
-	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = stringToLPCTSTR(file_type);
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFileTitle = NULL;
-	ofn.nMaxFileTitle = 0;
-	ofn.lpstrInitialDir = NULL;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-	// Display the Open dialog box 
-	if (GetOpenFileName(&ofn) == TRUE) {
-		#ifdef UNICODE
-			std::wstring ws(ofn.lpstrFile);
-			return std::string(ws.begin(), ws.end());
-		#else
-			return ofn.lpstrFile;
-		#endif
-	}
-	return "";
-}
+#include "GUIfuncs.h"
 
 void GUI::buildMenuBar(){
 	if (ImGui::BeginMainMenuBar()) {
@@ -107,37 +63,6 @@ void GUI::buildMenuBar(){
 	}
 }
 
-bool _DragFloat3LockAspect(const char* label, glm::vec3& value, bool& lock){
-	// Saving values
-	glm::vec3 copy = value;
-	bool changed = false;
-
-	if(ImGui::DragFloat3(label, glm::value_ptr(value), 0.02f, -100.0f, 100.0f)){
-		changed = true;
-		if(lock){
-			if(copy.x != value.x){
-				float change = copy.x == 0 ? 1 : value.x / copy.x;
-				value.y *= change;
-				value.z *= change;
-			}
-			else if(copy.y != value.y){
-				float change = copy.y == 0 ? 1 : value.y / copy.y;
-				value.x *= change;
-				value.z *= change;
-			}
-			else if(copy.z != value.z){
-				float change = copy.z == 0 ? 1 : value.z / copy.z;
-				value.x *= change;
-				value.y *= change;
-			}
-		}
-	}
-
-	ImGui::SameLine();
-	ImGui::Checkbox(" ", &lock);
-	return changed;
-}
-
 void GUI::buildEditWindow(){
 	ImGui::Begin("Edit Window", &show_edit_window);
 	//Model
@@ -161,48 +86,7 @@ void GUI::buildEditWindow(){
 				ImGui::Text("No models in scene");
 			}
 			else{
-				//Update position without friend class
-				glm::vec3 position = scene->getSelectedModel()->getPosition();
-				if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.02f, -100.0f, 100.0f)){
-					scene->getSelectedModel()->setPosition(position);
-				}
-				glm::vec3 orientation = scene->getSelectedModel()->getAngles();
-				if(ImGui::DragFloat3("Yaw Pitch Roll", glm::value_ptr(orientation), 0.01f, -glm::pi<float>(), glm::pi<float>())){
-					scene->getSelectedModel()->setAngles(orientation);
-				}
-				glm::vec3 scale = scene->getSelectedModel()->getScale();
-				if (_DragFloat3LockAspect("Scale", scale, lock_model_scale)){
-					scene->getSelectedModel()->setScale(scale);
-				}
-
-				ImGui::Separator();
-				bool is_obj = dynamic_cast<ObjModel*>(scene->getSelectedModel()) != nullptr;
-				if(!is_obj){
-					ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.0f, 0.3f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.0f, 0.0f, 0.3f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.0f, 0.3f));
-
-
-				}
-				if (ImGui::Button("Set mesh")){
-					if(is_obj)
-						dynamic_cast<ObjModel*>(scene->getSelectedModel())->setModel(popupExplorer(".obj"));
-				}
-				
-				if(!is_obj){
-					ImGui::PopStyleColor(3);
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Set texture")){
-					scene->getSelectedModel()->setTexture(popupExplorer(".jpg"));
-				}
-				ImGui::Separator();
-
-				int render_type = scene->getSelectedModel()->render_type;
-				ImGui::RadioButton("TRIANGLES", &render_type, GL_TRIANGLES); ImGui::SameLine();
-				ImGui::RadioButton("LINES", &render_type, GL_LINES); ImGui::SameLine();
-				ImGui::RadioButton("LINE_STRIP", &render_type, GL_LINE_STRIP);
-				scene->getSelectedModel()->render_type = render_type;
+				scene->getSelectedModel()->buildGUI();
 			}
 			ImGui::EndTabItem();
 			

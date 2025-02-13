@@ -6,6 +6,9 @@
 #include <sstream>
 #include <vector>
 #include<glm/gtc/matrix_transform.hpp>
+#include"GUIfuncs.h"
+#include<glm/gtc/type_ptr.hpp>
+
 using namespace glm;
 Model::Model() : _world_transform(1.0f), _model_transform(1.0f), _world_normal_transform(1.0f), _model_normal_transform(1.0f), size(1.0f,1.0f,1.0f){
 }
@@ -544,4 +547,48 @@ GroupModel* demoAxis(){
 	group->addModel(ball);
 
 	return group;
+}
+
+// - - - -
+//  GUI
+// - - - - 
+
+void Model::buildGUI(){
+	//Update position without friend class
+
+	if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.02f, -100.0f, 100.0f)){
+		updateTransform();
+	}
+
+	if(ImGui::DragFloat3("Yaw Pitch Roll", glm::value_ptr(yaw_pitch_roll), 0.01f, -glm::pi<float>(), glm::pi<float>())){
+		updateTransform();
+	}
+
+	glm::vec3 scale = getScale();
+	bool a = false;
+	if (_DragFloat3LockAspect("Scale", scale, a)){
+		setScale(scale);
+	}
+}
+
+void ObjModel::buildGUI(){
+	Model::buildGUI();
+	ImGui::Separator();
+
+	if (ImGui::Button("Set mesh")){
+		setModel(popupExplorer(".obj"));
+	}
+
+	ImGui::SameLine();
+	if (ImGui::Button("Set texture")){
+		popupExplorer(".jpg");
+	}
+
+	ImGui::Separator();
+
+	int _type = render_type;
+	ImGui::RadioButton("TRIANGLES", &_type, GL_TRIANGLES); ImGui::SameLine();
+	ImGui::RadioButton("LINES", &_type, GL_LINES); ImGui::SameLine();
+	ImGui::RadioButton("LINE_STRIP", &_type, GL_LINE_STRIP);
+	render_type = _type;
 }

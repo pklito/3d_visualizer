@@ -1,6 +1,7 @@
 #pragma once
 #include"VAO.h"
 #include"Texture.h"
+
 #include<string>
 #include"ShaderClass.h"
 #include<glm/glm.hpp>
@@ -49,7 +50,6 @@ protected:
 
     void updateTransform();
 
-    void buildGUI();
 
 
 public:
@@ -77,8 +77,9 @@ public:
     glm::vec3 getAngles() {return yaw_pitch_roll;};
     glm::vec3 getScale() {return size;};
 
-    friend class GUI;
     virtual Model* copy() const = 0;
+
+    virtual void buildGUI();
 };
 
 class ObjModel : public Model{
@@ -107,6 +108,9 @@ class ObjModel : public Model{
     virtual void render(Renderer& renderer) override;
     //applies transforms on the render, changes the set render_mode
     virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
+
+    
+    virtual void buildGUI() override;
 
     virtual void destroy() override;
 
@@ -165,6 +169,8 @@ public:
     void addCopy(const Model* const model);
     virtual void render(Renderer& renderer) override;
     virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
+    //virtual void buildGUI() override;
+
     virtual void destroy() override;
 
     virtual Model* copy() const override {return new GroupModel(*this);};
