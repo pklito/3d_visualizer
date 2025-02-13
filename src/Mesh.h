@@ -33,6 +33,8 @@ protected:
     glm::vec3 yaw_pitch_roll = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 size= glm::vec3(1,1,1);
 
+    glm::vec4 color = glm::vec4(1.,1.,1.,1.);
+
     GLuint render_type = GL_TRIANGLES;
 
     void applyWorldTransformation(const glm::mat4 &transformation);
@@ -69,6 +71,9 @@ public:
 
     glm::mat4 getFullTransformation();
     glm::mat4 getFullNormalTransformation();
+
+    glm::vec4 getColor() {return color;};
+    void setColor(const glm::vec4& color) {this->color = color;};
 
     void setPosition(const glm::vec3& position);
     void setAngles(const glm::vec3& orientation);

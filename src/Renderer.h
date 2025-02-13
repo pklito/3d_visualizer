@@ -26,7 +26,7 @@ public:
     glm::vec2 getWindowShape() {return glm::vec2(width, height);};
     //Shader& getMainShader() {return tex_shader;};
 
-    void renderModel(VAO* vao, Texture* texture, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode, GLsizeiptr indices_count);
+    void renderModel(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color = glm::vec4(1), const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1));
 
     void updateCamera(Camera& camera);
     void updateCamera(const glm::mat4& projection, const glm::mat4& view);

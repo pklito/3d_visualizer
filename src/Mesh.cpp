@@ -45,14 +45,14 @@ void Model::setTexture(const std::string& texture_dir){
 }
 
 void ObjModel::render(Renderer& renderer){
-	renderer.renderModel(&this->vao, &this->texture, getFullTransformation(), getFullNormalTransformation(), this->render_type, this->indices_count);
+	renderer.renderModel(this->render_type, this->indices_count, &this->vao, &this->texture, this->color, getFullTransformation(), getFullNormalTransformation());
 }
 
 void ObjModel::render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
 		render_mode = this->render_type;
 	}
-	renderer.renderModel(&this->vao, &this->texture, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode, this->indices_count);
+	renderer.renderModel(render_mode, this->indices_count, &this->vao, &this->texture, this->color, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation());
 }
 
 void Model::destroy(){

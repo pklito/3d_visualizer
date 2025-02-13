@@ -28,7 +28,7 @@ void Renderer::updateCamera(Camera& camera){
 	glUseProgram(0);
 }
 
-void Renderer::renderModel(VAO* vao, Texture* texture, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode, GLsizeiptr indices_count){
+void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	//Decide which shader to use
 	bool use_texture = texture != nullptr && texture->exists();
 	Shader& shader = use_texture ? tex_shader : no_tex_shader;
@@ -37,6 +37,7 @@ void Renderer::renderModel(VAO* vao, Texture* texture, const glm::mat4& model_tr
 	shader.activate();
 	shader.setMat4("modelTransform", model_transform);
 	shader.setMat4("normalTransform", normal_transform);
+	shader.setVec4("color", color);
 
 	//Draw.
 	vao->bind();
