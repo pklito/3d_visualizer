@@ -7,6 +7,7 @@
 #include<glm/glm.hpp>
 #include"Renderer.h"
 #include<vector>
+#include"GUIfuncs.h"
 
 class VertexData{
     public:
@@ -50,7 +51,7 @@ protected:
 
     void updateTransform();
 
-
+    LockFloat3State scale_state;
 
 public:
     Model();

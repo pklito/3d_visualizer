@@ -46,34 +46,57 @@ std::string popupExplorer(const std::string& file_type){
 	return "";
 }
 
+#include"imgui_internal.h"	//for ImGui::PushMultiItemsWidths
+bool DragFloat3Lock(const char* label, glm::vec3& value, LockFloat3State& state, float v_speed, const float p_min, const float p_max, const char* format, ImGuiSliderFlags flags)
+{
 
-bool _DragFloat3LockAspect(const char* label, glm::vec3& value, bool& lock){
-	// Saving values
-	glm::vec3 copy = value;
-	bool changed = false;
+	float toggle_height = ImGui::GetFrameHeight();
 
-	if(ImGui::DragFloat3(label, glm::value_ptr(value), 0.02f, -100.0f, 100.0f)){
-		changed = true;
-		if(lock){
-			if(copy.x != value.x){
-				float change = copy.x == 0 ? 1 : value.x / copy.x;
-				value.y *= change;
-				value.z *= change;
-			}
-			else if(copy.y != value.y){
-				float change = copy.y == 0 ? 1 : value.y / copy.y;
-				value.x *= change;
-				value.z *= change;
-			}
-			else if(copy.z != value.z){
-				float change = copy.z == 0 ? 1 : value.z / copy.z;
-				value.x *= change;
-				value.y *= change;
+    ImGuiContext& g = *ImGui::GetCurrentContext();
+    int value_changed = 0;
+    ImGui::BeginGroup();
+    ImGui::PushID(label);
+	float drag_width = glm::max(1.f, ImGui::CalcItemWidth() - ((toggle_height + g.Style.ItemInnerSpacing.x)));	//ensure its not too small.
+
+    ImGui::PushMultiItemsWidths(3, drag_width);
+    for (int i = 0; i < 3; i++)
+    {
+        ImGui::PushID(i);
+        if (i > 0)
+			ImGui::SameLine(0, g.Style.ItemInnerSpacing.x);
+        if(ImGui::DragFloat("", &value[i], v_speed, p_min, p_max, format, flags))
+			value_changed = 1+i;
+        ImGui::PopID();
+        ImGui::PopItemWidth();
+		
+    }
+	if(value_changed == 0){
+		state.util_val = value;
+	}
+	else if(state.lock){
+		for(int i = 0; i < 3; i++){
+			float denom = state.util_val[value_changed - 1];
+			float nom = value[value_changed - 1];
+			denom = denom == 0 ? 1 : denom;
+			nom = nom == 0 ? 1 : nom;
+			if(i != value_changed - 1){
+				
+				value[i] = state.util_val[i] * nom / denom;
 			}
 		}
 	}
 
-	ImGui::SameLine();
-	ImGui::Checkbox(" ", &lock);
-	return changed;
+	ImGui::SameLine(0, g.Style.ItemInnerSpacing.x);
+	ImGui::Checkbox("", &state.lock);
+    ImGui::PopID();
+
+    const char* label_end = ImGui::FindRenderedTextEnd(label);
+    if (label != label_end)
+    {
+        ImGui::SameLine(0, g.Style.ItemInnerSpacing.x);
+        ImGui::TextEx(label, label_end);
+    }
+	
+    ImGui::EndGroup();
+    return value_changed;
 }

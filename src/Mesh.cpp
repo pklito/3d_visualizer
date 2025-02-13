@@ -6,7 +6,6 @@
 #include <sstream>
 #include <vector>
 #include<glm/gtc/matrix_transform.hpp>
-#include"GUIfuncs.h"
 #include<glm/gtc/type_ptr.hpp>
 
 using namespace glm;
@@ -566,7 +565,7 @@ void Model::buildGUI(){
 
 	glm::vec3 scale = getScale();
 	bool a = false;
-	if (_DragFloat3LockAspect("Scale", scale, a)){
+	if (DragFloat3Lock("Scale", scale, scale_state)){
 		setScale(scale);
 	}
 }
