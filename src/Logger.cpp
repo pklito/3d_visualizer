@@ -53,7 +53,7 @@ void Logger::buildGUI() {
 }
 
 Logger& Logger::getInstance() {
-    static Logger instance(generateLogFilename());
+    static Logger instance("logs/"+generateLogFilename());
     return instance;
 }
 
