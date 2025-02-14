@@ -5,6 +5,7 @@
 #include"imgui_impl_opengl3.h"
 #include"stdafx.h"
 #include "GUIfuncs.h"
+#include "Logger.h"
 
 void GUI::buildMenuBar(){
 	if (ImGui::BeginMainMenuBar()) {
@@ -111,7 +112,7 @@ void GUI::buildEditWindow(){
 
 void GUI::buildOutputWindow(){
 	ImGui::Begin("Output Window", &show_output_window);
-	ImGui::Text("outputs go here");
+	Logger::getInstance().buildGUI();
 	ImGui::End();
 }
 

@@ -19,6 +19,7 @@
 #include"imgui_impl_glfw.h"
 #include"imgui_impl_opengl3.h"
 #include <stdexcept>
+#include "Logger.h"
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -64,6 +65,8 @@ int main()
 
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
+
+	Logger::getInstance().log(LOG_INFO, "Starting main loop");
 
 	// Main while loop
 	while (!glfwWindowShouldClose(renderer.getWindow()))
