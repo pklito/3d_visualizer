@@ -63,39 +63,42 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
         float bar_length = params["bar_length"];
         float arrow_radius = params["arrow_radius"];
         float arrow_length = params["arrow_length"];
-        // x
+        // x bar
         models[0]->setPosition(glm::vec3(bar_length/2,0,0));
         models[0]->setScale(glm::vec3(bar_radius,bar_length,bar_radius));
         models[0]->setAnglesDegrees(glm::vec3(0,0,90));
         models[0]->setColor(glm::vec4(1,0,0,1));
 
+        // x cone
         models[3]->setPosition(glm::vec3(bar_length + arrow_length/2,0,0));
         models[3]->setScale(glm::vec3(arrow_radius,arrow_length,arrow_radius));
         models[3]->setAnglesDegrees(glm::vec3(0,0,-90));
         models[3]->setColor(glm::vec4(1,0,0,1));
 
-        // y
+        // y bar
         models[1]->setPosition(glm::vec3(0,bar_length/2,0));
         models[1]->setScale(glm::vec3(bar_radius,bar_length,bar_radius));
         models[1]->setAnglesDegrees(glm::vec3(0,0,0));
         models[1]->setColor(glm::vec4(0,1,0,1));
 
+        // y cone
         models[4]->setPosition(glm::vec3(0,bar_length + arrow_length/2,0));
         models[4]->setScale(glm::vec3(arrow_radius,arrow_length,arrow_radius));
         models[4]->setAnglesDegrees(glm::vec3(0,0,0));
         models[4]->setColor(glm::vec4(0,1,0,1));
 
-        // z
+        // z bar
         models[2]->setPosition(glm::vec3(0,0,bar_length/2));
         models[2]->setScale(glm::vec3(bar_radius,bar_length,bar_radius));
         models[2]->setAnglesDegrees(glm::vec3(0,90,0));
         models[2]->setColor(glm::vec4(0,0,1,1));
 
+        // z cone
         models[5]->setPosition(glm::vec3(0,0,bar_length + arrow_length/2));
         models[5]->setScale(glm::vec3(arrow_radius,arrow_length,arrow_radius));
         models[5]->setAnglesDegrees(glm::vec3(0,-90,0));
         models[5]->setColor(glm::vec4(0,0,1,1));
-
+        // ball
         models[6]->setScale(glm::vec3(bar_radius));
     });
     group->updateModels();
