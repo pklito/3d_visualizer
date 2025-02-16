@@ -135,7 +135,8 @@ typedef enum
     PRIM_GRID,
     PRIM_CONE,
     PRIM_CYLINDER,
-    PRIM_SPHERE
+    PRIM_SPHERE,
+    PRIM_CIRCLE
 } PRIM_MODEL;
 
 #include <map>
@@ -146,7 +147,8 @@ const std::map<PRIM_MODEL, std::string> PRIM_MODEL_NAMES = {
     {PRIM_GRID, "grid"},
     {PRIM_CONE, "cone"},
     {PRIM_CYLINDER, "cylinder"},
-    {PRIM_SPHERE, "sphere"}
+    {PRIM_SPHERE, "sphere"},
+    {PRIM_CIRCLE, "circle"}
 };
 
 class Primitive : public ObjModel {
@@ -154,6 +156,7 @@ protected:
     void FromFile(const std::string file);
     void Tetrahedron();
     void Grid();
+    void Circle();
 public:
     Primitive(PRIM_MODEL model);
 };

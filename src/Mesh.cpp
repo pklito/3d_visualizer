@@ -285,6 +285,28 @@ GLuint indices[] = {
     this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 }
 
+void Primitive::Circle(){
+const int nodes = 100;
+GLfloat vertices[8*nodes];
+	for(int i = 0; i < nodes; i++){
+		float angle = 2 * glm::pi<float>() * i / nodes;
+		vertices[8*i + 0] = 0.5 * glm::cos(angle);
+		vertices[8*i + 1] = 0.0f;
+		vertices[8*i + 2] = 0.5 * glm::sin(angle);
+		vertices[8*i + 3] = 0.0f;
+		vertices[8*i + 4] = 1.0f;
+		vertices[8*i + 5] = 0.0f;
+		vertices[8*i + 6] = 0.5f * glm::cos(angle) + 0.5f;
+		vertices[8*i + 7] = 0.5f * glm::sin(angle) + 0.5f;
+	}
+	GLuint indices[nodes];
+	for(int i = 0; i < nodes; i++){
+		indices[i] = i;
+	}
+	this->setRenderType(GL_LINE_LOOP);
+	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
+};
+
 Primitive::Primitive(PRIM_MODEL model){
     switch(model){
         case PRIM_TETRAHEDRON:
@@ -292,6 +314,9 @@ Primitive::Primitive(PRIM_MODEL model){
 			break;
 		case PRIM_GRID:
 			Grid();
+			break;
+		case PRIM_CIRCLE:
+			Circle();
 			break;
 		case PRIM_CONE:
 		case PRIM_SPHERE:
@@ -538,6 +563,7 @@ void ObjModel::buildGUI(){
 	int _type = render_type;
 	ImGui::RadioButton("TRIANGLES", &_type, GL_TRIANGLES); ImGui::SameLine();
 	ImGui::RadioButton("LINES", &_type, GL_LINES); ImGui::SameLine();
-	ImGui::RadioButton("LINE_STRIP", &_type, GL_LINE_STRIP);
+	ImGui::RadioButton("LINE_STRIP", &_type, GL_LINE_STRIP); ImGui::SameLine();
+	ImGui::RadioButton("LINES_LOOP", &_type, GL_LINE_LOOP);
 	render_type = _type;
 }

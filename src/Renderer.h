@@ -17,6 +17,7 @@ protected:
     GLFWwindow* window;
 	Shader tex_shader;
 	Shader no_tex_shader;
+	Shader color_shader;
 
     glm::vec4 background_color;
     int width, height;

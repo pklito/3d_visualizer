@@ -1,5 +1,8 @@
 #include"Renderer.h"
-Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("resources/default.vert", "resources/default.frag"), no_tex_shader("resources/default.vert", "resources/default_no_tex.frag"), background_color(0.07f, 0.13f, 0.17f, 1.0f)
+Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("resources/default.vert", "resources/default.frag"),
+																no_tex_shader("resources/default.vert", "resources/default_no_tex.frag"), 
+																color_shader("resources/default.vert", "resources/color.frag"),
+																background_color(0.07f, 0.13f, 0.17f, 1.0f)
 , width(width), height(height), window(window){
 	// Specify the viewport of OpenGL in the Window
 	// In this case the viewport goes from x = 0, y = 0, to x = 800, y = 800
@@ -25,13 +28,17 @@ void Renderer::updateCamera(Camera& camera){
 	tex_shader.setMat4("cameraTransform", camera.getProjectionViewMatrix());
 	no_tex_shader.activate();
 	no_tex_shader.setMat4("cameraTransform", camera.getProjectionViewMatrix());
+	color_shader.activate();
+	color_shader.setMat4("cameraTransform", camera.getProjectionViewMatrix());
 	glUseProgram(0);
 }
 
 void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	//Decide which shader to use
 	bool use_texture = texture != nullptr && texture->exists();
-	Shader& shader = use_texture ? tex_shader : no_tex_shader;
+
+	bool use_color = render_mode == GL_LINES || render_mode == GL_LINE_STRIP || render_mode == GL_LINE_LOOP;
+	Shader& shader = use_color ? color_shader : (use_texture ? tex_shader : no_tex_shader);
 
 	//Pass model transforms
 	shader.activate();
