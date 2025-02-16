@@ -6,6 +6,7 @@
 #include"stdafx.h"
 #include "GUIfuncs.h"
 #include "Logger.h"
+#include "MeshEx.h"
 
 void GUI::buildMenuBar(){
 	if (ImGui::BeginMainMenuBar()) {

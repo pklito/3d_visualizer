@@ -494,61 +494,7 @@ GroupModel* demoFoxHat(){
 	return group;
 }
 
-GroupModel* demoAxis(float bar_radius, float bar_length, float arrow_radius, float size){
-	float arrow_length = size - bar_length;
-	//x
-	Model* mesh_x = new Primitive(PRIM_CYLINDER);
-	mesh_x->setPosition(glm::vec3(bar_length/2,0,0));
-	mesh_x->setScale(glm::vec3(bar_radius,bar_length,bar_radius));
-	mesh_x->setAnglesDegrees(glm::vec3(0,0,90));
-	mesh_x->setColor(glm::vec4(1,0,0,1));
 
-	Model* arrow_x = new Primitive(PRIM_CONE);
-	arrow_x->setPosition(glm::vec3(bar_length + arrow_length/2,0,0));
-	arrow_x->setScale(glm::vec3(arrow_radius,arrow_length,arrow_radius));
-	arrow_x->setAnglesDegrees(glm::vec3(0,0,-90));
-	arrow_x->setColor(glm::vec4(1,0,0,1));
-
-	//y
-	Model* mesh_y = new Primitive(PRIM_CYLINDER);
-	mesh_y->setPosition(glm::vec3(0,bar_length/2,0));
-	mesh_y->setScale(glm::vec3(bar_radius,bar_length,bar_radius));
-	mesh_y->setAnglesDegrees(glm::vec3(0,0,0));
-	mesh_y->setColor(glm::vec4(0,1,0,1));
-
-	Model* arrow_y = new Primitive(PRIM_CONE);
-	arrow_y->setPosition(glm::vec3(0,bar_length + arrow_length/2,0));
-	arrow_y->setScale(glm::vec3(arrow_radius,arrow_length,arrow_radius));
-	arrow_y->setAnglesDegrees(glm::vec3(0,0,0));
-	arrow_y->setColor(glm::vec4(0,1,0,1));
-
-	//z
-	Model* mesh_z = new Primitive(PRIM_CYLINDER);
-	mesh_z->setPosition(glm::vec3(0,0,bar_length/2));
-	mesh_z->setScale(glm::vec3(bar_radius,bar_length,bar_radius));
-	mesh_z->setAnglesDegrees(glm::vec3(0,90,0));
-	mesh_z->setColor(glm::vec4(0,0,1,1));
-
-	Model* arrow_z = new Primitive(PRIM_CONE);
-	arrow_z->setPosition(glm::vec3(0,0,bar_length + arrow_length/2));
-	arrow_z->setScale(glm::vec3(arrow_radius,arrow_length,arrow_radius));
-	arrow_z->setAnglesDegrees(glm::vec3(0,-90,0));
-	arrow_z->setColor(glm::vec4(0,0,1,1));
-
-	Model* ball = new Primitive(PRIM_SPHERE);
-	ball->setScale(glm::vec3(bar_radius));
-
-	GroupModel* group = new GroupModel();
-	group->addModel(mesh_x);
-	group->addModel(mesh_y);
-	group->addModel(mesh_z);
-	group->addModel(arrow_x);
-	group->addModel(arrow_y);
-	group->addModel(arrow_z);
-	group->addModel(ball);
-
-	return group;
-}
 
 // - - - -
 //  GUI

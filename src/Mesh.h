@@ -171,8 +171,8 @@ public:
     GroupModel(const std::vector<Model*>& models);
     GroupModel(const GroupModel& _that);
 
-    void addModel(Model* model);
-    void addCopy(const Model* const model);
+    virtual void addModel(Model* model);
+    virtual void addCopy(const Model* const model);
     virtual void render(Renderer& renderer) override;
     virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
     //virtual void buildGUI() override;
@@ -185,4 +185,3 @@ public:
 
 GroupModel* demoFoxHat();
 
-GroupModel* demoAxis(float bar_radius = 0.1, float bar_length = 0.5, float arrow_radius = 0.2, float size = 1.);

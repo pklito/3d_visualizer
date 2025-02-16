@@ -1,4 +1,5 @@
 #include"Scene.h"
+#include "MeshEx.h"
 
 Scene::Scene() : camera(){
         Model* grid1 = new Primitive(PRIM_GRID);
