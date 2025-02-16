@@ -15,6 +15,8 @@ public:
     void setFloatParams(std::map<std::string, float> params);
     float getFloatParam(std::string name);
     virtual void buildGUI() override;
+    
+    void updateModels();
 };
 
 ConfigableGroupModel* demoAxis(float bar_radius = 0.1, float bar_length = 0.5, float arrow_radius = 0.2, float size = 1.);

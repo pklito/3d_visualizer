@@ -7,14 +7,14 @@ ConfigableGroupModel::ConfigableGroupModel() : GroupModel() {}
 
 void ConfigableGroupModel::setFloatParam(std::string name, float value) {
     float_params[name] = value;
-    update_models(models, float_params);
+    updateModels();
 }
 
 void ConfigableGroupModel::setFloatParams(std::map<std::string, float> params) {
     for(auto pair : params) {
         float_params[pair.first] = pair.second;
     }
-    update_models(models, float_params);
+    updateModels();
 }
 
 float ConfigableGroupModel::getFloatParam(std::string name) {
@@ -24,10 +24,24 @@ float ConfigableGroupModel::getFloatParam(std::string name) {
 void ConfigableGroupModel::buildGUI() {
     Model::buildGUI();
     ImGui::Separator();
+    bool changed = false;
     for(auto pair : float_params) {
-        ImGui::SliderFloat(pair.first.c_str(), &float_params[pair.first], -10.0f, 10.0f);
+        if(ImGui::SliderFloat(pair.first.c_str(), &float_params[pair.first], -10.0f, 10.0f)){
+            changed = true;
+        }
+    }
+    if(changed) {
+        updateModels();
     }
 }
+
+void ConfigableGroupModel::updateModels() {
+    update_models(models, float_params);
+}
+
+//
+//  EXAMPLES
+//
 
 ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_radius, float size) {
     float arrow_length = size - bar_length;
@@ -84,6 +98,6 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
 
         models[6]->setScale(glm::vec3(bar_radius));
     });
-
+    group->updateModels();
     return group;
 }
