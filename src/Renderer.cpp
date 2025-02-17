@@ -2,6 +2,7 @@
 Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("resources/default.vert", "resources/default.frag"),
 																no_tex_shader("resources/default.vert", "resources/default_no_tex.frag"), 
 																color_shader("resources/default.vert", "resources/color.frag"),
+																highlight_shader("resources/default.vert", "resources/highlight.frag"),
 																background_color(0.07f, 0.13f, 0.17f, 1.0f)
 , width(width), height(height), window(window){
 	// Specify the viewport of OpenGL in the Window
@@ -52,12 +53,13 @@ void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, VAO* va
 
 void Renderer::renderHighlight(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	
-	Shader& shader = color_shader;
+	Shader& shader = highlight_shader;
 	//Pass model transforms
 	shader.activate();
 	shader.setMat4("modelTransform", model_transform);
 	shader.setMat4("normalTransform", normal_transform);
 	shader.setMat4("cameraTransform", camera_view);
+	shader.setFloat("time", glfwGetTime());
 	shader.setVec4("color", color);
 
 	//Draw.

@@ -9,6 +9,7 @@
 #include"VAO.h"
 #include"Texture.h"
 
+#include <vector>
 
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
@@ -18,6 +19,7 @@ protected:
 	Shader tex_shader;
 	Shader no_tex_shader;
 	Shader color_shader;
+    Shader highlight_shader;
 
     glm::vec4 background_color;
     glm::mat4 camera_view;

@@ -89,6 +89,11 @@ void Shader::setVec4(const std::string& name, const glm::vec4& vec)
 	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &vec[0]);
 }
 
+void Shader::setFloat(const std::string& name, float time)
+{
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), time);
+}
+
 // Checks if the different Shaders have compiled properly
 void Shader::compileErrors(unsigned int shader, const char* type)
 {

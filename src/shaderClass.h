@@ -25,6 +25,7 @@ public:
 	// Deletes the Shader Program
 	void destroy();
 
+	void setFloat(const std::string& name, float time);
 	void setMat4(const std::string& name, const glm::mat4& mat);
 	void setVec4(const std::string& name, const glm::vec4& vec);
 	
