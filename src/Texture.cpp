@@ -52,12 +52,12 @@ void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
 	glUniform1i(texUni, unit);
 }
 
-void Texture::bind()
+void Texture::bind() const
 {
 	glBindTexture(type, ID);
 }
 
-void Texture::unbind()
+void Texture::unbind() const
 {
 	glBindTexture(type, 0);
 }
@@ -67,6 +67,6 @@ void Texture::destroy()
 	glDeleteTextures(1, &ID);
 }
 
-bool Texture::exists(){
+bool Texture::exists() const{
 	return ID != 0;
 }

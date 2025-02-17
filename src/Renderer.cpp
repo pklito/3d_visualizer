@@ -28,7 +28,7 @@ void Renderer::updateCamera(Camera& camera){
 	camera_view = camera.getProjectionViewMatrix();
 }
 
-void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
+void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	//Decide which shader to use
 	bool use_texture = texture != nullptr && texture->exists();
 
@@ -51,7 +51,7 @@ void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, VAO* va
 	shader.deactivate();
 }
 
-void Renderer::renderHighlight(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
+void Renderer::renderHighlight(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	
 	Shader& shader = highlight_shader;
 	//Pass model transforms

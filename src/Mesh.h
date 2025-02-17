@@ -16,7 +16,7 @@ class VertexData{
     VertexData(GLfloat* vertices, GLsizeiptr vertexcount, GLint data_amount, GLuint* vertex_indices, GLsizeiptr indices_count)
     : data(vertices), data_length(vertexcount), data_amount(data_amount), indices(vertex_indices), indices_length(indices_count) {}
 };
-#define RenderFunc(name) void (Renderer::*name)(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform)
+#define RenderFunc(name) void (Renderer::*name)(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform)
 
 class Model {
 protected:
@@ -66,7 +66,7 @@ public:
     
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) = 0;
     //applies transforms on the render, changes the set render_mode
-    virtual void render(Renderer& renderer, void (Renderer::*name)(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform) = &Renderer::renderModel,
+    virtual void render(Renderer& renderer, RenderFunc(render_func) = &Renderer::renderModel,
                         const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) = 0;
 
     virtual void destroy();

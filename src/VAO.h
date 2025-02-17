@@ -16,9 +16,9 @@ public:
 	VBO& generate(GLfloat* vertices, GLsizeiptr size);
 
 	// Binds the VBO
-	void bind();
+	void bind() const;
 	// Unbinds the VBO
-	void unbind();
+	void unbind() const;
 	// Deletes the VBO
 	void destroy();
 };
@@ -36,9 +36,9 @@ public:
 	EBO() {};
 	EBO& generate(GLuint* indices, GLsizeiptr size);
 	// Binds the EBO
-	void bind();
+	void bind() const;
 	// Unbinds the EBO
-	void unbind();
+	void unbind() const;
 	// Deletes the EBO
 	void destroy();
 };
@@ -55,7 +55,7 @@ public:
 	// Links a VBO Attribute such as a position or color to the VAO
 	void linkAttributes(VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
 	// Binds the VAO
-	void bind();
+	void bind() const;
 	// Unbinds the VAO
 	static void unbind();
 	// Deletes the VAO
