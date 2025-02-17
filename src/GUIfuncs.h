@@ -13,6 +13,12 @@ struct LockFloat3State{
     glm::vec3 util_val;
 } ;
 
+enum GUIEditType {
+    GUI_SLIDER,
+    GUI_DRAG,
+    GUI_INPUT
+};
+
 LPCTSTR stringToLPCTSTR(const std::string& str);
 std::string popupExplorer(const std::string& file_type);
 bool DragFloat3Lock(const char* label, glm::vec3& value, LockFloat3State& state, float v_speed = 0.02, const float p_min = -100., const float p_max = 100., const char* format = "%.3f", ImGuiSliderFlags flags = 0);
