@@ -20,6 +20,7 @@ protected:
 	Shader color_shader;
 
     glm::vec4 background_color;
+    glm::mat4 camera_view;
     int width, height;
 public:
     Renderer(GLFWwindow* window, int width, int height);
@@ -28,7 +29,7 @@ public:
     //Shader& getMainShader() {return tex_shader;};
 
     void renderModel(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color = glm::vec4(1), const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1));
-
+    void renderHighlight(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color = glm::vec4(1), const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1));
     void updateCamera(Camera& camera);
     void updateCamera(const glm::mat4& projection, const glm::mat4& view);
     void clearFrame();

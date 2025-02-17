@@ -16,6 +16,7 @@ class VertexData{
     VertexData(GLfloat* vertices, GLsizeiptr vertexcount, GLint data_amount, GLuint* vertex_indices, GLsizeiptr indices_count)
     : data(vertices), data_length(vertexcount), data_amount(data_amount), indices(vertex_indices), indices_length(indices_count) {}
 };
+#define RenderFunc(name) void (Renderer::*name)(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform)
 
 class Model {
 protected:
@@ -63,9 +64,9 @@ public:
     void setTexture(const Texture& texture) {this->texture = texture;};
     bool hasTexture() {return texture.exists();};
     
-    virtual void render(Renderer& renderer) = 0;
+    virtual void render(RenderFunc(renderer_func)) = 0;
     //applies transforms on the render, changes the set render_mode
-    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) = 0;
+    virtual void render(RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) = 0;
 
     virtual void destroy();
 
@@ -111,9 +112,9 @@ class ObjModel : public Model{
         setTexture(texturedir);
     };
 
-    virtual void render(Renderer& renderer) override;
+    virtual void render(RenderFunc(renderer_func)) override;
     //applies transforms on the render, changes the set render_mode
-    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
+    virtual void render(RenderFunc(name), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
 
     
     virtual void buildGUI() override;
@@ -176,8 +177,8 @@ public:
 
     virtual void addModel(Model* model);
     virtual void addCopy(const Model* const model);
-    virtual void render(Renderer& renderer) override;
-    virtual void render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
+    virtual void render(RenderFunc(render_function)) override;
+    virtual void render(RenderFunc(render_function), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode = -1) override;
     //virtual void buildGUI() override;
 
     virtual void destroy() override;

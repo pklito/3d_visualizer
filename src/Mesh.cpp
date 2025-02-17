@@ -44,15 +44,15 @@ void Model::setTexture(const std::string& texture_dir){
     texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
-void ObjModel::render(Renderer& renderer){
-	renderer.renderModel(this->render_type, this->indices_count, &this->vao, &this->texture, this->color, getFullTransformation(), getFullNormalTransformation());
+void ObjModel::render(RenderFunc(renderer_func)){
+	renderer_func(this->render_type, this->indices_count, &this->vao, &this->texture, this->color, getFullTransformation(), getFullNormalTransformation());
 }
 
-void ObjModel::render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void ObjModel::render(RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
 		render_mode = this->render_type;
 	}
-	renderer.renderModel(render_mode, this->indices_count, &this->vao, &this->texture, this->color, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation());
+	renderer_func(render_mode, this->indices_count, &this->vao, &this->texture, this->color, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation());
 }
 
 void Model::destroy(){
@@ -487,18 +487,18 @@ void GroupModel::addCopy(const Model* const model){
 	models.push_back(new_model);
 }
 
-void GroupModel::render(Renderer& renderer){
+void GroupModel::render(RenderFunc(renderer_func)){
 	for(Model* model : models){
-		model->render(renderer, getFullTransformation(), getFullNormalTransformation(), render_type);
+		model->render(renderer_func, getFullTransformation(), getFullNormalTransformation(), render_type);
 	}
 }
 
-void GroupModel::render(Renderer& renderer, const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void GroupModel::render(RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
 		render_mode = this->render_type;
 	}
 	for(Model* model : models){
-		model->render(renderer, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
+		model->render(renderer_func, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
 	}
 }
 
