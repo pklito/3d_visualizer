@@ -64,9 +64,10 @@ public:
     void setTexture(const Texture& texture) {this->texture = texture;};
     bool hasTexture() {return texture.exists();};
     
-    virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) = 0;
+    // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) = 0;
     //applies transforms on the render, changes the set render_mode
-    virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) = 0;
+    virtual void render(Renderer& renderer, void (Renderer::*name)(GLuint render_mode, GLsizeiptr indices_count, VAO* vao, Texture* texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform) = &Renderer::renderModel,
+                        const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) = 0;
 
     virtual void destroy();
 
@@ -112,9 +113,9 @@ class ObjModel : public Model{
         setTexture(texturedir);
     };
 
-    virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) override;
+    // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) override;
     //applies transforms on the render, changes the set render_mode
-    virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
+    virtual void render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
 
     
     virtual void buildGUI() override;
@@ -177,8 +178,8 @@ public:
 
     virtual void addModel(Model* model);
     virtual void addCopy(const Model* const model);
-    virtual void render(Renderer& renderer, RenderFunc(render_function) = Renderer::renderModel) override;
-    virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
+    // virtual void render(Renderer& renderer, RenderFunc(render_func) = Renderer::renderModel) override;
+    virtual void render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
     //virtual void buildGUI() override;
 
     virtual void destroy() override;

@@ -44,11 +44,6 @@ void Model::setTexture(const std::string& texture_dir){
     texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
-void ObjModel::render(Renderer& renderer, RenderFunc(renderer_func)){
-	//Call renderer with the chosen render call (usually renderer.renderModel)
-	(renderer.*renderer_func)(this->render_type, this->indices_count, &this->vao, &this->texture, this->color, getFullTransformation(), getFullNormalTransformation());
-}
-
 void ObjModel::render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
 		render_mode = this->render_type;
@@ -488,12 +483,6 @@ void GroupModel::addModel(Model* model){
 void GroupModel::addCopy(const Model* const model){
 	Model* new_model = model->copy();
 	models.push_back(new_model);
-}
-
-void GroupModel::render(Renderer& renderer, RenderFunc(renderer_func)){
-	for(Model* model : models){
-		model->render(renderer, renderer_func, getFullTransformation(), getFullNormalTransformation(), render_type);
-	}
 }
 
 void GroupModel::render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){

@@ -56,7 +56,7 @@ void Scene::handleInputs(Renderer& renderer){
 
 void Scene::render(Renderer& renderer){
     for(Model* model : models){
-        model->render(renderer, Renderer::renderModel);
+        model->render(renderer);
     }
     int i = 0;
     for(Model* model : const_models){
@@ -68,7 +68,7 @@ void Scene::render(Renderer& renderer){
     }
 
     if (selected_model != -1){
-        models[selected_model]->render(renderer, glm::mat4(1), glm::mat4(1), GL_LINES);
+        models[selected_model]->render(renderer, &Renderer::renderModel, glm::mat4(1), glm::mat4(1), GL_LINES);
     }
 }
 
