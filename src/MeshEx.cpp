@@ -25,17 +25,47 @@ void ConfigableGroupModel::buildGUI() {
     Model::buildGUI();
     ImGui::SeparatorText("Config parameters");
 
-    ImGui::PushItemWidth(50);
-    ImGui::InputFloat("min", &min_slider, 0.0, 0.0, "%.1f"); ImGui::SameLine();
-    ImGui::InputFloat("max", &max_slider, 0.0, 0.0, "%.1f");
-    ImGui::PopItemWidth();
-
+    //choose how to change the variables
+    ImGui::RadioButton("Slider", (int*)&gui_edit_type, GUI_SLIDER); ImGui::SameLine();
+    ImGui::RadioButton("Drag", (int*)&gui_edit_type, GUI_DRAG); ImGui::SameLine();
+    ImGui::RadioButton("Input", (int*)&gui_edit_type, GUI_INPUT);
     bool changed = false;
-    for(auto pair : float_params) {
-        if(ImGui::SliderFloat(pair.first.c_str(), &float_params[pair.first], min_slider, max_slider)){
-            changed = true;
-        }
+
+    switch(gui_edit_type) {
+        case GUI_SLIDER:
+            {
+                ImGui::PushItemWidth(50);
+                ImGui::InputFloat("min", &min_slider, 0.0, 0.0, "%.1f"); ImGui::SameLine();
+                ImGui::InputFloat("max", &max_slider, 0.0, 0.0, "%.1f");
+                ImGui::PopItemWidth();
+
+                for(auto pair : float_params) {
+                    if(ImGui::SliderFloat(pair.first.c_str(), &float_params[pair.first], min_slider, max_slider)){
+                        changed = true;
+                    }
+                }
+            }
+            break;
+        case GUI_DRAG:
+            {
+                for(auto pair : float_params) {
+                    if(ImGui::DragFloat(pair.first.c_str(), &float_params[pair.first], 0.01f)){
+                        changed = true;
+                    }
+                }
+            }
+            break;
+        case GUI_INPUT:
+            {
+                for(auto pair : float_params) {
+                    if(ImGui::InputFloat(pair.first.c_str(), &float_params[pair.first], 0.01f)){
+                        changed = true;
+                    }
+                }
+            }
+            break;
     }
+    
 
     if(changed) {
         updateModels();

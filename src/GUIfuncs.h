@@ -16,7 +16,8 @@ struct LockFloat3State{
 enum GUIEditType {
     GUI_SLIDER,
     GUI_DRAG,
-    GUI_INPUT
+    GUI_INPUT,
+    ENUM_COUNT
 };
 
 LPCTSTR stringToLPCTSTR(const std::string& str);
