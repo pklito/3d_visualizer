@@ -23,13 +23,20 @@ float ConfigableGroupModel::getFloatParam(std::string name) {
 
 void ConfigableGroupModel::buildGUI() {
     Model::buildGUI();
-    ImGui::Separator();
+    ImGui::SeparatorText("Config parameters");
+
+    ImGui::PushItemWidth(50);
+    ImGui::InputFloat("min", &min_slider, 0.0, 0.0, "%.1f"); ImGui::SameLine();
+    ImGui::InputFloat("max", &max_slider, 0.0, 0.0, "%.1f");
+    ImGui::PopItemWidth();
+
     bool changed = false;
     for(auto pair : float_params) {
-        if(ImGui::SliderFloat(pair.first.c_str(), &float_params[pair.first], -10.0f, 10.0f)){
+        if(ImGui::SliderFloat(pair.first.c_str(), &float_params[pair.first], min_slider, max_slider)){
             changed = true;
         }
     }
+
     if(changed) {
         updateModels();
     }
@@ -55,14 +62,13 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
         new Primitive(PRIM_SPHERE)
     }, {
         {"bar_radius", bar_radius},
-        {"bar_length", bar_length},
-        {"arrow_radius", arrow_radius},
-        {"arrow_length", arrow_length}
+        {"arrow_length", arrow_length},
+        {"arrow_radius", arrow_radius}
     }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
         float bar_radius = params["bar_radius"];
-        float bar_length = params["bar_length"];
-        float arrow_radius = params["arrow_radius"];
         float arrow_length = params["arrow_length"];
+        float bar_length = 1 - arrow_length;
+        float arrow_radius = params["arrow_radius"];
         // x bar
         models[0]->setPosition(glm::vec3(bar_length/2,0,0));
         models[0]->setScale(glm::vec3(bar_radius,bar_length,bar_radius));
@@ -102,5 +108,7 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
         models[6]->setScale(glm::vec3(bar_radius));
     });
     group->updateModels();
+
+    group->setGUISliderRange(0.01, 1.0);
     return group;
 }

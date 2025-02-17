@@ -20,7 +20,7 @@ public:
     float getFloatParam(std::string name);
     virtual void buildGUI() override;
 
-    void setSliderRange(float min, float max) { min_slider = min; max_slider = max; }
+    void setGUISliderRange(float min, float max) { min_slider = min; max_slider = max; }
     void setGUIEditType(GUIEditType type) { gui_edit_type = type; }
 
     void updateModels();
