@@ -44,15 +44,18 @@ void Model::setTexture(const std::string& texture_dir){
     texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
-void ObjModel::render(RenderFunc(renderer_func)){
-	renderer_func(this->render_type, this->indices_count, &this->vao, &this->texture, this->color, getFullTransformation(), getFullNormalTransformation());
+void ObjModel::render(Renderer& renderer, RenderFunc(renderer_func)){
+	//Call renderer with the chosen render call (usually renderer.renderModel)
+	(renderer.*renderer_func)(this->render_type, this->indices_count, &this->vao, &this->texture, this->color, getFullTransformation(), getFullNormalTransformation());
 }
 
-void ObjModel::render(RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void ObjModel::render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
 		render_mode = this->render_type;
 	}
-	renderer_func(render_mode, this->indices_count, &this->vao, &this->texture, this->color, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation());
+	//Call renderer with the chosen render call (usually renderer.renderModel)
+	//Overrides the transformations.
+	(renderer.*renderer_func)(render_mode, this->indices_count, &this->vao, &this->texture, this->color, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation());
 }
 
 void Model::destroy(){
@@ -487,18 +490,18 @@ void GroupModel::addCopy(const Model* const model){
 	models.push_back(new_model);
 }
 
-void GroupModel::render(RenderFunc(renderer_func)){
+void GroupModel::render(Renderer& renderer, RenderFunc(renderer_func)){
 	for(Model* model : models){
-		model->render(renderer_func, getFullTransformation(), getFullNormalTransformation(), render_type);
+		model->render(renderer, renderer_func, getFullTransformation(), getFullNormalTransformation(), render_type);
 	}
 }
 
-void GroupModel::render(RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void GroupModel::render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
 		render_mode = this->render_type;
 	}
 	for(Model* model : models){
-		model->render(renderer_func, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
+		model->render(renderer, renderer_func, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
 	}
 }
 

@@ -56,9 +56,8 @@ void Scene::handleInputs(Renderer& renderer){
 
 void Scene::render(Renderer& renderer){
     for(Model* model : models){
-        model->render(&renderer.renderModel);
+        model->render(renderer, Renderer::renderModel);
     }
-
     int i = 0;
     for(Model* model : const_models){
         if((i == 0 || i == 1) && !render_grid){
