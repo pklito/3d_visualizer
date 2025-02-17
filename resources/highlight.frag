@@ -5,7 +5,7 @@ out vec4 FragColor;
 
 
 // Inputs the texture coordinates from the Vertex Shader
-in vec2 texCoord;
+in vec4 world_pos;
 
 // Gets the Texture Unit from the main function
 uniform vec4 color;
@@ -30,18 +30,19 @@ float noise(vec3 p) {
 }
 
 // Function to generate Perlin marble texture
-vec3 marble(vec3 p) {
+float marble(vec3 p) {
 	float n = noise(p * 5.0);
 	float m = sin(p.z + n * 10.0);
-	return vec3(1.0) * 0.5 + vec3(m) * 0.5;
+	return 1.0 * 0.5 + m * 0.5;
 }
 
 void main()
 {
-	vec3 p = vec3(texCoord, 1.0);
-	vec3 marbleColor = marble(p) + vec3(time);
-	if (marbleColor.r < 0.8) {
-		discard;
-	}
-	FragColor = vec4(marbleColor, marbleColor.r);
+	vec3 p = abs(world_pos.xyz + vec3(cos(0.1 * time))*normalize(world_pos.xyz) + vec3(0.1*time,sin(0.45*time),cos(0.3*time)));
+	float marbleColor = marble(p);
+
+	float cutoff = 0.7;
+	marbleColor = smoothstep(cutoff, 1., marbleColor);
+	if(marbleColor <= 0) discard;
+	FragColor = vec4(0.7*marbleColor, 0.6*smoothstep(0.3, 0.8, marbleColor), 0.6*smoothstep(0., marbleColor, 0.1) + 0.3*marbleColor*marbleColor, 0.6*marbleColor);
 }

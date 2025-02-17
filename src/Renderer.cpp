@@ -2,7 +2,7 @@
 Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("resources/default.vert", "resources/default.frag"),
 																no_tex_shader("resources/default.vert", "resources/default_no_tex.frag"), 
 																color_shader("resources/default.vert", "resources/color.frag"),
-																highlight_shader("resources/default.vert", "resources/highlight.frag"),
+																highlight_shader("resources/highlight.vert", "resources/highlight.frag"),
 																background_color(0.07f, 0.13f, 0.17f, 1.0f)
 , width(width), height(height), window(window){
 	// Specify the viewport of OpenGL in the Window
@@ -65,8 +65,13 @@ void Renderer::renderHighlight(GLuint render_mode, GLsizeiptr indices_count, VAO
 	//Draw.
 	vao->bind();
 	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+glEnable( GL_BLEND );
 	glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_INT, 0);
 	glEnable(GL_DEPTH_TEST);
+glDisable( GL_BLEND );
+
+
 	vao->unbind();
 	shader.deactivate();
 }
