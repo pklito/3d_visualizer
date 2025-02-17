@@ -545,7 +545,7 @@ void ObjModel::buildGUI(){
 
 	ImGui::SameLine();
 	if (ImGui::Button("Set texture")){
-		popupExplorer(".jpg");
+		setTexture(popupExplorer(".jpg"));
 	}
 	//ImGui::SameLine();
 	if (ImGui::ColorEdit4("Color", glm::value_ptr(color))){

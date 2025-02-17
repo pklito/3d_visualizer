@@ -95,7 +95,6 @@ class ObjModel : public Model{
         VAO vao;
         VBO vbo;
         EBO ebo;
-        Texture texture;
         // Shader shader;
         GLsizeiptr indices_count;
         void generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_count);
