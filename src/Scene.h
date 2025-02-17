@@ -12,6 +12,7 @@ int selected_model;
 std::vector<Model*> const_models;
 
 bool render_grid = true;
+bool highlight_selected_model = true;
 Camera camera;
 
     public:

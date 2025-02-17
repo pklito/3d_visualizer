@@ -59,6 +59,8 @@ void GUI::buildMenuBar(){
 		//edit
 		if (ImGui::BeginMenu("Render")) {
 			ImGui::Checkbox("Render Grid", &scene->render_grid);
+			ImGui::Checkbox("Highlight selected model", &scene->highlight_selected_model);
+
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();

@@ -67,7 +67,7 @@ void Scene::render(Renderer& renderer){
         model->render(renderer);
     }
 
-    if (selected_model != -1){
+    if (selected_model >= 0 && selected_model < models.size() && highlight_selected_model){
         models[selected_model]->render(renderer, &Renderer::renderHighlight);
     }
 }
