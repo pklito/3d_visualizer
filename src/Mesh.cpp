@@ -523,14 +523,28 @@ void Model::buildGUI(){
 	if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.02f, -100.0f, 100.0f)){
 		updateTransform();
 	}
-
+	if(_gui_use_degrees){
+		glm::vec3 yaw_pitch_roll_deg = yaw_pitch_roll * glm::vec3(180.0f/glm::pi<float>());
+		if(ImGui::DragFloat3("Yaw Pitch Roll", glm::value_ptr(yaw_pitch_roll_deg), 0.1f, -180.0f, 180.0f)){
+			yaw_pitch_roll = yaw_pitch_roll_deg * glm::vec3(glm::pi<float>()/180.0f);
+			updateTransform();
+		}
+	}
+	else{
 	if(ImGui::DragFloat3("Yaw Pitch Roll", glm::value_ptr(yaw_pitch_roll), 0.01f, -glm::pi<float>(), glm::pi<float>())){
 		updateTransform();
 	}
-
+	}
+	// Pop into next line if no room
+	if(ImGui::GetContentRegionAvail().x > 330)
+		ImGui::SameLine();
+	ImGui::PushID("use_degrees");
+	ImGui::SetNextItemWidth(50);
+	ImGui::SliderInt("", (int*)&_gui_use_degrees, 0, 1, _gui_use_degrees ? "   Deg" : "Rad   ");
+	ImGui::PopID();
 	glm::vec3 scale = getScale();
 	bool a = false;
-	if (DragFloat3Lock("Scale", scale, scale_state)){
+	if (DragFloat3Lock("Scale", scale, _gui_scale_state)){
 		setScale(scale);
 	}
 }

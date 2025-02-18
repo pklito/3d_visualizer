@@ -54,7 +54,8 @@ protected:
 
     void updateTransform();
 
-    LockFloat3State scale_state;
+    LockFloat3State _gui_scale_state;
+    bool _gui_use_degrees = false;
 
 public:
     Model();
