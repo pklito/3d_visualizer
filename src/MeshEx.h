@@ -21,3 +21,4 @@ public:
 };
 
 ConfigableGroupModel* demoAxis(float bar_radius = 0.1, float bar_length = 0.5, float arrow_radius = 0.2, float size = 1.);
+ConfigableGroupModel* stairModel(float stair_height = 0.17, float stair_length = 0.29);

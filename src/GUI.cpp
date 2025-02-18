@@ -47,6 +47,9 @@ void GUI::buildMenuBar(){
 					if(ImGui::MenuItem("Axis")){
 						scene->addModel(demoAxis());
 					}
+					if(ImGui::MenuItem("Stair")){
+						scene->addModel(stairModel());
+					}
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();

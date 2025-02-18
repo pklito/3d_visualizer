@@ -106,3 +106,53 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
 
     return group;
 }
+
+ConfigableGroupModel* stairModel(float stair_height, float stair_length) {
+    ConfigableGroupModel* group = new ConfigableGroupModel({
+        new Primitive(PRIM_CUBE),
+        new Primitive(PRIM_CUBE),
+        new Primitive(PRIM_CUBE)
+    }, {
+        {"step_number", 0},
+        {"stair_height", stair_height},
+        {"stair_length", stair_length},
+        {"top_thickness", 0.02},
+        {"front_thickness", 0.1},
+        {"stair_indent", 0.02}
+    }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
+        float stair_height = params["stair_height"];
+        float stair_length = params["stair_length"];
+        float top_thickness = params["top_thickness"];
+        float front_thickness = params["front_thickness"];
+        float stair_indent = params["stair_indent"];
+        float step_number = params["step_number"];
+
+        Model* stair_front = models[0];
+        stair_front->setPosition(glm::vec3(-front_thickness/2 - stair_indent, (stair_height - top_thickness) / 2,0));
+        stair_front->setScale(glm::vec3(front_thickness, stair_height - top_thickness, 1.));
+
+        Model* stair_top = models[1];
+        stair_top->setPosition(glm::vec3(-stair_length/2, stair_height - top_thickness/2, 0));
+        stair_top->setScale(glm::vec3(stair_length, top_thickness, 1.));
+        
+        Model* stair_bottom = models[2];
+        stair_bottom->setPosition(glm::vec3(-front_thickness/2 - stair_indent, - top_thickness/2, 0));
+        stair_bottom->setScale(glm::vec3(front_thickness + stair_indent, top_thickness, 1.));
+        //offset based on stair_number
+        for(Model* model : models) {
+            glm::vec3 pos = model->getPosition();
+            pos[0] -= step_number * stair_length;
+            pos[1] += step_number * stair_height;
+            model->setPosition(pos);
+        }
+
+        //set colors
+        for(Model* model : models) {
+            model->setColor(glm::vec4(0.7,0.8,0.4,1));
+        }
+
+    });
+    group->updateModels();
+
+    return group;
+}
