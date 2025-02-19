@@ -88,6 +88,11 @@ void GUI::buildEditWindow(){
 			}
 			ImGui::SameLine();
 			ImGui::Text("Selected Model: %d/%d", scene->selected_model+1, scene->models.size());
+			ImGui::SameLine();
+			if (ImGui::Button("Delete")){
+				scene->deleteSelectedModel();
+			}
+			
 			ImGui::Separator();
 			if(scene->getSelectedModel() == nullptr){
 				ImGui::Text("No models in scene");

@@ -24,6 +24,16 @@ void Scene::addModel(Model* model){
     selected_model = models.size()-1;
 }
 
+void Scene::deleteSelectedModel(){
+    if (selected_model == -1 || models.size() <= selected_model){
+        return;
+    }
+    models[selected_model]->destroy();
+    delete models[selected_model];
+    models.erase(models.begin() + selected_model);
+    selected_model -= 1;
+}
+
 Model* Scene::getSelectedModel(){
     if (selected_model == -1 || models.size() <= selected_model){
         return nullptr;

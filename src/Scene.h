@@ -28,6 +28,7 @@ Camera camera;
     //For GUI
     Camera* getActiveCamera();
 
+    void deleteSelectedModel();
     void addModel(Model* model);
     void cycleSelectedModel(int amount = 1);
     friend class GUI;
