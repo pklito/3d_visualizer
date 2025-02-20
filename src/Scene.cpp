@@ -23,6 +23,12 @@ void Scene::setupDemo(){
     // calf->setPosition(glm::vec3(0,0,0.2));
     // models.push_back(calf);
     models.push_back(Leg());
+    models.push_back(Leg());
+    models.push_back(Leg());
+    models.push_back(Leg());
+    models.push_back(Leg());
+    models.push_back(Leg());
+
     //stairs
     ConfigableGroupModel* stair = stairModel();
     stair->setPosition(glm::vec3(-0.4,0.0,0));

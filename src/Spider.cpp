@@ -100,6 +100,9 @@ ConfigableGroupModel* Leg(){
         {"calf_depth", 0.05},
         {"calf_indent", 0.01}
     }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
+        float TIBIA_THETA = params["TIBIA_THETA"];
+        float FEMUR_THETA = params["FEMUR_THETA"];
+        float COXA_THETA = params["COXA_THETA"];
         float HIP_LENGTH = params["HIP_LENGTH"];
         float hip_width = params["hip_width"];
         float THIGH_LENGTH = params["THIGH_LENGTH"];
@@ -114,6 +117,7 @@ ConfigableGroupModel* Leg(){
         float _current_dist = 0;
         ConfigableGroupModel* hip = dynamic_cast<ConfigableGroupModel*>(models[0]);
         hip->setPosition(glm::vec3(0,0,_current_dist));
+        hip->setAngles(glm::vec3(COXA_THETA,0,0));
         _current_dist += HIP_LENGTH;
 
         hip->setFloatParams({
@@ -122,7 +126,9 @@ ConfigableGroupModel* Leg(){
         });
 
         ConfigableGroupModel* thigh = dynamic_cast<ConfigableGroupModel*>(models[1]);
-        thigh->setPosition(glm::vec3(0,0,_current_dist));
+        glm::vec4 pos = hip->getFullTransformation()*glm::vec4(0,0,HIP_LENGTH,1);
+        thigh->setPosition(glm::vec3(pos.x,pos.y,pos.z));
+        thigh->setAngles(glm::vec3(COXA_THETA,-FEMUR_THETA,0));
         _current_dist += THIGH_LENGTH;
 
         thigh->setFloatParams({
@@ -133,7 +139,9 @@ ConfigableGroupModel* Leg(){
         });
 
         ConfigableGroupModel* calf = dynamic_cast<ConfigableGroupModel*>(models[2]);
-        calf->setPosition(glm::vec3(0,0,_current_dist));
+        pos = thigh->getFullTransformation()*glm::vec4(0,0,THIGH_LENGTH,1);
+        calf->setPosition(glm::vec3(pos.x,pos.y,pos.z));
+        calf->setAngles(glm::vec3(COXA_THETA,-FEMUR_THETA-TIBIA_THETA,0));
 
         calf->setFloatParams({
             {"CALF_LENGTH", CALF_LENGTH},
@@ -151,8 +159,8 @@ ConfigableGroupModel* Leg(){
 ConfigableGroupModel* LegThigh(){
     ConfigableGroupModel* group = new ConfigableGroupModel({
         
-        new Primitive(PRIM_CUBE),
-        new Primitive(PRIM_CUBE),
+        new Primitive(PRIM_CYLINDER),
+        new Primitive(PRIM_CYLINDER),
         new Primitive(PRIM_CUBE),
         motor()
 
