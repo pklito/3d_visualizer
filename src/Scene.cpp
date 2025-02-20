@@ -18,6 +18,7 @@ Scene::Scene() : camera(){
 void Scene::setupDemo(){
     GroupModel* group = demoAxis(0.02, 0.95, 0.05, 1.);
     models.push_back(group);
+    models.push_back(LegThigh());
     models.push_back(LegCalf());
 }
 
