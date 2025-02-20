@@ -1,5 +1,6 @@
 #include"Scene.h"
 #include "MeshEx.h"
+#include "Spider.h"
 
 Scene::Scene() : camera(){
         Model* grid1 = new Primitive(PRIM_GRID);
@@ -17,6 +18,7 @@ Scene::Scene() : camera(){
 void Scene::setupDemo(){
     GroupModel* group = demoAxis(0.02, 0.95, 0.05, 1.);
     models.push_back(group);
+    models.push_back(LegCalf());
 }
 
 void Scene::addModel(Model* model){
