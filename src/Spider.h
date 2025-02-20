@@ -3,3 +3,5 @@
 
 ConfigableGroupModel* LegCalf();
 ConfigableGroupModel* LegThigh();
+
+Model* motor();

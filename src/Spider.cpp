@@ -61,3 +61,9 @@ ConfigableGroupModel* LegCalf(){
 ConfigableGroupModel* LegThigh(){
     return LegCalf();
 }
+
+Model* motor(){
+    ObjModel* obj = new ObjModel("resources\\motor.obj","resources\\motor.png");
+    // obj->setScale(glm::vec3(0.001, 0.001, 0.001));
+    return obj;
+}
