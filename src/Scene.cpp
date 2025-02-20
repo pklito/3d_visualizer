@@ -18,11 +18,11 @@ Scene::Scene() : camera(){
 void Scene::setupDemo(){
     // GroupModel* group = demoAxis(0.02, 0.95, 0.05, 1.);
     // models.push_back(group);
-    models.push_back(LegThigh());
-    Model* calf = LegCalf();
-    calf->setPosition(glm::vec3(0,0,0.2));
-    models.push_back(calf);
-
+    // models.push_back(LegThigh());
+    // Model* calf = LegCalf();
+    // calf->setPosition(glm::vec3(0,0,0.2));
+    // models.push_back(calf);
+    models.push_back(Leg());
     //stairs
     ConfigableGroupModel* stair = stairModel();
     stair->setPosition(glm::vec3(-0.4,0.0,0));
