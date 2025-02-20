@@ -8,10 +8,10 @@ ConfigableGroupModel* LegCalf(){
         new Primitive(PRIM_TETRAHEDRON)
 
     }, {
-        {"CALF_LENGTH", 0.3},
-        {"calf_width", 0.08},
-        {"calf_depth", 0.1},
-        {"calf_indent", 0.04}
+        {"CALF_LENGTH", 0.24},
+        {"calf_width", 0.05},
+        {"calf_depth", 0.05},
+        {"calf_indent", 0.01}
     }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
         float CALF_LENGTH = params["CALF_LENGTH"];
         float calf_width = params["calf_width"];
@@ -67,10 +67,10 @@ ConfigableGroupModel* LegThigh(){
         motor()
 
     }, {
-        {"THIGH_LENGTH", 0.3},
-        {"thigh_width", 0.08},
-        {"thigh_depth", 0.1},
-        {"thigh_indent", 0.04}
+        {"THIGH_LENGTH", 0.2},
+        {"thigh_width", 0.04},
+        {"thigh_depth", 0.05},
+        {"thigh_indent", 0.02}
     }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
         float THIGH_LENGTH = params["THIGH_LENGTH"];
         float thigh_width = params["thigh_width"];

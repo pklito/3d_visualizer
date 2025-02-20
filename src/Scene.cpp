@@ -16,10 +16,25 @@ Scene::Scene() : camera(){
     }
 
 void Scene::setupDemo(){
-    GroupModel* group = demoAxis(0.02, 0.95, 0.05, 1.);
-    models.push_back(group);
+    // GroupModel* group = demoAxis(0.02, 0.95, 0.05, 1.);
+    // models.push_back(group);
     models.push_back(LegThigh());
-    models.push_back(LegCalf());
+    Model* calf = LegCalf();
+    calf->setPosition(glm::vec3(0,0,0.2));
+    models.push_back(calf);
+
+    //stairs
+    ConfigableGroupModel* stair = stairModel();
+    stair->setPosition(glm::vec3(-0.4,0.0,0));
+    models.push_back(stair);
+    stair = stairModel();
+    stair->setPosition(glm::vec3(-0.4,0.0,0));
+    stair->setFloatParam("STEP_NUMBER", -1);
+    models.push_back(stair);
+    stair = stairModel();
+    stair->setPosition(glm::vec3(-0.4,0.0,0));
+    stair->setFloatParam("STEP_NUMBER", 1);
+    models.push_back(stair);
 }
 
 void Scene::addModel(Model* model){
