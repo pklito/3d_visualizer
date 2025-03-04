@@ -1,4 +1,4 @@
-#include "Spider.h"
+#include "graphics/Spider.h"
 
 ConfigableGroupModel* LegCalf(){
     ConfigableGroupModel* group = new ConfigableGroupModel({

@@ -1,8 +1,8 @@
 #pragma once
-#include "Mesh.h"
+#include "graphics/Mesh.h"
 #include <map>
 #include <functional>
-#include "GUIfuncs.h"
+#include "graphics/GUIfuncs.h"
 
 class ConfigableGroupModel : public GroupModel {
 private:

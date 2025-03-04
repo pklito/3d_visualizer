@@ -1,4 +1,4 @@
-#include"VAO.h"
+#include"graphics/VAO.h"
 
 // Constructor that generates a VAO ID
 VAO& VAO::generate()

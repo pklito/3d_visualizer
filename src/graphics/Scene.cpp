@@ -1,6 +1,6 @@
 #include"Scene.h"
-#include "MeshEx.h"
-#include "Spider.h"
+#include "graphics/MeshEx.h"
+#include "graphics/Spider.h"
 
 Scene::Scene() : camera(){
         Model* grid1 = new Primitive(PRIM_GRID);

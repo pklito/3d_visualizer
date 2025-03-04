@@ -1,4 +1,4 @@
-#include"Renderer.h"
+#include"graphics/Renderer.h"
 Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("resources/default.vert", "resources/default.frag"),
 																no_tex_shader("resources/default.vert", "resources/default_no_tex.frag"), 
 																color_shader("resources/default.vert", "resources/color.frag"),

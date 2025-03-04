@@ -1,13 +1,13 @@
 #pragma once
-#include"VAO.h"
-#include"Texture.h"
+#include"graphics/VAO.h"
+#include"graphics/Texture.h"
 
 #include<string>
-#include"ShaderClass.h"
+#include"graphics/shaderClass.h"
 #include<glm/glm.hpp>
-#include"Renderer.h"
+#include"graphics/Renderer.h"
 #include<vector>
-#include"GUIfuncs.h"
+#include"graphics/GUIfuncs.h"
 
 class VertexData{
     public:

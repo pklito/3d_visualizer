@@ -2,12 +2,12 @@
 #include"imgui.h"
 #include"imgui_impl_glfw.h"
 #include"imgui_impl_opengl3.h"
-#include "shaderClass.h"
+#include "graphics/shaderClass.h"
 #include<glm/glm.hpp>
 
-#include"Camera.h"
-#include"VAO.h"
-#include"Texture.h"
+#include"graphics/Camera.h"
+#include"graphics/VAO.h"
+#include"graphics/Texture.h"
 
 #include <vector>
 

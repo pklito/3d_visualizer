@@ -8,12 +8,12 @@
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/type_ptr.hpp>
 
-#include"shaderClass.h"
-#include"Mesh.h"
-#include"Camera.h"
-#include"GUI.h"
-#include"Renderer.h"
-#include"Scene.h"
+#include"graphics/shaderClass.h"
+#include"graphics/Mesh.h"
+#include"graphics/Camera.h"
+#include"graphics/GUI.h"
+#include"graphics/Renderer.h"
+#include"graphics/Scene.h"
 
 #include"imgui.h"
 #include"imgui_impl_glfw.h"

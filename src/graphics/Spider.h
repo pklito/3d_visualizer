@@ -1,5 +1,5 @@
 #pragma once
-#include "MeshEx.h"
+#include "graphics/MeshEx.h"
 
 ConfigableGroupModel* LegCalf();
 ConfigableGroupModel* LegThigh();

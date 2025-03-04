@@ -1,4 +1,4 @@
-#include"Texture.h"
+#include"graphics/Texture.h"
 void Texture::generate(const std::string& path, GLenum texType, GLenum slot, GLenum format, GLenum pixelType)
 {
 	// Assigns the type of the texture to the texture object

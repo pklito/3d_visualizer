@@ -6,7 +6,7 @@
 #include <sstream>
 #include <vector>
 
-#include "GUIfuncs.h"
+#include "graphics/GUIfuncs.h"
 
 // Enum to represent log levels
 enum LogLevel { LOG_DEBUG, LOG_INFO, LOG_WARNING, LOG_ERROR, LOG_CRITICAL };

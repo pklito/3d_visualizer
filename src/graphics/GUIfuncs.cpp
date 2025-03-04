@@ -1,4 +1,4 @@
-#include "GUIfuncs.h"
+#include "graphics/GUIfuncs.h"
 
 
 LPCTSTR stringToLPCTSTR(const std::string& str) {

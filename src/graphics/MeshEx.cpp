@@ -1,4 +1,4 @@
-#include "MeshEx.h"
+#include "graphics/MeshEx.h"
 
 ConfigableGroupModel::ConfigableGroupModel(std::vector<Model*> models, std::map<std::string, float> float_params, std::function<void(std::vector<Model*>&, std::map<std::string, float>&)> update)
     : GroupModel(models), update_models(update), float_params(float_params) {}

@@ -1,12 +1,12 @@
-#include "GUI.h"
+#include "graphics/GUI.h"
 
 #include"imgui.h"
 #include"imgui_impl_glfw.h"
 #include"imgui_impl_opengl3.h"
 #include"stdafx.h"
-#include "GUIfuncs.h"
+#include "graphics/GUIfuncs.h"
 #include "Logger.h"
-#include "MeshEx.h"
+#include "graphics/MeshEx.h"
 
 void GUI::buildMenuBar(){
 	if (ImGui::BeginMainMenuBar()) {

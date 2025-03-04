@@ -1,9 +1,9 @@
 #pragma once
 #include<vector>
 #include<glm/glm.hpp>
-#include"Renderer.h"
-#include"Camera.h"
-#include"Mesh.h"
+#include"graphics/Renderer.h"
+#include"graphics/Camera.h"
+#include"graphics/Mesh.h"
 
 class Scene{
     protected:
