@@ -51,7 +51,7 @@ int main()
 	//Load GLAD so it configures OpenGL
 	gladLoadGL();
 
-	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
+	// Create a GLFWwindow object of 800 by 800 pixels
 	Renderer renderer = Renderer(window, width, height);
 	// Generates Shader object using shaders default.vert and default.frag
 
