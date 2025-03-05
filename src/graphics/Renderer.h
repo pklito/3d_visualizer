@@ -35,4 +35,16 @@ public:
     void updateCamera(Camera& camera);
     void updateCamera(const glm::mat4& projection, const glm::mat4& view);
     void clearFrame();
+
+    void setClearColor(const glm::vec4& color) {background_color = color;};
+    void setClearColor(float r, float g, float b, float a) {background_color = glm::vec4(r,g,b,a);};
+    glm::vec4 getClearColor() {return background_color;};
+
+    void windowResizeCallBack(GLFWwindow* window, int width, int height){
+        if(window == this->window){
+            this->width = width;
+            this->height = height;
+            glViewport(0, 0, width, height);
+        }
+    }
 };
