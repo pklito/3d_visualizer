@@ -44,11 +44,17 @@ void GUI::buildMenuBar(){
 							scene->addModel(mesh);
 						}
 					}
-					if(ImGui::MenuItem("Axis")){
-						scene->addModel(demoAxis());
-					}
-					if(ImGui::MenuItem("Stair")){
-						scene->addModel(stairModel());
+					ImGui::EndMenu();
+				}
+				if(ImGui::BeginMenu("Config Models")){
+					//Iterate over all the defined primitives, add all the buttons
+					for(auto pair : getDemoConfigGroupModels()){
+						std::string name = pair.first.c_str();
+						name[0] = toupper(name[0]);
+						if(ImGui::MenuItem(name.c_str())){
+							Model* mesh = pair.second();
+							scene->addModel(mesh);
+						}
 					}
 					ImGui::EndMenu();
 				}

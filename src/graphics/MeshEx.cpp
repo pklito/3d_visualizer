@@ -200,3 +200,60 @@ ConfigableGroupModel* stairModel(float stair_height, float stair_length) {
 
     return group;
 }
+
+ConfigableGroupModel* arrow(float bar_radius, float bar_length, float arrow_radius, float size){
+    float arrow_length = size - bar_length;
+    ConfigableGroupModel* group = new ConfigableGroupModel(
+        {new Primitive(PRIM_CYLINDER),
+        new Primitive(PRIM_CONE)},
+        {NEW_CONFIG(float, "barRadius", bar_radius),
+        NEW_CONFIG(float, "arrowLength", arrow_length),
+        NEW_CONFIG(float, "barLength", bar_length),
+        NEW_CONFIG(float, "arrowRadius", arrow_radius),
+        NEW_CONFIG(glm::vec4, "color", glm::vec4(1.))}
+        , [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params){
+            float bar_radius = GET_CONFIG_VARIABLE(float, params["barRadius"]);
+            float arrow_length = GET_CONFIG_VARIABLE(float, params["arrowLength"]);
+            float bar_length = GET_CONFIG_VARIABLE(float, params["barLength"]);
+            float arrow_radius = GET_CONFIG_VARIABLE(float, params["arrowRadius"]);
+            glm::vec4 color = GET_CONFIG_VARIABLE(glm::vec4, params["color"]);
+
+            Model* bar = models[0];
+            // z bar
+            models[0]->setPosition(glm::vec3(0,0,bar_length/2));
+            models[0]->setScale(glm::vec3(bar_radius,bar_length,bar_radius));
+            models[0]->setAnglesDegrees(glm::vec3(0,-90,0));
+
+            // z cone
+            models[1]->setPosition(glm::vec3(0,0,bar_length + arrow_length/2));
+            models[1]->setScale(glm::vec3(arrow_radius,arrow_length,arrow_radius));
+            models[1]->setAnglesDegrees(glm::vec3(0,-90,0));
+            
+            //set colors
+            for(Model* model : models) {
+                model->setColor(color);
+            }
+        }
+    );
+    group->updateModels();
+    return group;
+}
+
+//
+// MISC
+//
+
+// For iterating these demos
+ConfigableGroupModel* _demoAxis() { return demoAxis(); }
+ConfigableGroupModel* _stairModel() {   return stairModel(); }
+ConfigableGroupModel* _arrow() {   return arrow(); }
+
+const std::map<std::string, ConfigableGroupModel*(*)()> demoFuncList = {
+    {"Axis", _demoAxis},
+    {"Stair", _stairModel},
+    {"Arrow", _arrow}
+};
+
+const std::map<std::string, ConfigableGroupModel*(*)()> getDemoConfigGroupModels() {
+     return demoFuncList;
+};

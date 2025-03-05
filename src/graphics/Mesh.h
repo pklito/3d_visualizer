@@ -186,6 +186,8 @@ public:
 
     virtual Model* copy() const override {return new GroupModel(*this);};
 
+    virtual std::vector<Model*>::iterator begin() {return models.begin();};
+    virtual std::vector<Model*>::iterator end() {return models.end();};
 };
 
 GroupModel* demoFoxHat();
