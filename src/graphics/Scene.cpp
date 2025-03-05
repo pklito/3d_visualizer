@@ -16,12 +16,13 @@ Scene::Scene() : camera(){
     }
 
 void Scene::setupDemo(){
-    // GroupModel* group = demoAxis(0.02, 0.95, 0.05, 1.);
-    // models.push_back(group);
-    // models.push_back(LegThigh());
-    // Model* calf = LegCalf();
-    // calf->setPosition(glm::vec3(0,0,0.2));
-    // models.push_back(calf);
+    GroupModel* group = demoAxis(0.02, 0.95, 0.05, 1.);
+    models.push_back(group);
+    models.push_back(LegThigh());
+    Model* calf = LegCalf();
+    calf->setPosition(glm::vec3(0,0,0.2));
+    models.push_back(calf);
+    /*
     models.push_back(Leg());
     models.push_back(Leg());
     models.push_back(Leg());
@@ -35,12 +36,13 @@ void Scene::setupDemo(){
     models.push_back(stair);
     stair = stairModel();
     stair->setPosition(glm::vec3(-0.4,0.0,0));
-    stair->setFloatParam("STEP_NUMBER", -1);
+    stair->setFloatParam("stepNumber", -1);
     models.push_back(stair);
     stair = stairModel();
     stair->setPosition(glm::vec3(-0.4,0.0,0));
-    stair->setFloatParam("STEP_NUMBER", 1);
+    stair->setFloatParam("stepNumber", 1);
     models.push_back(stair);
+    */
 }
 
 void Scene::addModel(Model* model){

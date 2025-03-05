@@ -5,6 +5,8 @@
 #include "graphics/GUIfuncs.h"
 
 #define NEW_CONFIG(type, name, value) {name, new ConfigVariable<type>((name), (value))}
+#define NEW_CONFIG_HIDDEN(type, name, value) {name, new ConfigVariable<type>((name), (value), false)}
+
 #define GET_CONFIG_VARIABLE(type, cv) (dynamic_cast<ConfigVariable<type>*>(cv) == nullptr ? type() : dynamic_cast<ConfigVariable<type>*>(cv)->value)
 class ConfigVariableBase {
     public:
