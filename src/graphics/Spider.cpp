@@ -8,15 +8,15 @@ ConfigableGroupModel* LegCalf(){
         new Primitive(PRIM_TETRAHEDRON)
 
     }, {
-        {"CALF_LENGTH", 0.24},
-        {"calf_width", 0.05},
-        {"calf_depth", 0.05},
-        {"calf_indent", 0.01}
-    }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
-        float CALF_LENGTH = params["CALF_LENGTH"];
-        float calf_width = params["calf_width"];
-        float calf_depth = params["calf_depth"];
-        float calf_indent = params["calf_indent"];
+        NEW_CONFIG(float, "CALF_LENGTH", 0.24),
+        NEW_CONFIG(float, "calf_width", 0.05),
+        NEW_CONFIG(float, "calf_depth", 0.05),
+        NEW_CONFIG(float, "calf_indent", 0.01)
+    }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
+        float CALF_LENGTH = GET_CONFIG_VARIABLE(float, params["CALF_LENGTH"]);
+        float calf_width = GET_CONFIG_VARIABLE(float, params["calf_width"]);
+        float calf_depth = GET_CONFIG_VARIABLE(float, params["calf_depth"]);
+        float calf_indent = GET_CONFIG_VARIABLE(float, params["calf_indent"]);
 
         float _current_dist = CALF_LENGTH;
         float _size =  (calf_width + calf_depth)/2;
@@ -62,11 +62,11 @@ ConfigableGroupModel* LegHip(){
     ConfigableGroupModel* group = new ConfigableGroupModel({
         new Primitive(PRIM_CYLINDER)
     }, {
-        {"HIP_LENGTH", 0.04},
-        {"hip_width", 0.02}
-    }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
-        float HIP_LENGTH = params["HIP_LENGTH"];
-        float hip_width = params["hip_width"];
+        NEW_CONFIG(float, "HIP_LENGTH", 0.04),
+        NEW_CONFIG(float, "hip_width", 0.02)
+    }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
+        float HIP_LENGTH = GET_CONFIG_VARIABLE(float, params["HIP_LENGTH"]);
+        float hip_width = GET_CONFIG_VARIABLE(float, params["hip_width"]);
 
         Model* cylinder = models[0];
         cylinder->setAnglesDegrees(glm::vec3(0,-90,0));
@@ -86,33 +86,33 @@ ConfigableGroupModel* Leg(){
         LegThigh(),
         LegCalf()
     }, {
-        {"TIBIA_THETA", 0},
-        {"FEMUR_THETA", 0},
-        {"COXA_THETA", 0},
-        {"HIP_LENGTH", 0.04},
-        {"hip_width", 0.02},
-        {"THIGH_LENGTH", 0.2},
-        {"thigh_width", 0.04},
-        {"thigh_depth", 0.05},
-        {"thigh_indent", 0.02},
-        {"CALF_LENGTH", 0.24},
-        {"calf_width", 0.05},
-        {"calf_depth", 0.05},
-        {"calf_indent", 0.01}
-    }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
-        float TIBIA_THETA = params["TIBIA_THETA"];
-        float FEMUR_THETA = params["FEMUR_THETA"];
-        float COXA_THETA = params["COXA_THETA"];
-        float HIP_LENGTH = params["HIP_LENGTH"];
-        float hip_width = params["hip_width"];
-        float THIGH_LENGTH = params["THIGH_LENGTH"];
-        float thigh_width = params["thigh_width"];
-        float thigh_depth = params["thigh_depth"];
-        float thigh_indent = params["thigh_indent"];
-        float CALF_LENGTH = params["CALF_LENGTH"];
-        float calf_width = params["calf_width"];
-        float calf_depth = params["calf_depth"];
-        float calf_indent = params["calf_indent"];
+        NEW_CONFIG(float, "TIBIA_THETA", 0),
+        NEW_CONFIG(float, "FEMUR_THETA", 0),
+        NEW_CONFIG(float, "COXA_THETA", 0),
+        NEW_CONFIG(float, "HIP_LENGTH", 0.04),
+        NEW_CONFIG(float, "hip_width", 0.02),
+        NEW_CONFIG(float, "THIGH_LENGTH", 0.2),
+        NEW_CONFIG(float, "thigh_width", 0.04),
+        NEW_CONFIG(float, "thigh_depth", 0.05),
+        NEW_CONFIG(float, "thigh_indent", 0.02),
+        NEW_CONFIG(float, "CALF_LENGTH", 0.24),
+        NEW_CONFIG(float, "calf_width", 0.05),
+        NEW_CONFIG(float, "calf_depth", 0.05),
+        NEW_CONFIG(float, "calf_indent", 0.01)
+    }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
+        float TIBIA_THETA = GET_CONFIG_VARIABLE(float, params["TIBIA_THETA"]);
+        float FEMUR_THETA = GET_CONFIG_VARIABLE(float, params["FEMUR_THETA"]);
+        float COXA_THETA = GET_CONFIG_VARIABLE(float, params["COXA_THETA"]);
+        float HIP_LENGTH = GET_CONFIG_VARIABLE(float, params["HIP_LENGTH"]);
+        float hip_width = GET_CONFIG_VARIABLE(float, params["hip_width"]);
+        float THIGH_LENGTH = GET_CONFIG_VARIABLE(float, params["THIGH_LENGTH"]);
+        float thigh_width = GET_CONFIG_VARIABLE(float, params["thigh_width"]);
+        float thigh_depth = GET_CONFIG_VARIABLE(float, params["thigh_depth"]);
+        float thigh_indent = GET_CONFIG_VARIABLE(float, params["thigh_indent"]);
+        float CALF_LENGTH = GET_CONFIG_VARIABLE(float, params["CALF_LENGTH"]);
+        float calf_width = GET_CONFIG_VARIABLE(float, params["calf_width"]);
+        float calf_depth = GET_CONFIG_VARIABLE(float, params["calf_depth"]);
+        float calf_indent = GET_CONFIG_VARIABLE(float, params["calf_indent"]);
 
         float _current_dist = 0;
         ConfigableGroupModel* hip = dynamic_cast<ConfigableGroupModel*>(models[0]);
@@ -120,10 +120,10 @@ ConfigableGroupModel* Leg(){
         hip->setAngles(glm::vec3(COXA_THETA,0,0));
         _current_dist += HIP_LENGTH;
 
-        hip->setFloatParams({
-            {"HIP_LENGTH", HIP_LENGTH},
-            {"hip_width", hip_width}
-        });
+        // hip->setFloatParams({
+        //     {"HIP_LENGTH", HIP_LENGTH},
+        //     {"hip_width", hip_width}
+        // });
 
         ConfigableGroupModel* thigh = dynamic_cast<ConfigableGroupModel*>(models[1]);
         glm::vec4 pos = hip->getFullTransformation()*glm::vec4(0,0,HIP_LENGTH,1);
@@ -131,24 +131,24 @@ ConfigableGroupModel* Leg(){
         thigh->setAngles(glm::vec3(COXA_THETA,-FEMUR_THETA,0));
         _current_dist += THIGH_LENGTH;
 
-        thigh->setFloatParams({
-            {"THIGH_LENGTH", THIGH_LENGTH},
-            {"thigh_width", thigh_width},
-            {"thigh_depth", thigh_depth},
-            {"thigh_indent", thigh_indent}
-        });
+        // thigh->setFloatParams({
+        //     {"THIGH_LENGTH", THIGH_LENGTH},
+        //     {"thigh_width", thigh_width},
+        //     {"thigh_depth", thigh_depth},
+        //     {"thigh_indent", thigh_indent}
+        // });
 
         ConfigableGroupModel* calf = dynamic_cast<ConfigableGroupModel*>(models[2]);
         pos = thigh->getFullTransformation()*glm::vec4(0,0,THIGH_LENGTH,1);
         calf->setPosition(glm::vec3(pos.x,pos.y,pos.z));
         calf->setAngles(glm::vec3(COXA_THETA,-FEMUR_THETA-TIBIA_THETA,0));
 
-        calf->setFloatParams({
-            {"CALF_LENGTH", CALF_LENGTH},
-            {"calf_width", calf_width},
-            {"calf_depth", calf_depth},
-            {"calf_indent", calf_indent}
-        });
+        // calf->setFloatParams({
+        //     {"CALF_LENGTH", CALF_LENGTH},
+        //     {"calf_width", calf_width},
+        //     {"calf_depth", calf_depth},
+        //     {"calf_indent", calf_indent}
+        // });
 
     });
     group->updateModels();
@@ -165,15 +165,15 @@ ConfigableGroupModel* LegThigh(){
         motor()
 
     }, {
-        {"THIGH_LENGTH", 0.2},
-        {"thigh_width", 0.04},
-        {"thigh_depth", 0.05},
-        {"thigh_indent", 0.02}
-    }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
-        float THIGH_LENGTH = params["THIGH_LENGTH"];
-        float thigh_width = params["thigh_width"];
-        float thigh_depth = params["thigh_depth"];
-        float thigh_indent = params["thigh_indent"];
+        NEW_CONFIG(float, "THIGH_LENGTH", 0.2),
+        NEW_CONFIG(float, "thigh_width", 0.04),
+        NEW_CONFIG(float, "thigh_depth", 0.05),
+        NEW_CONFIG(float, "thigh_indent", 0.02)
+    }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
+        float THIGH_LENGTH = GET_CONFIG_VARIABLE(float,params["THIGH_LENGTH"]);
+        float thigh_width = GET_CONFIG_VARIABLE(float,params["thigh_width"]);
+        float thigh_depth = GET_CONFIG_VARIABLE(float,params["thigh_depth"]);
+        float thigh_indent = GET_CONFIG_VARIABLE(float,params["thigh_indent"]);
 
         float _current_dist = THIGH_LENGTH;
         Model* motor = models[3];

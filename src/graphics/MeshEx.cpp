@@ -1,24 +1,28 @@
 #include "graphics/MeshEx.h"
 
-ConfigableGroupModel::ConfigableGroupModel(std::vector<Model*> models, std::map<std::string, float> float_params, std::function<void(std::vector<Model*>&, std::map<std::string, float>&)> update)
-    : GroupModel(models), update_models(update), float_params(float_params) {}
+ConfigableGroupModel::ConfigableGroupModel(std::vector<Model*> models, std::map<std::string, ConfigVariableBase*> params, std::function<void(std::vector<Model*>&, std::map<std::string, ConfigVariableBase*>&)> update)
+    : GroupModel(models), update_models(update), params(params) {}
 
 ConfigableGroupModel::ConfigableGroupModel() : GroupModel() {}
 
 void ConfigableGroupModel::setFloatParam(std::string name, float value) {
-    float_params[name] = value;
+    auto* param = dynamic_cast<ConfigVariable<float>*>(params[name]);
+    if(param == nullptr) {
+        return;
+    }
+    param->value = value;    
     updateModels();
 }
 
-void ConfigableGroupModel::setFloatParams(std::map<std::string, float> params) {
+void ConfigableGroupModel::setFloatParams(std::map<std::string, ConfigVariableBase*> params) {
     for(auto pair : params) {
-        float_params[pair.first] = pair.second;
+        params[pair.first] = pair.second;
     }
     updateModels();
 }
 
 float ConfigableGroupModel::getFloatParam(std::string name) {
-    return float_params[name];
+    return GET_CONFIG_VARIABLE(float, params[name]);
 }
 
 void ConfigableGroupModel::buildGUI() {
@@ -26,9 +30,9 @@ void ConfigableGroupModel::buildGUI() {
     ImGui::SeparatorText("Config parameters");
 
     bool changed = false;
-    for(auto pair : float_params) {
-        if(ImGui::DragFloat(pair.first.c_str(), &float_params[pair.first], 0.01f)) {
-            changed = true;
+    for(auto pair : params) {
+        if(pair.second->show_in_gui) {
+            changed |= pair.second->buildGUI();
         }
     }
 
@@ -38,8 +42,48 @@ void ConfigableGroupModel::buildGUI() {
 }
 
 void ConfigableGroupModel::updateModels() {
-    update_models(models, float_params);
+    update_models(models, params);
 }
+
+//
+//  ConfigVariable
+//
+template <>
+bool ConfigVariable<float>::buildGUI(){
+    return ImGui::DragFloat(name.c_str(), &value, 0.01f);}
+template <>
+bool ConfigVariable<int>::buildGUI(){
+    return ImGui::DragInt(name.c_str(), &value, 1);}
+template <>
+bool ConfigVariable<bool>::buildGUI(){
+    return ImGui::Checkbox(name.c_str(), &value);}
+template <>
+bool ConfigVariable<std::string>::buildGUI(){
+    //this sucks
+    char buffer[256];
+    strncpy_s(buffer, value.c_str(), sizeof(buffer));
+    buffer[sizeof(buffer) - 1] = 0;
+    if (ImGui::InputText(name.c_str(), buffer, sizeof(buffer))) {
+        value = std::string(buffer);
+        return true;
+    }
+    return false;
+}
+template <>
+bool ConfigVariable<glm::vec3>::buildGUI(){
+    return ImGui::DragFloat3(name.c_str(), glm::value_ptr(value), 0.01f);}
+template <>
+bool ConfigVariable<glm::vec4>::buildGUI(){
+    return ImGui::ColorEdit4(name.c_str(), glm::value_ptr(value));}
+template <>
+bool ConfigVariable<glm::vec2>::buildGUI(){
+    return ImGui::DragFloat2(name.c_str(), glm::value_ptr(value), 0.01f);}
+
+template <typename T>
+bool ConfigVariable<T>::buildGUI(){
+    return false;
+}
+
 
 //
 //  EXAMPLES
@@ -56,14 +100,14 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
         new Primitive(PRIM_CONE),
         new Primitive(PRIM_SPHERE)
     }, {
-        {"bar_radius", bar_radius},
-        {"arrow_length", arrow_length},
-        {"arrow_radius", arrow_radius}
-    }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
-        float bar_radius = params["bar_radius"];
-        float arrow_length = params["arrow_length"];
+        {"bar_radius", new ConfigVariable<float>("bar radius", bar_radius)},
+        {"arrow_length", new ConfigVariable<float>("arrow length", arrow_length)},
+        {"arrow_radius", new ConfigVariable<float>("arrow radius", arrow_radius)}
+    }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
+        float bar_radius = GET_CONFIG_VARIABLE(float, params["bar_radius"]);
+        float arrow_length = GET_CONFIG_VARIABLE(float, params["bar_radius"]);
         float bar_length = 1 - arrow_length;
-        float arrow_radius = params["arrow_radius"];
+        float arrow_radius = GET_CONFIG_VARIABLE(float, params["bar_radius"]);
         // x bar
         models[0]->setPosition(glm::vec3(bar_length/2,0,0));
         models[0]->setScale(glm::vec3(bar_radius,bar_length,bar_radius));
@@ -113,19 +157,19 @@ ConfigableGroupModel* stairModel(float stair_height, float stair_length) {
         new Primitive(PRIM_CUBE),
         new Primitive(PRIM_CUBE)
     }, {
-        {"STEP_NUMBER", 0},
-        {"STAIR_HEIGHT", stair_height},
-        {"STAIR_LENGTH", stair_length},
-        {"top_thickness", 0.02},
-        {"front_thickness", 0.1},
-        {"stair_indent", 0.02}
-    }, [](std::vector<Model*>& models, std::map<std::string, float>& params) {
-        float stair_height = params["STAIR_HEIGHT"];
-        float stair_length = params["STAIR_LENGTH"];
-        float top_thickness = params["top_thickness"];
-        float front_thickness = params["front_thickness"];
-        float stair_indent = params["stair_indent"];
-        float step_number = params["STEP_NUMBER"];
+        {"STEP_NUMBER", new ConfigVariable<int>("step number", 0)},
+        {"STAIR_HEIGHT", new ConfigVariable<float>("stair height", stair_height)},
+        {"STAIR_LENGTH", new ConfigVariable<float>("stair length", stair_length)},
+        {"top_thickness", new ConfigVariable<float>("top thickness", 0.02)},
+        {"front_thickness", new ConfigVariable<float>("front thickness", 0.1)},
+        {"stair_indent", new ConfigVariable<float>("stair indent", 0.02)}
+    }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
+        float stair_height = GET_CONFIG_VARIABLE(float, params["STAIR_HEIGHT"]);
+        float stair_length = GET_CONFIG_VARIABLE(float, params["STAIR_LENGTH"]);
+        float top_thickness = GET_CONFIG_VARIABLE(float, params["top_thickness"]);
+        float front_thickness = GET_CONFIG_VARIABLE(float, params["front_thickness"]);
+        float stair_indent = GET_CONFIG_VARIABLE(float, params["stair_indent"]);
+        int step_number = GET_CONFIG_VARIABLE(int, params["STEP_NUMBER"]);
 
         Model* stair_front = models[0];
         stair_front->setPosition(glm::vec3(-front_thickness/2 - stair_indent, (stair_height - top_thickness) / 2,0));
