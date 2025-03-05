@@ -25,7 +25,12 @@ public:
 	// Deletes the Shader Program
 	void destroy();
 
+	void setFloat(const std::string& name, float time);
 	void setMat4(const std::string& name, const glm::mat4& mat);
+	void setVec4(const std::string& name, const glm::vec4& vec);
+	
+	// Deactivates shaders
+	static void deactivate();
 private:
 	// Checks if the different Shaders have compiled properly
 	void compileErrors(unsigned int shader, const char* type);

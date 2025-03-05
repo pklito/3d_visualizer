@@ -16,9 +16,9 @@ public:
 	VBO& generate(GLfloat* vertices, GLsizeiptr size);
 
 	// Binds the VBO
-	void bind();
+	void bind() const;
 	// Unbinds the VBO
-	void unbind();
+	void unbind() const;
 	// Deletes the VBO
 	void destroy();
 };
@@ -36,9 +36,9 @@ public:
 	EBO() {};
 	EBO& generate(GLuint* indices, GLsizeiptr size);
 	// Binds the EBO
-	void bind();
+	void bind() const;
 	// Unbinds the EBO
-	void unbind();
+	void unbind() const;
 	// Deletes the EBO
 	void destroy();
 };
@@ -47,7 +47,7 @@ class VAO
 {
 public:
 	// ID reference for the Vertex Array Object
-	GLuint ID;
+	GLuint ID = 0;
 	// Constructor that generates a VAO ID
 	VAO() {};
 
@@ -55,9 +55,9 @@ public:
 	// Links a VBO Attribute such as a position or color to the VAO
 	void linkAttributes(VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
 	// Binds the VAO
-	void bind();
+	void bind() const;
 	// Unbinds the VAO
-	void unbind();
+	static void unbind();
 	// Deletes the VAO
 	void destroy();
 };

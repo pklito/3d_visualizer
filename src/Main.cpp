@@ -8,17 +8,18 @@
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/type_ptr.hpp>
 
-#include"shaderClass.h"
-#include"Mesh.h"
-#include"Camera.h"
-#include"GUI.h"
-#include"Renderer.h"
-#include"Scene.h"
+#include"graphics/shaderClass.h"
+#include"graphics/Mesh.h"
+#include"graphics/Camera.h"
+#include"graphics/GUI.h"
+#include"graphics/Renderer.h"
+#include"graphics/Scene.h"
 
 #include"imgui.h"
 #include"imgui_impl_glfw.h"
 #include"imgui_impl_opengl3.h"
 #include <stdexcept>
+#include "Logger.h"
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -50,36 +51,41 @@ int main()
 	//Load GLAD so it configures OpenGL
 	gladLoadGL();
 
-	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
+	// Create a GLFWwindow object of 800 by 800 pixels
 	Renderer renderer = Renderer(window, width, height);
 	// Generates Shader object using shaders default.vert and default.frag
 
 	Scene scene = Scene();
+	scene.setupDemo();
 
 	//Texture brickTex("resources\\brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	//brickTex.texUnit(shaderProgram, "tex0", 0);
 
-	initGUI(renderer.getWindow());
+	GUI gui(renderer.getWindow(), &scene);
 
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
+
+	Logger::getInstance().log(LOG_INFO, "Starting main loop");
 
 	// Main while loop
 	while (!glfwWindowShouldClose(renderer.getWindow()))
 	{
 		renderer.clearFrame();
 
-		GUIParameters parameters;
-		createGUI(parameters);
-		if(parameters.path_name.length() > 0){
-			scene.getSelectedModel()->setModel(parameters.path_name);
-		}
+		gui.build();
+
+		//test move around the object
+		// scene.getSelectedModel()->setPosition(glm::vec3(sin(glfwGetTime()),0,0));
+		// scene.getSelectedModel()->setScale(+glm::vec3(1.+cos(0.3*glfwGetTime())/4.));
+
 
 		scene.handleInputs(renderer);
 		// Handles camera inputs
 		scene.render(renderer);
 		
-		renderGUI();
+		gui.render();
+		glUseProgram(0);
 		
 		glfwSwapBuffers(renderer.getWindow());
 		// Take care of all GLFW events
@@ -87,7 +93,7 @@ int main()
 	}
 
 	// Deletes all ImGUI instances
-	deleteGUI();
+	gui.destroy();
 
 	// Delete all the objects we've created
 	scene.destroy();

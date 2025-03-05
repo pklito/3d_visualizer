@@ -1,5 +1,5 @@
-#include"shaderClass.h"
-
+#include"graphics/shaderClass.h"
+#include<stdio.h>
 // Reads a text file and outputs a string with everything in the text file
 std::string get_file_contents(const char* filename)
 {
@@ -20,6 +20,7 @@ std::string get_file_contents(const char* filename)
 // Constructor that build the Shader Program from 2 different shaders
 Shader::Shader(const char* vertexFile, const char* fragmentFile)
 {
+	
 	// Read vertexFile and fragmentFile and store the strings
 	std::string vertexCode = get_file_contents(vertexFile);
 	std::string fragmentCode = get_file_contents(fragmentFile);
@@ -30,7 +31,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
 
 	// Create Vertex Shader Object and get its reference
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	// Attach Vertex Shader source to the Vertex Shader Object
+	// Attach Vertex Shader source to the Vertex Shader Objecta
 	glShaderSource(vertexShader, 1, &vertexSource, NULL);
 	// Compile the Vertex Shader into machine code
 	glCompileShader(vertexShader);
@@ -68,6 +69,10 @@ void Shader::activate()
 	glUseProgram(ID);
 }
 
+void Shader::deactivate(){
+	glUseProgram(0);
+}
+
 // Deletes the Shader Program
 void Shader::destroy()
 {
@@ -77,6 +82,16 @@ void Shader::destroy()
 void Shader::setMat4(const std::string& name, const glm::mat4& mat)
 {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+void Shader::setVec4(const std::string& name, const glm::vec4& vec)
+{
+	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &vec[0]);
+}
+
+void Shader::setFloat(const std::string& name, float time)
+{
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), time);
 }
 
 // Checks if the different Shaders have compiled properly

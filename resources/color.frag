@@ -7,13 +7,10 @@ out vec4 FragColor;
 // Inputs the texture coordinates from the Vertex Shader
 in vec2 texCoord;
 
-in vec4 normal;
 // Gets the Texture Unit from the main function
-uniform sampler2D tex0;
+uniform vec4 color;
 
-uniform mat4 cameraTransform;
 void main()
 {
-	vec4 textureColor = texture(tex0, texCoord);
-	FragColor = min(max(dot(normal, vec4(0.,0.,1.,0.)),0.1),1.) * textureColor;
+	FragColor = color;
 }

@@ -1,4 +1,4 @@
-#include"VAO.h"
+#include"graphics/VAO.h"
 
 // Constructor that generates a VAO ID
 VAO& VAO::generate()
@@ -17,7 +17,7 @@ void VAO::linkAttributes(VBO& VBO, GLuint layout, GLuint numComponents, GLenum t
 }
 
 // Binds the VAO
-void VAO::bind()
+void VAO::bind() const
 {
 	glBindVertexArray(ID);
 }
@@ -48,13 +48,13 @@ VBO& VBO::generate(GLfloat* vertices, GLsizeiptr size)
 }
 
 // Binds the VBO
-void VBO::bind()
+void VBO::bind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, ID);
 }
 
 // Unbinds the VBO
-void VBO::unbind()
+void VBO::unbind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -79,13 +79,13 @@ EBO& EBO::generate(GLuint* indices, GLsizeiptr size)
 }
 
 // Binds the EBO
-void EBO::bind()
+void EBO::bind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
 }
 
 // Unbinds the EBO
-void EBO::unbind()
+void EBO::unbind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

@@ -1,4 +1,4 @@
-#include"Camera.h"
+#include"graphics/Camera.h"
 
 
 
@@ -60,11 +60,11 @@ void Camera::processInputs(GLFWwindow* window, int width, int height)
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
-		speed = 0.4f;
+		speed = fast_speed;
 	}
 	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
 	{
-		speed = 0.1f;
+		speed = slow_speed;
 	}
 
 	// Handles mouse inputs

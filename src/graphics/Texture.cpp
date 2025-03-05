@@ -1,8 +1,7 @@
-#include"Texture.h"
-
+#include"graphics/Texture.h"
 void Texture::generate(const std::string& path, GLenum texType, GLenum slot, GLenum format, GLenum pixelType)
 {
-	// Assigns the type of the texture ot the texture object
+	// Assigns the type of the texture to the texture object
 	type = texType;
 
 	// Stores the width, height, and the number of color channels of the image
@@ -11,6 +10,10 @@ void Texture::generate(const std::string& path, GLenum texType, GLenum slot, GLe
 	stbi_set_flip_vertically_on_load(true);
 	// Reads the image from a file and stores it in bytes
 	unsigned char* bytes = stbi_load(path.c_str(), &widthImg, &heightImg, &numColCh, 0);
+	if (!bytes) {
+	std::cerr << "Failed to load texture: " << path << std::endl;
+	return;
+	}
 
 	// Generates an OpenGL texture object
 	glGenTextures(1, &ID);
@@ -26,12 +29,21 @@ void Texture::generate(const std::string& path, GLenum texType, GLenum slot, GLe
 	glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	// Extra lines in case you choose to use GL_CLAMP_TO_BORDER
-	// float flatColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	// glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, flatColor);
+	// Determine the proper internal format based on the number of color channels
+	GLenum internalFormat;
+	if(numColCh == 4)
+	internalFormat = GL_RGBA;
+	else if(numColCh == 3)
+	internalFormat = GL_RGB;
+	else if(numColCh == 1)
+	internalFormat = GL_RED;
+	else {
+	// Fallback to the provided format if the channel count is unexpected
+	internalFormat = format;
+	}
 
-	// Assigns the image to the OpenGL Texture object
-	glTexImage2D(texType, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, bytes);
+	// Assigns the image to the OpenGL Texture object using the determined internal format
+	glTexImage2D(texType, 0, internalFormat, widthImg, heightImg, 0, internalFormat, pixelType, bytes);
 	// Generates MipMaps
 	glGenerateMipmap(texType);
 
@@ -41,6 +53,7 @@ void Texture::generate(const std::string& path, GLenum texType, GLenum slot, GLe
 	// Unbinds the OpenGL Texture object so that it can't accidentally be modified
 	glBindTexture(texType, 0);
 }
+
 
 void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
 {
@@ -52,12 +65,12 @@ void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
 	glUniform1i(texUni, unit);
 }
 
-void Texture::bind()
+void Texture::bind() const
 {
 	glBindTexture(type, ID);
 }
 
-void Texture::unbind()
+void Texture::unbind() const
 {
 	glBindTexture(type, 0);
 }
@@ -65,4 +78,8 @@ void Texture::unbind()
 void Texture::destroy()
 {
 	glDeleteTextures(1, &ID);
+}
+
+bool Texture::exists() const{
+	return ID != 0;
 }
