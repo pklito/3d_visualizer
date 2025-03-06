@@ -69,7 +69,13 @@ void GUI::buildMenuBar(){
 		if (ImGui::BeginMenu("Render")) {
 			ImGui::Checkbox("Render Grid", &scene->render_grid);
 			ImGui::Checkbox("Highlight selected model", &scene->highlight_selected_model);
-
+			if(renderer != nullptr){
+				glm::vec4 color = renderer->getClearColor();
+				color.a = 1.0f;
+				ImGui::Text("Background Color"); ImGui::SameLine();
+				if(ImGui::ColorEdit4("MyColor##3", glm::value_ptr(color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel))
+					renderer->setClearColor(color);
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -161,7 +167,7 @@ void GUI::destroy(){
 	ImGui::DestroyContext();
 }
 
-GUI::GUI(GLFWwindow* window, Scene* scene) : scene(scene)
+GUI::GUI(GLFWwindow* window, Scene* scene, Renderer* renderer) : scene(scene), renderer(renderer)
 {   
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
