@@ -89,7 +89,7 @@ public:
     glm::vec3 getScale() {return size;};
     
     void setName(const std::string& name) {this->name = name;};
-    std::string getName() {return name;};
+    std::string getName() const {return name;};
 
     virtual Model* copy() const = 0;
 

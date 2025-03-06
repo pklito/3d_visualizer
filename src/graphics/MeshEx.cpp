@@ -147,6 +147,7 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
         models[6]->setScale(glm::vec3(bar_radius));
     });
     group->updateModels();
+    group->setName("axis");
 
     return group;
 }
@@ -197,6 +198,7 @@ ConfigableGroupModel* stairModel(float stair_height, float stair_length) {
 
     });
     group->updateModels();
+    group->setName("stair");
 
     return group;
 }
@@ -236,6 +238,7 @@ ConfigableGroupModel* arrow(float bar_radius, float bar_length, float arrow_radi
         }
     );
     group->updateModels();
+    group->setName("arrow");
     return group;
 }
 

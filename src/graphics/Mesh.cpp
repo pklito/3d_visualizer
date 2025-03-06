@@ -487,14 +487,16 @@ void Model::updateTransform(){
 // --------------------
 
 GroupModel::GroupModel() : models(){
-
+	name = "groupModel";
 }
 
 GroupModel::GroupModel(const std::vector<Model*>& models){
+	name = "groupModel";
 	this->models = models; //? works?
 }
 
 GroupModel::GroupModel(const GroupModel& _that){
+	name = _that.getName();
 	for(Model* model : _that.models){
 		addCopy(model);
 	}
