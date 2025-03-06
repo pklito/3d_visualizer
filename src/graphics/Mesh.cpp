@@ -9,8 +9,30 @@
 #include<glm/gtc/type_ptr.hpp>
 
 using namespace glm;
-Model::Model() : _world_transform(1.0f), _model_transform(1.0f), _world_normal_transform(1.0f), _model_normal_transform(1.0f), size(1.0f,1.0f,1.0f){
+Model::Model() : _world_transform(1.0f), _model_transform(1.0f), _world_normal_transform(1.0f), _model_normal_transform(1.0f), size(1.0f,1.0f,1.0f), name("model"){
 }
+
+std::string extractFileName(const std::string& filedir) {
+	int start = filedir.find_last_of("/\\") + 1;
+	int end = filedir.substr(start).find_first_of(".");
+	if (end == 0) {
+		end = filedir.length();
+	}
+	return filedir.substr(start, end);
+}
+
+ObjModel::ObjModel() : Model() {name = "objModel";};
+ObjModel::ObjModel(const std::string& filedir) : Model() {
+	setModel(filedir);
+	name = extractFileName(filedir);
+
+};
+ObjModel::ObjModel(const std::string& filedir, const std::string& texturedir) : Model() {
+	loadFile(filedir);
+	setTexture(texturedir);
+	name = extractFileName(filedir);
+};
+
 
 void ObjModel::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_c){
     vao = VAO().generate();
@@ -306,6 +328,7 @@ GLfloat vertices[8*nodes];
 };
 
 Primitive::Primitive(PRIM_MODEL model){
+	name = PRIM_MODEL_NAMES.at(model);
     switch(model){
         case PRIM_TETRAHEDRON:
             Tetrahedron();

@@ -104,7 +104,11 @@ void GUI::buildEditWindow(){
 			if (ImGui::Button("Delete")){
 				scene->deleteSelectedModel();
 			}
-			
+			if(scene->getSelectedModel() != nullptr){
+				ImGui::SameLine();
+				ImGui::Text(scene->getSelectedModel()->getName().c_str());
+			}
+
 			ImGui::Separator();
 			if(scene->getSelectedModel() == nullptr){
 				ImGui::Text("No models in scene");

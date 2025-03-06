@@ -38,6 +38,8 @@ protected:
 
     GLuint render_type = GL_TRIANGLES;
 
+    std::string name;
+
     void applyWorldTransformation(const glm::mat4 &transformation);
 	void applyModelTransformation(const glm::mat4 &transformation);
 	void applyWorldNormalTransformation(const glm::mat4 &transformation_inv);
@@ -85,6 +87,9 @@ public:
     glm::vec3 getPosition() {return position;};
     glm::vec3 getAngles() {return yaw_pitch_roll;};
     glm::vec3 getScale() {return size;};
+    
+    void setName(const std::string& name) {this->name = name;};
+    std::string getName() {return name;};
 
     virtual Model* copy() const = 0;
 
@@ -104,14 +109,9 @@ class ObjModel : public Model{
     void setModel(const std::string& modeldir);
     void loadFile(const std::string& file);
 
-    ObjModel() : Model() {};
-    ObjModel(const std::string& filedir) : Model() {
-        setModel(filedir);
-    };
-    ObjModel(const std::string& filedir, const std::string& texturedir) : Model() {
-        loadFile(filedir);
-        setTexture(texturedir);
-    };
+    ObjModel();
+    ObjModel(const std::string& filedir);
+    ObjModel(const std::string& filedir, const std::string& texturedir);
 
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) override;
     //applies transforms on the render, changes the set render_mode
