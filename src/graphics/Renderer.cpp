@@ -25,9 +25,17 @@ void Renderer::clearFrame()
 }
 
 void Renderer::updateCamera(Camera& camera){
-	camera_view = camera.getProjectionViewMatrix();
+	camera_view = aspect_matrix * camera.getProjectionViewMatrix();
 }
 
+void Renderer::windowResizeCallBack(GLFWwindow* window, int width, int height){
+	if(window == this->window){
+		this->width = width;
+		this->height = height;
+		glViewport(0, 0, width, height);
+	}
+	aspect_matrix[0][0] = (float)height / width;
+}
 void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	//Decide which shader to use
 	bool use_texture = texture != nullptr && texture->exists();

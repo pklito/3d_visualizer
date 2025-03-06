@@ -12,9 +12,9 @@ Camera::Camera()
 /**
  * fovWidth is degrees, aspect ratio is width/height
  */
-void Camera::doPerspective(const float FOVWidth, const float aspect, const float nearPlane, const float farPlane)
+void Camera::doPerspective(const float FOVWidth, const float nearPlane, const float farPlane, const float stretch)
 {
-	ProjectionMatrix = glm::perspective(glm::radians(FOVWidth), aspect, nearPlane, farPlane);
+	ProjectionMatrix = glm::perspective(glm::radians(FOVWidth), stretch, nearPlane, farPlane);
 	InvProjectionMatrix = glm::inverse(ProjectionMatrix);
 	ProjectionViewMatrix = ProjectionMatrix * ViewMatrix;
 }
