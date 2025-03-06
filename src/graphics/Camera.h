@@ -39,8 +39,8 @@ public:
 	// Camera constructor to set up initial values
 	Camera();
 
-	// Updates and exports the camera matrix to the Vertex Shader
-	void doPerspective(const float fovx, const float aspect, const float zNear, const float zFar);
+	// Updates and exports the camera matrix to the Vertex Shader (stretch is a constant stretch of the camera, aspect ratio is handled by renderer)
+	void doPerspective(const float fovx, const float zNear, const float zFar, const float stretch = 1.0);
 	// Handles camera inputs
 	void processInputs(GLFWwindow* window, int window_width, int window_height);
 
@@ -51,6 +51,8 @@ public:
 	glm::mat4 getProjectionMatrix() {return ProjectionMatrix;};
 	glm::mat4 getViewMatrix() {return ProjectionMatrix;};
 	glm::mat4 getProjectionViewMatrix() {return ProjectionViewMatrix;};
+
+	void buildGUI();
 
 };
 #endif

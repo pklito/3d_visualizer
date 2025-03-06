@@ -23,6 +23,7 @@ protected:
 
     glm::vec4 background_color;
     glm::mat4 camera_view;
+    glm::mat4 aspect_matrix = glm::mat4(1.0f);
     int width, height;
 public:
     Renderer(GLFWwindow* window, int width, int height);
@@ -35,4 +36,10 @@ public:
     void updateCamera(Camera& camera);
     void updateCamera(const glm::mat4& projection, const glm::mat4& view);
     void clearFrame();
+
+    void setClearColor(const glm::vec4& color) {background_color = color;};
+    void setClearColor(float r, float g, float b, float a) {background_color = glm::vec4(r,g,b,a);};
+    glm::vec4 getClearColor() {return background_color;};
+
+    void windowResizeCallBack(GLFWwindow* window, int width, int height);
 };

@@ -24,6 +24,9 @@
 const unsigned int width = 800;
 const unsigned int height = 800;
 
+// GLFW needs to take a function to call, and renderer isn't static. so i'm using a static pointer as a trick.
+static Renderer* _renderer_global_ptr = nullptr;
+
 int main()
 {
 	// Initialize GLFW
@@ -53,6 +56,13 @@ int main()
 
 	// Create a GLFWwindow object of 800 by 800 pixels
 	Renderer renderer = Renderer(window, width, height);
+	_renderer_global_ptr = &renderer;
+
+	auto framebuffer_size_callback = [](GLFWwindow* window, int width, int height){
+		_renderer_global_ptr->windowResizeCallBack(window, width, height);
+	};
+	
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	// Generates Shader object using shaders default.vert and default.frag
 
 	Scene scene = Scene();
