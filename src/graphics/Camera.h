@@ -52,5 +52,7 @@ public:
 	glm::mat4 getViewMatrix() {return ProjectionMatrix;};
 	glm::mat4 getProjectionViewMatrix() {return ProjectionViewMatrix;};
 
+	void buildGUI();
+
 };
 #endif

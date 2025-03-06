@@ -1,6 +1,7 @@
 #include"graphics/Camera.h"
-
-
+#include "imgui.h"
+#include<glm/glm.hpp>
+#include<glm/gtc/type_ptr.hpp>
 
 Camera::Camera()
 {
@@ -118,4 +119,16 @@ void Camera::processInputs(GLFWwindow* window, int width, int height)
 	
 	ViewMatrix = glm::lookAt(Position, Position + Orientation, Up);
 	ProjectionViewMatrix = ProjectionMatrix * ViewMatrix;
+}
+
+void Camera::buildGUI() {
+	ImGui::DragFloatRange2("Camera FOV", &slow_speed, &fast_speed, 0.001f, 0.f, 100.0f);
+	ImGui::Separator();
+	ImGui::DragFloat3("Position", glm::value_ptr(Position), 0.02f, -100.0f, 100.0f);
+	if(ImGui::DragFloat3("Orientation", glm::value_ptr(Orientation), 0.02f, -100.0f, 100.0f)){
+		Orientation = glm::normalize(Orientation);
+	}
+	if(ImGui::DragFloat3("Up", glm::value_ptr(Up), 0.02f, -100.0f, 100.0f)){
+		Up = glm::normalize(Up);
+	}
 }

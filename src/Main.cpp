@@ -24,6 +24,7 @@
 const unsigned int width = 800;
 const unsigned int height = 800;
 
+// GLFW needs to take a function to call, and renderer isn't static. so i'm using a static pointer as a trick.
 static Renderer* _renderer_global_ptr = nullptr;
 
 int main()
