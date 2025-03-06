@@ -122,7 +122,7 @@ void Camera::processInputs(GLFWwindow* window, int width, int height)
 }
 
 void Camera::buildGUI() {
-	ImGui::DragFloatRange2("Camera FOV", &slow_speed, &fast_speed, 0.001f, 0.f, 100.0f);
+	ImGui::DragFloatRange2("Move Speed (normal / shift)", &slow_speed, &fast_speed, 0.001f, 0.f, 100.0f);
 	ImGui::Separator();
 	ImGui::DragFloat3("Position", glm::value_ptr(Position), 0.02f, -100.0f, 100.0f);
 	if(ImGui::DragFloat3("Orientation", glm::value_ptr(Orientation), 0.02f, -100.0f, 100.0f)){
