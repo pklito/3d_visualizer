@@ -14,10 +14,12 @@ class GUI{
         Renderer* renderer;
         bool show_edit_window = true;
         bool show_output_window = false;
+        bool show_scene_window = true;
         
         void buildMenuBar();
         void buildEditWindow();
         void buildOutputWindow();
+        void buildSceneWindow();
     public:
         GUI(GLFWwindow* window, Scene* scene = nullptr, Renderer* renderer = nullptr);
         void setScene(Scene* scene);

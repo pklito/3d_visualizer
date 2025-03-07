@@ -16,13 +16,13 @@ Scene::Scene() : camera(){
     }
 
 void Scene::setupDemo(){
-    GroupModel* group = demoAxis(0.02, 0.95, 0.05, 1.);
-    models.push_back(group);
-    models.push_back(LegThigh());
-    Model* calf = LegCalf();
-    calf->setPosition(glm::vec3(0,0,0.2));
-    models.push_back(calf);
-    /*
+    // GroupModel* group = demoAxis(0.02, 0.95, 0.05, 1.);
+    // models.push_back(group);
+    // models.push_back(LegThigh());
+    // Model* calf = LegCalf();
+    // calf->setPosition(glm::vec3(0,0,0.2));
+    // models.push_back(calf);
+    
     models.push_back(Leg());
     models.push_back(Leg());
     models.push_back(Leg());
@@ -42,7 +42,7 @@ void Scene::setupDemo(){
     stair->setPosition(glm::vec3(-0.4,0.0,0));
     stair->setFloatParam("stepNumber", 1);
     models.push_back(stair);
-    */
+    
 }
 
 void Scene::addModel(Model* model){
@@ -109,22 +109,33 @@ void Scene::render(Renderer& renderer){
     }
 }
 
-void Scene::buildModelEditGUI(){
+void Scene::buildSceneGUI(){
     // model list
-    if (!models.empty()) {
-        std::vector<std::string> model_names;
-        for(int i = 0; i < models.size(); i++){
-            model_names.push_back(models[i]->getName());
-        }
-        std::vector<const char*> model_name_ptrs;
-        for(const auto& name : model_names){
-            model_name_ptrs.push_back(name.c_str());
-        }
-        ImGui::ListBox("Models", &selected_model, model_name_ptrs.data(), models.size(), 4);
-    } else {
+    if (models.empty()) {
         ImGui::Text("No models available");
         return;
     }
+    std::vector<std::string> model_names;
+    for(int i = 0; i < models.size(); i++){
+        model_names.push_back(models[i]->getName());
+    }
+    std::vector<const char*> model_name_ptrs;
+    for(const auto& name : model_names){
+        model_name_ptrs.push_back(name.c_str());
+    }
+    ImGui::ListBox("Models", &selected_model, model_name_ptrs.data(), model_names.size());
+
+    // Group subelements
+    GroupModel* group = dynamic_cast<GroupModel*>(getSelectedModel());
+    if(group != nullptr){
+        ImGui::SeparatorText("Children");
+        group->buildChildrenDropdownGUI();
+    }
+        
+}
+
+void Scene::buildModelEditGUI(){
+    
     // Forward backwards buttons
     if (ImGui::Button("<")){
         cycleSelectedModel(-1);

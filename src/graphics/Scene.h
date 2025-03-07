@@ -33,5 +33,6 @@ Camera camera;
     void cycleSelectedModel(int amount = 1);
 
     void buildModelEditGUI();
+    void buildSceneGUI();
     friend class GUI;
 };

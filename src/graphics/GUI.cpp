@@ -21,6 +21,7 @@ void GUI::buildMenuBar(){
 		if (ImGui::BeginMenu("Windows")) {
 			ImGui::Checkbox("Edit Window", &show_edit_window);
 			ImGui::Checkbox("Output Window", &show_output_window);
+			ImGui::Checkbox("Scene Window", &show_scene_window);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("New")) {
@@ -103,6 +104,12 @@ void GUI::buildEditWindow(){
 	ImGui::End();
 }
 
+void GUI::buildSceneWindow(){
+	ImGui::Begin("Scene window", &show_scene_window);
+	scene->buildSceneGUI();
+	ImGui::End();
+}
+
 void GUI::buildOutputWindow(){
 	ImGui::Begin("Output Window", &show_output_window);
 	Logger::getInstance().buildGUI();
@@ -127,6 +134,10 @@ void GUI::build(){
 
 	if(show_output_window){
 		buildOutputWindow();
+	}
+
+	if(show_scene_window){
+		buildSceneWindow();
 	}
 
 }
