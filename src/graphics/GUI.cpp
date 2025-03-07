@@ -89,33 +89,7 @@ void GUI::buildEditWindow(){
 	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags)){
 		//TAB 1
 		if (ImGui::BeginTabItem("Model")){
-			// Forward backwards buttons
-			if (ImGui::Button("<")){
-				scene->cycleSelectedModel(-1);
-			}
-			ImGui::SameLine();
-			if (ImGui::Button(">")){
-				scene->cycleSelectedModel(1);
-				
-			}
-			ImGui::SameLine();
-			ImGui::Text("Selected Model: %d/%d", scene->selected_model+1, scene->models.size());
-			ImGui::SameLine();
-			if (ImGui::Button("Delete")){
-				scene->deleteSelectedModel();
-			}
-			if(scene->getSelectedModel() != nullptr){
-				ImGui::SameLine();
-				ImGui::Text(scene->getSelectedModel()->getName().c_str());
-			}
-
-			ImGui::Separator();
-			if(scene->getSelectedModel() == nullptr){
-				ImGui::Text("No models in scene");
-			}
-			else{
-				scene->getSelectedModel()->buildGUI();
-			}
+			scene->buildModelEditGUI();
 			ImGui::EndTabItem();
 			
 		}

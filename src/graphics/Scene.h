@@ -31,5 +31,7 @@ Camera camera;
     void deleteSelectedModel();
     void addModel(Model* model);
     void cycleSelectedModel(int amount = 1);
+
+    void buildModelEditGUI();
     friend class GUI;
 };

@@ -108,6 +108,50 @@ void Scene::render(Renderer& renderer){
     }
 }
 
+void Scene::buildModelEditGUI(){
+    // model list
+    if (!models.empty()) {
+        std::vector<std::string> model_names;
+        for(int i = 0; i < models.size(); i++){
+            model_names.push_back(models[i]->getName());
+        }
+        std::vector<const char*> model_name_ptrs;
+        for(const auto& name : model_names){
+            model_name_ptrs.push_back(name.c_str());
+        }
+        ImGui::ListBox("Models", &selected_model, model_name_ptrs.data(), models.size(), 4);
+    } else {
+        ImGui::Text("No models available");
+    }
+    // Forward backwards buttons
+    if (ImGui::Button("<")){
+        cycleSelectedModel(-1);
+    }
+    ImGui::SameLine();
+    if (ImGui::Button(">")){
+        cycleSelectedModel(1);
+        
+    }
+    ImGui::SameLine();
+    ImGui::Text("Selected Model: %d/%d", selected_model+1, models.size());
+    ImGui::SameLine();
+    if (ImGui::Button("Delete")){
+        deleteSelectedModel();
+    }
+    if(getSelectedModel() != nullptr){
+        ImGui::SameLine();
+        ImGui::Text(getSelectedModel()->getName().c_str());
+    }
+
+    ImGui::Separator();
+    if(getSelectedModel() == nullptr){
+        ImGui::Text("No models in scene");
+    }
+    else{
+        getSelectedModel()->buildGUI();
+    }
+}
+
 void Scene::destroy(){
     for(Model* model : models){
         model->destroy();
