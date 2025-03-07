@@ -178,6 +178,13 @@ void Scene::buildModelEditGUI(){
     ImGui::Separator();
     
     getSelectedModel()->buildGUI();
+
+    GroupModel* group = dynamic_cast<GroupModel*>(getSelectedModel());
+    if(group != nullptr){
+        ImGui::SeparatorText("Children");
+        group->buildChildrenDropdownGUI();
+    }
+        
 }
 
 void Scene::destroy(){

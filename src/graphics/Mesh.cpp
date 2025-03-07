@@ -598,3 +598,23 @@ void ObjModel::buildGUI(){
 	ImGui::RadioButton("LINES_LOOP", &_type, GL_LINE_LOOP);
 	render_type = _type;
 }
+
+void GroupModel::buildChildrenDropdownGUI(){
+	int i = 0;
+	for(auto child : models){
+		ImGui::PushID(i++);
+		GroupModel* group_ptr = dynamic_cast<GroupModel*>(child);
+		if(group_ptr){
+			if(ImGui::TreeNode(child->getName().c_str())){
+				group_ptr->buildChildrenDropdownGUI();
+				ImGui::TreePop();
+			}
+		}
+		else{
+			if(ImGui::Selectable(child->getName().c_str())){
+			}
+		}
+		ImGui::PopID();
+	}
+
+}
