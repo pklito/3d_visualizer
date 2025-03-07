@@ -58,6 +58,7 @@ void Scene::deleteSelectedModel(){
     delete models[selected_model];
     models.erase(models.begin() + selected_model);
     selected_model -= 1;
+    selected_model = max(0, selected_model);
 }
 
 Model* Scene::getSelectedModel(){
@@ -122,6 +123,7 @@ void Scene::buildModelEditGUI(){
         ImGui::ListBox("Models", &selected_model, model_name_ptrs.data(), models.size(), 4);
     } else {
         ImGui::Text("No models available");
+        return;
     }
     // Forward backwards buttons
     if (ImGui::Button("<")){
@@ -132,24 +134,50 @@ void Scene::buildModelEditGUI(){
         cycleSelectedModel(1);
         
     }
+
+    if(getSelectedModel() == nullptr){
+        ImGui::Text("No selected model");
+        return;
+    }
+
     ImGui::SameLine();
     ImGui::Text("Selected Model: %d/%d", selected_model+1, models.size());
     ImGui::SameLine();
     if (ImGui::Button("Delete")){
         deleteSelectedModel();
+        if(getSelectedModel() == nullptr)
+            return;
     }
-    if(getSelectedModel() != nullptr){
-        ImGui::SameLine();
-        ImGui::Text(getSelectedModel()->getName().c_str());
-    }
+    ImGui::SameLine();
+    ImGui::Text(getSelectedModel()->getName().c_str());
+    ImGui::SameLine();
+    static bool renaming = false;
+    if(ImGui::Button("Rename")){
+        renaming = true;
+        ImGui::OpenPopup("Rename");
 
+    }
+    if (ImGui::BeginPopup("Rename"))
+    {
+        ImGui::Text("Enter new name");
+        ImGui::SetNextItemWidth(ImGui::GetFontSize() * 30);
+        std::string name = getSelectedModel()->getName();
+                
+        char buffer[256];
+        strncpy_s(buffer, name.c_str(), sizeof(buffer));
+        buffer[sizeof(buffer) - 1] = 0;
+        if (ImGui::InputText("###Name", buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+            ImGui::CloseCurrentPopup();
+            getSelectedModel()->setName(std::string(buffer));
+        }
+        if(renaming)
+            ImGui::SetKeyboardFocusHere(-1);
+        ImGui::EndPopup();
+    }
+    
     ImGui::Separator();
-    if(getSelectedModel() == nullptr){
-        ImGui::Text("No models in scene");
-    }
-    else{
-        getSelectedModel()->buildGUI();
-    }
+    
+    getSelectedModel()->buildGUI();
 }
 
 void Scene::destroy(){
