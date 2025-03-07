@@ -9,8 +9,30 @@
 #include<glm/gtc/type_ptr.hpp>
 
 using namespace glm;
-Model::Model() : _world_transform(1.0f), _model_transform(1.0f), _world_normal_transform(1.0f), _model_normal_transform(1.0f), size(1.0f,1.0f,1.0f){
+Model::Model() : _world_transform(1.0f), _model_transform(1.0f), _world_normal_transform(1.0f), _model_normal_transform(1.0f), size(1.0f,1.0f,1.0f), name("model"){
 }
+
+std::string extractFileName(const std::string& filedir) {
+	int start = filedir.find_last_of("/\\") + 1;
+	int end = filedir.substr(start).find_first_of(".");
+	if (end == 0) {
+		end = filedir.length();
+	}
+	return filedir.substr(start, end);
+}
+
+ObjModel::ObjModel() : Model() {name = "objModel";};
+ObjModel::ObjModel(const std::string& filedir) : Model() {
+	setModel(filedir);
+	name = extractFileName(filedir);
+
+};
+ObjModel::ObjModel(const std::string& filedir, const std::string& texturedir) : Model() {
+	loadFile(filedir);
+	setTexture(texturedir);
+	name = extractFileName(filedir);
+};
+
 
 void ObjModel::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_c){
     vao = VAO().generate();
@@ -306,6 +328,7 @@ GLfloat vertices[8*nodes];
 };
 
 Primitive::Primitive(PRIM_MODEL model){
+	name = PRIM_MODEL_NAMES.at(model);
     switch(model){
         case PRIM_TETRAHEDRON:
             Tetrahedron();
@@ -464,14 +487,16 @@ void Model::updateTransform(){
 // --------------------
 
 GroupModel::GroupModel() : models(){
-
+	name = "groupModel";
 }
 
 GroupModel::GroupModel(const std::vector<Model*>& models){
+	name = "groupModel";
 	this->models = models; //? works?
 }
 
 GroupModel::GroupModel(const GroupModel& _that){
+	name = _that.getName();
 	for(Model* model : _that.models){
 		addCopy(model);
 	}
@@ -520,7 +545,7 @@ GroupModel* demoFoxHat(){
 void Model::buildGUI(){
 	//Update position without friend class
 
-	if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.02f, -100.0f, 100.0f)){
+	if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.001f, -100.0f, 100.0f)){
 		updateTransform();
 	}
 	if(_gui_use_degrees){

@@ -34,6 +34,11 @@ void Camera::lookAt(glm::vec3 position, glm::vec3 target, glm::vec3 up){
 
 void Camera::processInputs(GLFWwindow* window, int width, int height)
 {
+	//don't fly around if user is typing
+	ImGuiIO& io = ImGui::GetIO();
+	if(io.WantCaptureKeyboard)
+		return;
+
 	// Handles key inputs
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{

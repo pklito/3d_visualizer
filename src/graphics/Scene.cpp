@@ -58,6 +58,7 @@ void Scene::deleteSelectedModel(){
     delete models[selected_model];
     models.erase(models.begin() + selected_model);
     selected_model -= 1;
+    selected_model = max(0, selected_model);
 }
 
 Model* Scene::getSelectedModel(){
@@ -106,6 +107,77 @@ void Scene::render(Renderer& renderer){
     if (selected_model >= 0 && selected_model < models.size() && highlight_selected_model){
         models[selected_model]->render(renderer, &Renderer::renderHighlight);
     }
+}
+
+void Scene::buildModelEditGUI(){
+    // model list
+    if (!models.empty()) {
+        std::vector<std::string> model_names;
+        for(int i = 0; i < models.size(); i++){
+            model_names.push_back(models[i]->getName());
+        }
+        std::vector<const char*> model_name_ptrs;
+        for(const auto& name : model_names){
+            model_name_ptrs.push_back(name.c_str());
+        }
+        ImGui::ListBox("Models", &selected_model, model_name_ptrs.data(), models.size(), 4);
+    } else {
+        ImGui::Text("No models available");
+        return;
+    }
+    // Forward backwards buttons
+    if (ImGui::Button("<")){
+        cycleSelectedModel(-1);
+    }
+    ImGui::SameLine();
+    if (ImGui::Button(">")){
+        cycleSelectedModel(1);
+        
+    }
+
+    if(getSelectedModel() == nullptr){
+        ImGui::Text("No selected model");
+        return;
+    }
+
+    ImGui::SameLine();
+    ImGui::Text("Selected Model: %d/%d", selected_model+1, models.size());
+    ImGui::SameLine();
+    if (ImGui::Button("Delete")){
+        deleteSelectedModel();
+        if(getSelectedModel() == nullptr)
+            return;
+    }
+    ImGui::SameLine();
+    ImGui::Text(getSelectedModel()->getName().c_str());
+    ImGui::SameLine();
+    static bool renaming = false;
+    if(ImGui::Button("Rename")){
+        renaming = true;
+        ImGui::OpenPopup("Rename");
+
+    }
+    if (ImGui::BeginPopup("Rename"))
+    {
+        ImGui::Text("Enter new name");
+        ImGui::SetNextItemWidth(ImGui::GetFontSize() * 30);
+        std::string name = getSelectedModel()->getName();
+                
+        char buffer[256];
+        strncpy_s(buffer, name.c_str(), sizeof(buffer));
+        buffer[sizeof(buffer) - 1] = 0;
+        if (ImGui::InputText("###Name", buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+            ImGui::CloseCurrentPopup();
+            getSelectedModel()->setName(std::string(buffer));
+        }
+        if(renaming)
+            ImGui::SetKeyboardFocusHere(-1);
+        ImGui::EndPopup();
+    }
+    
+    ImGui::Separator();
+    
+    getSelectedModel()->buildGUI();
 }
 
 void Scene::destroy(){

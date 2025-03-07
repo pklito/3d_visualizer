@@ -69,7 +69,13 @@ void GUI::buildMenuBar(){
 		if (ImGui::BeginMenu("Render")) {
 			ImGui::Checkbox("Render Grid", &scene->render_grid);
 			ImGui::Checkbox("Highlight selected model", &scene->highlight_selected_model);
-
+			if(renderer != nullptr){
+				glm::vec4 color = renderer->getClearColor();
+				color.a = 1.0f;
+				ImGui::Text("Background Color"); ImGui::SameLine();
+				if(ImGui::ColorEdit4("MyColor##3", glm::value_ptr(color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel))
+					renderer->setClearColor(color);
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -83,29 +89,7 @@ void GUI::buildEditWindow(){
 	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags)){
 		//TAB 1
 		if (ImGui::BeginTabItem("Model")){
-			// Forward backwards buttons
-			if (ImGui::Button("<")){
-				scene->cycleSelectedModel(-1);
-			}
-			ImGui::SameLine();
-			if (ImGui::Button(">")){
-				scene->cycleSelectedModel(1);
-				
-			}
-			ImGui::SameLine();
-			ImGui::Text("Selected Model: %d/%d", scene->selected_model+1, scene->models.size());
-			ImGui::SameLine();
-			if (ImGui::Button("Delete")){
-				scene->deleteSelectedModel();
-			}
-			
-			ImGui::Separator();
-			if(scene->getSelectedModel() == nullptr){
-				ImGui::Text("No models in scene");
-			}
-			else{
-				scene->getSelectedModel()->buildGUI();
-			}
+			scene->buildModelEditGUI();
 			ImGui::EndTabItem();
 			
 		}
@@ -161,7 +145,7 @@ void GUI::destroy(){
 	ImGui::DestroyContext();
 }
 
-GUI::GUI(GLFWwindow* window, Scene* scene) : scene(scene)
+GUI::GUI(GLFWwindow* window, Scene* scene, Renderer* renderer) : scene(scene), renderer(renderer)
 {   
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
