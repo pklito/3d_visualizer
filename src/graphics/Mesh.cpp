@@ -545,7 +545,7 @@ GroupModel* demoFoxHat(){
 void Model::buildGUI(){
 	//Update position without friend class
 
-	if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.02f, -100.0f, 100.0f)){
+	if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.001f, -100.0f, 100.0f)){
 		updateTransform();
 	}
 	if(_gui_use_degrees){
