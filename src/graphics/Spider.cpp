@@ -54,6 +54,7 @@ ConfigableGroupModel* LegCalf(){
 
     });
     group->updateModels();
+    group->setName("spiderLegCalf");
 
     return group;
 }
@@ -76,7 +77,8 @@ ConfigableGroupModel* LegHip(){
         cylinder->setColor(glm::vec4(0.4,0.4,0.6,1));
 
     });
-
+    group->updateModels();
+    group->setName("spiderHip");
     return group;
 }
 
@@ -152,6 +154,7 @@ ConfigableGroupModel* Leg(){
 
     });
     group->updateModels();
+    group->setName("spiderLeg");
 
     return group;
 }
@@ -209,7 +212,7 @@ ConfigableGroupModel* LegThigh(){
 
     });
     group->updateModels();
-
+    group->setName("spiderLegThigh");
     return group;
 }
 
