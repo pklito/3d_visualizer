@@ -1,9 +1,9 @@
 #include "graphics/MeshEx.h"
 
 ConfigableGroupModel::ConfigableGroupModel(std::vector<Model*> models, std::map<std::string, ConfigVariableBase*> params, std::function<void(std::vector<Model*>&, std::map<std::string, ConfigVariableBase*>&)> update)
-    : GroupModel(models), update_models(update), params(params) {}
+    : GroupModel(models), update_models(update), params(params) {name = "ConfigableGroupModel";}
 
-ConfigableGroupModel::ConfigableGroupModel() : GroupModel() {}
+ConfigableGroupModel::ConfigableGroupModel() : GroupModel() {name = "ConfigableGroupModel";}
 
 void ConfigableGroupModel::setFloatParam(std::string name, float value) {
     auto* param = dynamic_cast<ConfigVariable<float>*>(params[name]);
