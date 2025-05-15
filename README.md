@@ -5,4 +5,7 @@ This project was inspired by the following video: https://www.youtube.com/watch?
 
 ![A spider hexapod, infront of 3 stairs, with a edit GUI window, which contains variables of the spider leg, and a scene window, which shows the objects in it](docs/spider_red.png)
 
-To run this, import the project into visual studios and build.
+To run this, import the project into Visual Studio and build.
+I ran this project using the installations: MSVC v143, C++ ATL for v143, and C++ MTC for v143. (Visual studio 2022).
+
+If you are getting the error at `#include <afx.h>`, you didn't enable C++ MTC, which isn't enabled by default in the installation.
