@@ -373,7 +373,7 @@ void Primitive::Cone(){
 		indices[6 * i + 4] = i;
 		indices[6 * i + 5] = top_node;
 	}
-	this->setRenderType(GL_LINE_LOOP);
+	this->setRenderType(GL_TRIANGLES);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 };
 
@@ -445,9 +445,44 @@ void Primitive::Cylinder(){
 		indices[12 * i + 10] = br;
 		indices[12 * i + 11] = bottom_node;
 	}
-	this->setRenderType(GL_LINE_LOOP);
+	this->setRenderType(GL_TRIANGLES);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 };
+
+void Primitive::Cube(){
+	GLfloat vertices[8 * 8];
+	for(int i = 0; i < 8; i ++ ){
+		//pos
+		vertices[8 * i] = (i%2 == 1 ? 1 : -1) * 0.5f;
+		vertices[8 * i + 1] = (i >= 4 ? 1 : -1) * 0.5f;
+		vertices[8 * i + 2] = ((i/2)%2 == 1 ? 1 : -1) * 0.5f;
+
+		vertices[8 * i + 3] = (i%2 ? 1 : -1) * 0.5f;
+		vertices[8 * i + 4] = (i > 4 ? 1 : -1) * 0.5f;
+		vertices[8 * i + 5] = ((i/2)%2 ? 1 : -1) * 0.5f;
+
+		vertices[8 * i + 6] = i/8;
+		vertices[8 * i + 7] = i%2;
+	}
+	GLuint indices[] = {
+    1, 2, 0,    // fixed
+    1, 3, 2,
+    5, 4, 6,    // fixed
+    5, 6, 7,
+    2, 3, 6,
+    6, 3, 7,    // fixed
+    1, 5, 3,
+    5, 7, 3,    // fixed
+    1, 0, 4,    // fixed
+    5, 1, 4,
+    2, 4, 0,    // fixed
+    4, 2, 6
+};
+
+	this->setRenderType(GL_TRIANGLES);
+	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
+
+}
 
 Primitive::Primitive(PRIM_MODEL model){
 	name = PRIM_MODEL_NAMES.at(model);
@@ -469,6 +504,8 @@ Primitive::Primitive(PRIM_MODEL model){
 			break;
 		case PRIM_SPHERE:
 		case PRIM_CUBE:
+			Cube();
+			break;
 		default:
             FromFile(PRIM_MODEL_NAMES.at(model) + ".obj");
 			break;
