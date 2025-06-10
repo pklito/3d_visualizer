@@ -159,6 +159,10 @@ protected:
     void Tetrahedron();
     void Grid();
     void Circle();
+    void Cone();
+	void Sphere();
+	void Cylinder();
+	void Cube();
 public:
     Primitive(PRIM_MODEL model);
 };
