@@ -450,34 +450,36 @@ void Primitive::Cylinder(){
 };
 
 void Primitive::Cube(){
-	GLfloat vertices[8 * 8];
-	for(int i = 0; i < 8; i ++ ){
+	GLfloat vertices[8 * 24];
+	vec3 faces[] = {vec3(1,0,0), vec3(-1,0,0), vec3(0,1,0), vec3(0,-1,0), vec3(0,0,1), vec3(0,0,-1)};
+	vec3 forward[] = {vec3(0,-1,0), vec3(0,1,0), vec3(1,0,0), vec3(-1,0,0), vec3(-1,0,0), vec3(1,0,0)};
+	vec3 side[] = {vec3(0,0,1), vec3(0,0,1), vec3(0,0,1), vec3(0,0,1), vec3(0,1,0), vec3(0,1,0)};
+	for(int i = 0; i < 6; i ++ ){
 		//pos
-		vertices[8 * i] = (i%2 == 1 ? 1 : -1) * 0.5f;
-		vertices[8 * i + 1] = (i >= 4 ? 1 : -1) * 0.5f;
-		vertices[8 * i + 2] = ((i/2)%2 == 1 ? 1 : -1) * 0.5f;
+		for(int j = 0; j < 4; j ++ ){
+			float lr = j % 2 ? 1 : -1;
+			float ud = j / 2 ? 1 : -1;
+			vertices[8 * (4 * i + j) + 0] = 0.5f * (faces[i] + lr * forward[i] + ud * side[i])[0];
+			vertices[8 * (4 * i + j) + 1] = 0.5f * (faces[i] + lr * forward[i] + ud * side[i])[1];
+			vertices[8 * (4 * i + j) + 2] = 0.5f * (faces[i] + lr * forward[i] + ud * side[i])[2];
 
-		vertices[8 * i + 3] = (i%2 ? 1 : -1) * 0.5f;
-		vertices[8 * i + 4] = (i > 4 ? 1 : -1) * 0.5f;
-		vertices[8 * i + 5] = ((i/2)%2 ? 1 : -1) * 0.5f;
-
-		vertices[8 * i + 6] = i/8;
-		vertices[8 * i + 7] = i%2;
+			vertices[8 * (4 * i + j) + 3] = faces[i][0];
+			vertices[8 * (4 * i + j) + 4] = faces[i][1];
+			vertices[8 * (4 * i + j) + 5] = faces[i][2];
+			//todo improve
+			vertices[8 * (4 * i + j) + 6] = i/8;
+			vertices[8 * (4 * i + j) + 7] = i%2;
+		}
 	}
-	GLuint indices[] = {
-    1, 2, 0,    // fixed
-    1, 3, 2,
-    5, 4, 6,    // fixed
-    5, 6, 7,
-    2, 3, 6,
-    6, 3, 7,    // fixed
-    1, 5, 3,
-    5, 7, 3,    // fixed
-    1, 0, 4,    // fixed
-    5, 1, 4,
-    2, 4, 0,    // fixed
-    4, 2, 6
-};
+	GLuint indices[3*12];
+	for(int i = 0; i < 6; i ++){
+		indices[6*i] = 4*i;
+		indices[6*i + 1] = 4*i + 2;
+		indices[6*i + 2] = 4*i + 1;
+		indices[6*i + 3] = 4*i + 2;
+		indices[6*i + 4] = 4*i + 3;
+		indices[6*i + 5] = 4*i + 1;
+	}
 
 	this->setRenderType(GL_TRIANGLES);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
