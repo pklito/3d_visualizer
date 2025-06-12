@@ -20,7 +20,9 @@
 #include"imgui_impl_opengl3.h"
 #include <stdexcept>
 #include "Logger.h"
+#include <glm/gtx/string_cast.hpp>
 
+#include "DH.h"
 const unsigned int width = 800;
 const unsigned int height = 800;
 
@@ -77,6 +79,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	Logger::getInstance().log(LOG_INFO, "Starting main loop");
+	Logger::getInstance().log(LOG_INFO, glm::to_string(DH::forwardKinematics({{0,glm::radians(45.f),3,0},{glm::radians(90.f),0,5,0},{0,glm::radians(45.f),0,2},{glm::radians(30.f),glm::radians(-10.f),2,0}}) ));
 
 	// Main while loop
 	while (!glfwWindowShouldClose(renderer.getWindow()))
