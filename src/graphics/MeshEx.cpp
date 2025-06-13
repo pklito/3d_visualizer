@@ -103,10 +103,10 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
         {"barRadius", new ConfigVariable<float>("bar radius", bar_radius)},
         {"arrowLength", new ConfigVariable<float>("arrow length", arrow_length)},
         {"arrowRadius", new ConfigVariable<float>("arrow radius", arrow_radius)}
-    }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
+    }, [size](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
         float bar_radius = GET_CONFIG_VARIABLE(float, params["barRadius"]);
         float arrow_length = GET_CONFIG_VARIABLE(float, params["arrowLength"]);
-        float bar_length = 1 - arrow_length;
+        float bar_length = size - arrow_length;
         float arrow_radius = GET_CONFIG_VARIABLE(float, params["arrowRadius"]);
         // x bar
         models[0]->setPosition(glm::vec3(bar_length/2,0,0));
@@ -248,11 +248,13 @@ ConfigableGroupModel* arrow(float bar_radius, float bar_length, float arrow_radi
 
 // For iterating these demos
 ConfigableGroupModel* _demoAxis() { return demoAxis(); }
+ConfigableGroupModel* _demoAxisMini() { return demoAxis(0.002,0.025,0.01,0.05); }
 ConfigableGroupModel* _stairModel() {   return stairModel(); }
 ConfigableGroupModel* _arrow() {   return arrow(); }
 
 const std::map<std::string, ConfigableGroupModel*(*)()> demoFuncList = {
-    {"Axis", _demoAxis},
+    {"Axis 1.00m", _demoAxis},
+    {"Axis 0.05m", _demoAxisMini},
     {"Stair", _stairModel},
     {"Arrow", _arrow}
 };
