@@ -1,4 +1,17 @@
 #include"graphics/Renderer.h"
+
+// How i split the depths, all objects are in the 0.2-1f range, overlays are 0.1-0.2, and highlighting the selected object is 0-0.1.
+// Convention: _depthDefault is maintained.
+void _depthDefault(){
+	glDepthRange(0.2f,1.f);
+}
+void _depthOverlay(){
+	glDepthRange(0.1f,0.2f);
+}
+void _depthClosest(){
+	glDepthRange(0.0f,0.1f);
+}
+
 Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("resources/default.vert", "resources/default.frag"),
 																no_tex_shader("resources/default.vert", "resources/default_no_tex.frag"), 
 																color_shader("resources/default.vert", "resources/color.frag"),
@@ -13,9 +26,8 @@ Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("reso
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
-	glDepthRange(0.1f,1.f);
+	_depthDefault();
 }
-
 
 void Renderer::clearFrame()
 {
@@ -73,11 +85,11 @@ void Renderer::renderHighlight(GLuint render_mode, GLsizeiptr indices_count, con
 
 	//Draw.
 	vao->bind();
-	glDepthRange(0,0.1f);
+	_depthClosest();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 glEnable( GL_BLEND );
 	glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_INT, 0);
-	glDepthRange(0.1f,1.f);
+	_depthDefault();
 glDisable( GL_BLEND );
 
 
@@ -97,8 +109,8 @@ void Renderer::renderOverlay(GLuint render_mode, GLsizeiptr indices_count, const
 
 	//Draw.
 	vao->bind();
-	glDepthRange(0,0.1f);
+	_depthOverlay();
 	glDrawElements(render_mode, indices_count, GL_UNSIGNED_INT, 0);
-	glDepthRange(0.1f,1);
+	_depthDefault();
 	shader.deactivate();
 }
