@@ -274,10 +274,10 @@ Primitive::Primitive(PRIM_MODEL model){
 		case PRIM_CYLINDER:
 			Cylinder();
 			break;
-		case PRIM_SPHERE:
 		case PRIM_CUBE:
 			Cube();
 			break;
+		case PRIM_SPHERE:
 		default:
             FromFile(PRIM_MODEL_NAMES.at(model) + ".obj");
 			break;
