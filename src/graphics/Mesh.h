@@ -40,6 +40,8 @@ protected:
 
     std::string name;
 
+    bool overlay = false;   //render above everything else and without shading.
+
     void applyWorldTransformation(const glm::mat4 &transformation);
 	void applyModelTransformation(const glm::mat4 &transformation);
 	void applyWorldNormalTransformation(const glm::mat4 &transformation_inv);
@@ -87,7 +89,8 @@ public:
     glm::vec3 getPosition() {return position;};
     glm::vec3 getAngles() {return yaw_pitch_roll;};
     glm::vec3 getScale() {return size;};
-    
+    void setOverlay(bool value) {this->overlay = value;};
+    bool isOverlay() {return this->overlay;};
     void setName(const std::string& name) {this->name = name;};
     std::string getName() const {return name;};
 

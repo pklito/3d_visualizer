@@ -13,6 +13,7 @@ Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("reso
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
+	glDepthRange(0.1f,1.f);
 }
 
 
@@ -72,14 +73,32 @@ void Renderer::renderHighlight(GLuint render_mode, GLsizeiptr indices_count, con
 
 	//Draw.
 	vao->bind();
-	glDisable(GL_DEPTH_TEST);
+	glDepthRange(0,0.1f);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 glEnable( GL_BLEND );
 	glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_INT, 0);
-	glEnable(GL_DEPTH_TEST);
+	glDepthRange(0.1f,1.f);
 glDisable( GL_BLEND );
 
 
 	vao->unbind();
+	shader.deactivate();
+}
+
+void Renderer::renderOverlay(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
+	Shader& shader = color_shader;
+
+	//Pass model transforms
+	shader.activate();
+	shader.setMat4("modelTransform", model_transform);
+	shader.setMat4("normalTransform", normal_transform);
+	shader.setMat4("cameraTransform", camera_view);
+	shader.setVec4("color", color);
+
+	//Draw.
+	vao->bind();
+	glDepthRange(0,0.1f);
+	glDrawElements(render_mode, indices_count, GL_UNSIGNED_INT, 0);
+	glDepthRange(0.1f,1);
 	shader.deactivate();
 }

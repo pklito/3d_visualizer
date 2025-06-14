@@ -455,6 +455,7 @@ void Model::buildGUI(){
 	if (DragFloat3Lock("Scale", scale, _gui_scale_state)){
 		setScale(scale);
 	}
+	ImGui::Checkbox("Overlay draw", &overlay);
 }
 
 void ObjModel::buildGUI(){

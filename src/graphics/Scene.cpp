@@ -1,6 +1,7 @@
 #include"Scene.h"
 #include "graphics/MeshEx.h"
 #include "graphics/Spider.h"
+#include <Logger.h>
 
 Scene::Scene() : camera(){
         Model* grid1 = new Primitive(PRIM_GRID);
@@ -93,7 +94,12 @@ void Scene::handleInputs(Renderer& renderer){
 
 void Scene::render(Renderer& renderer){
     for(Model* model : models){
-        model->render(renderer);
+        if(model->isOverlay()){ //this shouldn't be here but whatever.
+            model->render(renderer, &Renderer::renderOverlay);
+        }
+        else{
+            model->render(renderer);
+        }
     }
     int i = 0;
     for(Model* model : const_models){
