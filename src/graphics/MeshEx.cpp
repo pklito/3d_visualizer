@@ -249,13 +249,13 @@ ConfigableGroupModel* arrow(float bar_radius, float bar_length, float arrow_radi
 
 // For iterating these demos
 ConfigableGroupModel* _demoAxis() { return demoAxis(); }
-ConfigableGroupModel* _demoAxisMini() { return demoAxis(0.002,0.025,0.01,0.05); }
+ConfigableGroupModel* _demoAxisMini() { return demoAxis(0.004,0.05,0.02,0.1); }
 ConfigableGroupModel* _stairModel() {   return stairModel(); }
 ConfigableGroupModel* _arrow() {   return arrow(); }
 
 const std::map<std::string, ConfigableGroupModel*(*)()> demoFuncList = {
     {"Axis 1.00m", _demoAxis},
-    {"Axis 0.05m", _demoAxisMini},
+    {"Axis 0.1m", _demoAxisMini},
     {"Stair", _stairModel},
     {"Arrow", _arrow}
 };
