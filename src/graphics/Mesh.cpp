@@ -21,6 +21,27 @@ std::string extractFileName(const std::string& filedir) {
 	return filedir.substr(start, end);
 }
 
+void Model::render(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform){
+	//Default thing to do when calling render
+	switch(renderformat){
+		case PL_TRIANGLES:
+		case PL_LINES:
+		case PL_LINE_LOOP:
+		case PL_LINE_STRIP:
+			_render(renderer, &Renderer::renderModel, model_transform, normal_transform, PL_TO_GL(renderformat));
+			return;
+		case PL_TRIANGLES_HIGHLIGHT:
+			_render(renderer, &Renderer::renderHighlight, model_transform, normal_transform, GL_TRIANGLES);
+			return;
+		case PL_TRIANGLES_SHADELESS:
+			_render(renderer, &Renderer::renderModel, model_transform, normal_transform, GL_TRIANGLES);
+			return;
+		case PL_TRIANGLES_OVERLAY:
+			_render(renderer, &Renderer::renderOverlay, model_transform, normal_transform, GL_TRIANGLES);
+			return;
+	}
+}
+
 ObjModel::ObjModel() : Model() {name = "objModel";};
 ObjModel::ObjModel(const std::string& filedir) : Model() {
 	setModel(filedir);
@@ -66,9 +87,9 @@ void Model::setTexture(const std::string& texture_dir){
     texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
-void ObjModel::render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void ObjModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
-		render_mode = this->render_type;
+		render_mode = PL_TO_GL(this->render_pipeline);
 	}
 	//Call renderer with the chosen render call (usually renderer.renderModel)
 	//Overrides the transformations.
@@ -393,18 +414,18 @@ void GroupModel::addCopy(const Model* const model){
 	models.push_back(new_model);
 }
 
-void GroupModel::render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void GroupModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
-		render_mode = this->render_type;
+		render_mode = PL_TO_GL(render_pipeline);
 	}
 	for(Model* model : models){
-		model->render(renderer, renderer_func, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
+		model->_render(renderer, renderer_func, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
 	}
 }
 
 GroupModel* demoFoxHat(){
 	Model* mesh = new ObjModel("resources\\fox.obj", "resources\\UVMap.png");
-    mesh->setRenderType(GL_TRIANGLES);
+    mesh->setRenderPipeline(PL_TRIANGLES);
     mesh->setScale(glm::vec3(1.,0.5,1.));
     mesh->setPosition(glm::vec3(0.0,0,0));
 
@@ -475,12 +496,20 @@ void ObjModel::buildGUI(){
 	}
 	ImGui::Separator();
 
-	int _type = render_type;
-	ImGui::RadioButton("TRIANGLES", &_type, GL_TRIANGLES); ImGui::SameLine();
-	ImGui::RadioButton("LINES", &_type, GL_LINES); ImGui::SameLine();
-	ImGui::RadioButton("LINE_STRIP", &_type, GL_LINE_STRIP); ImGui::SameLine();
-	ImGui::RadioButton("LINES_LOOP", &_type, GL_LINE_LOOP);
-	render_type = _type;
+	const std::map<std::string, RenderPipeline> selectablePipelines = {
+		{"MESH", PL_TRIANGLES},
+		{"LINES", PL_LINES},
+		{"LINE_LOOP", PL_LINE_LOOP},
+		{"MESH OVERLAY", PL_TRIANGLES_OVERLAY},
+		{"LINE STRIP", PL_LINE_STRIP}
+	};
+	
+	for(auto pair : selectablePipelines){
+		if(ImGui::RadioButton(pair.first.c_str(), render_pipeline == pair.second)){
+			render_pipeline = pair.second;
+		}
+		ImGui::SameLine();
+	}
 }
 
 void GroupModel::buildChildrenDropdownGUI(){

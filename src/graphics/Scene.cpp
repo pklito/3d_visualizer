@@ -94,12 +94,7 @@ void Scene::handleInputs(Renderer& renderer){
 
 void Scene::render(Renderer& renderer){
     for(Model* model : models){
-        if(model->isOverlay()){ //this shouldn't be here but whatever.
-            model->render(renderer, &Renderer::renderOverlay);
-        }
-        else{
-            model->render(renderer);
-        }
+        model->render(renderer);
     }
     int i = 0;
     for(Model* model : const_models){
@@ -111,7 +106,7 @@ void Scene::render(Renderer& renderer){
     }
 
     if (selected_model >= 0 && selected_model < models.size() && highlight_selected_model){
-        models[selected_model]->render(renderer, &Renderer::renderHighlight);
+        models[selected_model]->render(renderer, PL_TRIANGLES_HIGHLIGHT);
     }
 }
 

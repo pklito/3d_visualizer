@@ -31,7 +31,7 @@ void GUI::buildMenuBar(){
 					if(file != ""){
 						Model* mesh = new ObjModel(file);
 						mesh->setTexture(popupExplorer(".jpg"));
-						mesh->setRenderType(GL_TRIANGLES);
+						mesh->setRenderPipeline(PL_TRIANGLES);
 						scene->addModel(mesh);
 					}
 				}

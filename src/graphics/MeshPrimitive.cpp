@@ -71,7 +71,7 @@ GLuint indices[] = {
 36, 37, 39, 38,
 40, 41, 43, 42
 };
-	this->setRenderType(GL_LINES);
+	this->setRenderPipeline(PL_LINES);
     this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 }
 
@@ -93,7 +93,7 @@ void Primitive::Circle(){
 	for(int i = 0; i < nodes; i++){
 		indices[i] = i;
 	}
-	this->setRenderType(GL_LINE_LOOP);
+	this->setRenderPipeline(PL_LINE_LOOP);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 };
 
@@ -143,7 +143,7 @@ void Primitive::Cone(){
 		indices[6 * i + 4] = i;
 		indices[6 * i + 5] = top_node;
 	}
-	this->setRenderType(GL_TRIANGLES);
+	this->setRenderPipeline(PL_TRIANGLES);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 };
 
@@ -215,7 +215,7 @@ void Primitive::Cylinder(){
 		indices[12 * i + 10] = br;
 		indices[12 * i + 11] = bottom_node;
 	}
-	this->setRenderType(GL_TRIANGLES);
+	this->setRenderPipeline(PL_TRIANGLES);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 };
 
@@ -251,7 +251,7 @@ void Primitive::Cube(){
 		indices[6*i + 5] = 4*i + 1;
 	}
 
-	this->setRenderType(GL_TRIANGLES);
+	this->setRenderPipeline(PL_TRIANGLES);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 
 }
