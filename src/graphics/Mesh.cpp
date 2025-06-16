@@ -24,19 +24,19 @@ std::string extractFileName(const std::string& filedir) {
 void Model::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	//Default thing to do when calling render
 	switch(renderformat){
-		case PL_TRIANGLES:
+		case PL_MESH:
 		case PL_LINES:
 		case PL_LINE_LOOP:
 		case PL_LINE_STRIP:
 			_render(renderer, &Renderer::renderModel, model_transform, normal_transform, PL_TO_GL(renderformat));
 			return;
-		case PL_TRIANGLES_HIGHLIGHT:
+		case PL_MESH_HIGHLIGHT:
 			_render(renderer, &Renderer::renderHighlight, model_transform, normal_transform, GL_TRIANGLES);
 			return;
-		case PL_TRIANGLES_SHADELESS:
+		case PL_MESH_SHADELESS:
 			_render(renderer, &Renderer::renderModelShadeless, model_transform, normal_transform, GL_TRIANGLES);
 			return;
-		case PL_TRIANGLES_OVERLAY:
+		case PL_MESH_OVERLAY:
 			_render(renderer, &Renderer::renderOverlay, model_transform, normal_transform, GL_TRIANGLES);
 			return;
 		case PL_NONE:
@@ -443,7 +443,7 @@ void GroupModel::doRenderPipeline(Renderer& renderer, RenderPipeline renderforma
 
 GroupModel* demoFoxHat(){
 	Model* mesh = new ObjModel("resources\\fox.obj", "resources\\UVMap.png");
-    mesh->setRenderPipeline(PL_TRIANGLES);
+    mesh->setRenderPipeline(PL_MESH);
     mesh->setScale(glm::vec3(1.,0.5,1.));
     mesh->setPosition(glm::vec3(0.0,0,0));
 
@@ -514,12 +514,12 @@ void ObjModel::buildGUI(){
 	ImGui::Separator();
 
 	const std::map<std::string, RenderPipeline> selectablePipelines = {
-		{"MESH", PL_TRIANGLES},
+		{"MESH", PL_MESH},
 		{"LINES", PL_LINES},
 		{"LINE_LOOP", PL_LINE_LOOP},
 		{"LINE STRIP", PL_LINE_STRIP},
-		{"MESH OVERLAY", PL_TRIANGLES_OVERLAY},
-		{"MESH SHADELESS", PL_TRIANGLES_SHADELESS}
+		{"MESH OVERLAY", PL_MESH_OVERLAY},
+		{"MESH SHADELESS", PL_MESH_SHADELESS}
 	};
 	
 	float accum_width = 0;

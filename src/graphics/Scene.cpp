@@ -106,7 +106,7 @@ void Scene::render(Renderer& renderer){
     }
 
     if (selected_model >= 0 && selected_model < models.size() && highlight_selected_model){
-        models[selected_model]->doRenderPipeline(renderer, PL_TRIANGLES_HIGHLIGHT);
+        models[selected_model]->doRenderPipeline(renderer, PL_MESH_HIGHLIGHT);
     }
 }
 

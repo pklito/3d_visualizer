@@ -148,7 +148,7 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
     });
     group->updateModels();
     group->setName("axis");
-    group->setRenderPipeline(PL_TRIANGLES_OVERLAY);
+    group->setRenderPipeline(PL_MESH_OVERLAY);
 
     return group;
 }

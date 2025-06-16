@@ -23,13 +23,13 @@ typedef enum {
     //pass to models to have them use their own pipeline.
     PL_OVERRIDDEN = -2,
     PL_NONE = -1,
-    PL_TRIANGLES = GL_TRIANGLES,
+    PL_MESH = GL_TRIANGLES,
     PL_LINES = GL_LINES,
     PL_LINE_STRIP = GL_LINE_STRIP,
     PL_LINE_LOOP = GL_LINE_LOOP,
-    PL_TRIANGLES_SHADELESS = GL_TRIANGLES | 1 << 4,
-    PL_TRIANGLES_HIGHLIGHT = GL_TRIANGLES | 2 << 4,
-    PL_TRIANGLES_OVERLAY = GL_TRIANGLES | 3 << 4
+    PL_MESH_SHADELESS = GL_TRIANGLES | 1 << 4,
+    PL_MESH_HIGHLIGHT = GL_TRIANGLES | 2 << 4,
+    PL_MESH_OVERLAY = GL_TRIANGLES | 3 << 4
 } RenderPipeline;
 
 inline GLuint PL_TO_GL(RenderPipeline pl){
@@ -54,7 +54,7 @@ protected:
 
     glm::vec4 color = glm::vec4(1.,1.,1.,1.);
 
-    RenderPipeline render_pipeline = PL_TRIANGLES;
+    RenderPipeline render_pipeline = PL_MESH;
 
     std::string name;
 

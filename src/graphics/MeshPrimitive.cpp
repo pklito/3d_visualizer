@@ -143,7 +143,7 @@ void Primitive::Cone(){
 		indices[6 * i + 4] = i;
 		indices[6 * i + 5] = top_node;
 	}
-	this->setRenderPipeline(PL_TRIANGLES);
+	this->setRenderPipeline(PL_MESH);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 };
 
@@ -215,7 +215,7 @@ void Primitive::Cylinder(){
 		indices[12 * i + 10] = br;
 		indices[12 * i + 11] = bottom_node;
 	}
-	this->setRenderPipeline(PL_TRIANGLES);
+	this->setRenderPipeline(PL_MESH);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 };
 
@@ -251,7 +251,7 @@ void Primitive::Cube(){
 		indices[6*i + 5] = 4*i + 1;
 	}
 
-	this->setRenderPipeline(PL_TRIANGLES);
+	this->setRenderPipeline(PL_MESH);
 	this->generateMesh(vertices, sizeof(vertices)/sizeof(GLfloat), indices, sizeof(indices)/sizeof(GLuint));
 
 }
