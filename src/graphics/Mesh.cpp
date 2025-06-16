@@ -483,7 +483,7 @@ void Model::buildGUI(){
 	}
 	}
 	// Pop into next line if no room
-	if(ImGui::GetContentRegionAvail().x > 330)
+	if(ImGui::GetContentRegionAvail().x - ImGui::GetItemRectSize().x > 50)
 		ImGui::SameLine();
 	ImGui::PushID("use_degrees");
 	ImGui::SetNextItemWidth(50);
@@ -522,11 +522,21 @@ void ObjModel::buildGUI(){
 		{"MESH SHADELESS", PL_TRIANGLES_SHADELESS}
 	};
 	
+	float accum_width = 0;
 	for(auto pair : selectablePipelines){
 		if(ImGui::RadioButton(pair.first.c_str(), render_pipeline == pair.second)){
 			render_pipeline = pair.second;
 		}
-		ImGui::SameLine();
+		accum_width += ImGui::GetItemRectSize().x;
+		if(accum_width > ImGui::GetContentRegionAvail().x - 100){
+			accum_width = 0;
+		}
+		else{
+			ImGui::SameLine();
+		}
+	}
+	if(accum_width != 0){
+		ImGui::NewLine();
 	}
 }
 
