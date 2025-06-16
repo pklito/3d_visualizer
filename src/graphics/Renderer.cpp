@@ -49,12 +49,42 @@ void Renderer::windowResizeCallBack(GLFWwindow* window, int width, int height){
 	}
 	aspect_matrix[0][0] = (float)height / width;
 }
+
+void Renderer::_renderPipeline(bool do_blend, int layer, Shader& shader, GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
+	//Preventing code repetition
+
+	//Pass model transforms
+	shader.activate();
+	shader.setMat4("modelTransform", model_transform);
+	shader.setMat4("normalTransform", normal_transform);
+	shader.setMat4("cameraTransform", camera_view);
+	shader.setVec4("color", color);
+
+	//Draw.
+	vao->bind();
+	if (texture != nullptr)	texture->bind();
+	glDrawElements(render_mode, indices_count, GL_UNSIGNED_INT, 0);
+	vao->unbind();
+	if (texture != nullptr)	texture->unbind();
+	shader.deactivate();
+
+}
+
 void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	//Decide which shader to use
 	bool use_texture = texture != nullptr && texture->exists();
 
 	bool use_color = render_mode == GL_LINES || render_mode == GL_LINE_STRIP || render_mode == GL_LINE_LOOP;
 	Shader& shader = use_color ? color_shader : (use_texture ? tex_shader : no_tex_shader);
+
+	_renderPipeline(false, 0, shader, render_mode, indices_count, vao, texture, color, model_transform, normal_transform);
+}
+
+void Renderer::renderModelShadeless(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
+	//Decide which shader to use
+	bool use_texture = texture != nullptr && texture->exists();
+
+	Shader& shader = color_shader;
 
 	//Pass model transforms
 	shader.activate();
@@ -71,6 +101,7 @@ void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, const V
 	if (texture != nullptr)	texture->unbind();
 	shader.deactivate();
 }
+
 
 void Renderer::renderHighlight(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	
