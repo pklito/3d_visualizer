@@ -60,6 +60,21 @@ void Renderer::_renderPipeline(bool do_blend, int layer, Shader& shader, GLuint 
 	shader.setMat4("cameraTransform", camera_view);
 	shader.setVec4("color", color);
 
+	if(layer == 0)
+		_depthDefault();
+	if(layer == 1)
+		_depthOverlay();
+	if(layer == 2)
+		_depthClosest();
+
+	if(do_blend){
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable( GL_BLEND );
+
+	}
+	else{
+		glDisable( GL_BLEND );
+	}
 	//Draw.
 	vao->bind();
 	if (texture != nullptr)	texture->bind();
@@ -67,6 +82,10 @@ void Renderer::_renderPipeline(bool do_blend, int layer, Shader& shader, GLuint 
 	vao->unbind();
 	if (texture != nullptr)	texture->unbind();
 	shader.deactivate();
+
+	//for sanity sake:
+	_depthDefault();
+	glDisable(GL_BLEND);
 
 }
 
@@ -81,67 +100,18 @@ void Renderer::renderModel(GLuint render_mode, GLsizeiptr indices_count, const V
 }
 
 void Renderer::renderModelShadeless(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
-	//Decide which shader to use
-	bool use_texture = texture != nullptr && texture->exists();
-
-	Shader& shader = color_shader;
-
-	//Pass model transforms
-	shader.activate();
-	shader.setMat4("modelTransform", model_transform);
-	shader.setMat4("normalTransform", normal_transform);
-	shader.setMat4("cameraTransform", camera_view);
-	shader.setVec4("color", color);
-
-	//Draw.
-	vao->bind();
-	if (texture != nullptr)	texture->bind();
-	glDrawElements(render_mode, indices_count, GL_UNSIGNED_INT, 0);
-	vao->unbind();
-	if (texture != nullptr)	texture->unbind();
-	shader.deactivate();
+	_renderPipeline(false, 0, color_shader, render_mode, indices_count, vao, texture, color, model_transform, normal_transform);
 }
 
+void Renderer::renderOverlay(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
+	_renderPipeline(false, 1, color_shader, render_mode, indices_count, vao, texture, color, model_transform, normal_transform);
+}
 
 void Renderer::renderHighlight(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	
 	Shader& shader = highlight_shader;
-	//Pass model transforms
+	//Pass additional uniform
 	shader.activate();
-	shader.setMat4("modelTransform", model_transform);
-	shader.setMat4("normalTransform", normal_transform);
-	shader.setMat4("cameraTransform", camera_view);
 	shader.setFloat("time", glfwGetTime());
-	shader.setVec4("color", color);
-
-	//Draw.
-	vao->bind();
-	_depthClosest();
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-glEnable( GL_BLEND );
-	glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_INT, 0);
-	_depthDefault();
-glDisable( GL_BLEND );
-
-
-	vao->unbind();
-	shader.deactivate();
-}
-
-void Renderer::renderOverlay(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform){
-	Shader& shader = color_shader;
-
-	//Pass model transforms
-	shader.activate();
-	shader.setMat4("modelTransform", model_transform);
-	shader.setMat4("normalTransform", normal_transform);
-	shader.setMat4("cameraTransform", camera_view);
-	shader.setVec4("color", color);
-
-	//Draw.
-	vao->bind();
-	_depthOverlay();
-	glDrawElements(render_mode, indices_count, GL_UNSIGNED_INT, 0);
-	_depthDefault();
-	shader.deactivate();
+	_renderPipeline(true, 2, shader, GL_TRIANGLES, indices_count, vao, nullptr, glm::vec4(1), model_transform, normal_transform);
 }
