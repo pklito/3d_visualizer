@@ -29,7 +29,7 @@ typedef enum {
     PL_LINE_LOOP = GL_LINE_LOOP,
     PL_TRIANGLES_SHADELESS = GL_TRIANGLES | 1 << 4,
     PL_TRIANGLES_HIGHLIGHT = GL_TRIANGLES | 2 << 4,
-    PL_TRIANGLES_OVERLAY = GL_TRIANGLES | 3 << 4,
+    PL_TRIANGLES_OVERLAY = GL_TRIANGLES | 3 << 4
 } RenderPipeline;
 
 inline GLuint PL_TO_GL(RenderPipeline pl){

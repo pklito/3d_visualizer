@@ -517,8 +517,9 @@ void ObjModel::buildGUI(){
 		{"MESH", PL_TRIANGLES},
 		{"LINES", PL_LINES},
 		{"LINE_LOOP", PL_LINE_LOOP},
+		{"LINE STRIP", PL_LINE_STRIP},
 		{"MESH OVERLAY", PL_TRIANGLES_OVERLAY},
-		{"LINE STRIP", PL_LINE_STRIP}
+		{"MESH SHADELESS", PL_TRIANGLES_SHADELESS}
 	};
 	
 	for(auto pair : selectablePipelines){
