@@ -58,8 +58,6 @@ protected:
 
     std::string name;
 
-    bool overlay = false;   //render above everything else and without shading.
-
     void applyWorldTransformation(const glm::mat4 &transformation);
 	void applyModelTransformation(const glm::mat4 &transformation);
 	void applyWorldNormalTransformation(const glm::mat4 &transformation_inv);
@@ -89,7 +87,7 @@ public:
     
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) = 0;
     //applies transforms on the render, changes the set render_mode
-    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_TRIANGLES ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1));
+    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_OVERRIDDEN ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1));
     virtual void _render(Renderer& renderer, RenderFunc(render_func) = &Renderer::renderModel,
                         const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) = 0;
 
@@ -108,8 +106,6 @@ public:
     glm::vec3 getPosition() {return position;};
     glm::vec3 getAngles() {return yaw_pitch_roll;};
     glm::vec3 getScale() {return size;};
-    void setOverlay(bool value) {this->overlay = value;};
-    bool isOverlay() {return this->overlay;};
     void setName(const std::string& name) {this->name = name;};
     std::string getName() const {return name;};
 
@@ -206,7 +202,7 @@ public:
     virtual void addModel(Model* model);
     virtual void addCopy(const Model* const model);
     // virtual void render(Renderer& renderer, RenderFunc(render_func) = Renderer::renderModel) override;
-    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_TRIANGLES ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) override;
+    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_OVERRIDDEN ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) override;
     virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
     //virtual void buildGUI() override;
 
