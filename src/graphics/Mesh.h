@@ -18,6 +18,24 @@ class VertexData{
 };
 #define RenderFunc(name) void (Renderer::*name)(GLuint render_mode, GLsizeiptr indices_count, const VAO* const vao, const Texture* const texture, const glm::vec4& color, const glm::mat4& model_transform, const glm::mat4& normal_transform)
 
+//I've decided to put a wrapper over GL_[RENDER] types because i want to pass relevant choices to my renderer without adding infinitely many and conflicting parameters
+typedef enum {
+    //pass to models to have them use their own pipeline.
+    PL_OVERRIDDEN = -2,
+    PL_NONE = -1,
+    PL_MESH = GL_TRIANGLES,
+    PL_LINES = GL_LINES,
+    PL_LINE_STRIP = GL_LINE_STRIP,
+    PL_LINE_LOOP = GL_LINE_LOOP,
+    PL_MESH_SHADELESS = GL_TRIANGLES | 1 << 4,
+    PL_MESH_HIGHLIGHT = GL_TRIANGLES | 2 << 4,
+    PL_MESH_OVERLAY = GL_TRIANGLES | 3 << 4
+} RenderPipeline;
+
+inline GLuint PL_TO_GL(RenderPipeline pl){
+    return pl & 0b111;
+}
+
 class Model {
 protected:
     Texture texture;
@@ -36,7 +54,7 @@ protected:
 
     glm::vec4 color = glm::vec4(1.,1.,1.,1.);
 
-    GLuint render_type = GL_TRIANGLES;
+    RenderPipeline render_pipeline = PL_MESH;
 
     std::string name;
 
@@ -62,14 +80,15 @@ protected:
 public:
     Model();
 
-    void setRenderType(GLuint new_type) {render_type = new_type;};
+    void setRenderPipeline(RenderPipeline pipeline) {render_pipeline = pipeline;};
     void setTexture(const std::string& texturedir);
     void setTexture(const Texture& texture) {this->texture = texture;};
     bool hasTexture() {return texture.exists();};
     
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) = 0;
     //applies transforms on the render, changes the set render_mode
-    virtual void render(Renderer& renderer, RenderFunc(render_func) = &Renderer::renderModel,
+    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_OVERRIDDEN ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1));
+    virtual void _render(Renderer& renderer, RenderFunc(render_func) = &Renderer::renderModel,
                         const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) = 0;
 
     virtual void destroy();
@@ -87,7 +106,6 @@ public:
     glm::vec3 getPosition() {return position;};
     glm::vec3 getAngles() {return yaw_pitch_roll;};
     glm::vec3 getScale() {return size;};
-    
     void setName(const std::string& name) {this->name = name;};
     std::string getName() const {return name;};
 
@@ -115,7 +133,8 @@ class ObjModel : public Model{
 
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) override;
     //applies transforms on the render, changes the set render_mode
-    virtual void render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
+    //virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_TRIANGLES ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) override;
+    virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
 
     
     virtual void buildGUI() override;
@@ -183,7 +202,8 @@ public:
     virtual void addModel(Model* model);
     virtual void addCopy(const Model* const model);
     // virtual void render(Renderer& renderer, RenderFunc(render_func) = Renderer::renderModel) override;
-    virtual void render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
+    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_OVERRIDDEN ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) override;
+    virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
     //virtual void buildGUI() override;
 
     virtual void destroy() override;

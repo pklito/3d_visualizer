@@ -1,6 +1,7 @@
 #include"Scene.h"
 #include "graphics/MeshEx.h"
 #include "graphics/Spider.h"
+#include <Logger.h>
 
 Scene::Scene() : camera(){
         Model* grid1 = new Primitive(PRIM_GRID);
@@ -93,7 +94,7 @@ void Scene::handleInputs(Renderer& renderer){
 
 void Scene::render(Renderer& renderer){
     for(Model* model : models){
-        model->render(renderer);
+        model->doRenderPipeline(renderer);
     }
     int i = 0;
     for(Model* model : const_models){
@@ -101,11 +102,11 @@ void Scene::render(Renderer& renderer){
             i++;
             continue;
         }
-        model->render(renderer);
+        model->doRenderPipeline(renderer);
     }
 
     if (selected_model >= 0 && selected_model < models.size() && highlight_selected_model){
-        models[selected_model]->render(renderer, &Renderer::renderHighlight);
+        models[selected_model]->doRenderPipeline(renderer, PL_MESH_HIGHLIGHT);
     }
 }
 

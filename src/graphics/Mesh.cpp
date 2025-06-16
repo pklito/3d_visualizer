@@ -21,6 +21,35 @@ std::string extractFileName(const std::string& filedir) {
 	return filedir.substr(start, end);
 }
 
+void Model::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform){
+	//Default thing to do when calling render
+	switch(renderformat){
+		case PL_MESH:
+		case PL_LINES:
+		case PL_LINE_LOOP:
+		case PL_LINE_STRIP:
+			_render(renderer, &Renderer::renderModel, model_transform, normal_transform, PL_TO_GL(renderformat));
+			return;
+		case PL_MESH_HIGHLIGHT:
+			_render(renderer, &Renderer::renderHighlight, model_transform, normal_transform, GL_TRIANGLES);
+			return;
+		case PL_MESH_SHADELESS:
+			_render(renderer, &Renderer::renderModelShadeless, model_transform, normal_transform, GL_TRIANGLES);
+			return;
+		case PL_MESH_OVERLAY:
+			_render(renderer, &Renderer::renderOverlay, model_transform, normal_transform, GL_TRIANGLES);
+			return;
+		case PL_NONE:
+			return;
+		case PL_OVERRIDDEN:
+			//switch to own pipeline if it doesn't cause infinite recursion
+			if(this->render_pipeline != PL_OVERRIDDEN){
+				doRenderPipeline(renderer, this->render_pipeline, model_transform, normal_transform);
+			}
+			return;
+	}
+}
+
 ObjModel::ObjModel() : Model() {name = "objModel";};
 ObjModel::ObjModel(const std::string& filedir) : Model() {
 	setModel(filedir);
@@ -66,9 +95,9 @@ void Model::setTexture(const std::string& texture_dir){
     texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
-void ObjModel::render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void ObjModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
-		render_mode = this->render_type;
+		render_mode = PL_TO_GL(this->render_pipeline);
 	}
 	//Call renderer with the chosen render call (usually renderer.renderModel)
 	//Overrides the transformations.
@@ -393,18 +422,28 @@ void GroupModel::addCopy(const Model* const model){
 	models.push_back(new_model);
 }
 
-void GroupModel::render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void GroupModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
-		render_mode = this->render_type;
+		render_mode = PL_TO_GL(this->render_pipeline);
 	}
 	for(Model* model : models){
-		model->render(renderer, renderer_func, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
+		model->_render(renderer, renderer_func, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
 	}
 }
 
+void GroupModel::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform){
+	if(renderformat == PL_OVERRIDDEN){
+		renderformat = this->render_pipeline;
+	}
+	for(Model* model : models){
+		model->doRenderPipeline(renderer, renderformat, model_transform, normal_transform);
+	}
+}
+
+
 GroupModel* demoFoxHat(){
 	Model* mesh = new ObjModel("resources\\fox.obj", "resources\\UVMap.png");
-    mesh->setRenderType(GL_TRIANGLES);
+    mesh->setRenderPipeline(PL_MESH);
     mesh->setScale(glm::vec3(1.,0.5,1.));
     mesh->setPosition(glm::vec3(0.0,0,0));
 
@@ -444,7 +483,7 @@ void Model::buildGUI(){
 	}
 	}
 	// Pop into next line if no room
-	if(ImGui::GetContentRegionAvail().x > 330)
+	if(ImGui::GetContentRegionAvail().x - ImGui::GetItemRectSize().x > 50)
 		ImGui::SameLine();
 	ImGui::PushID("use_degrees");
 	ImGui::SetNextItemWidth(50);
@@ -474,12 +513,31 @@ void ObjModel::buildGUI(){
 	}
 	ImGui::Separator();
 
-	int _type = render_type;
-	ImGui::RadioButton("TRIANGLES", &_type, GL_TRIANGLES); ImGui::SameLine();
-	ImGui::RadioButton("LINES", &_type, GL_LINES); ImGui::SameLine();
-	ImGui::RadioButton("LINE_STRIP", &_type, GL_LINE_STRIP); ImGui::SameLine();
-	ImGui::RadioButton("LINES_LOOP", &_type, GL_LINE_LOOP);
-	render_type = _type;
+	const std::map<std::string, RenderPipeline> selectablePipelines = {
+		{"MESH", PL_MESH},
+		{"LINES", PL_LINES},
+		{"LINE_LOOP", PL_LINE_LOOP},
+		{"LINE STRIP", PL_LINE_STRIP},
+		{"MESH OVERLAY", PL_MESH_OVERLAY},
+		{"MESH SHADELESS", PL_MESH_SHADELESS}
+	};
+	
+	float accum_width = 0;
+	for(auto pair : selectablePipelines){
+		if(ImGui::RadioButton(pair.first.c_str(), render_pipeline == pair.second)){
+			render_pipeline = pair.second;
+		}
+		accum_width += ImGui::GetItemRectSize().x;
+		if(accum_width > ImGui::GetContentRegionAvail().x - 100){
+			accum_width = 0;
+		}
+		else{
+			ImGui::SameLine();
+		}
+	}
+	if(accum_width != 0){
+		ImGui::NewLine();
+	}
 }
 
 void GroupModel::buildChildrenDropdownGUI(){
