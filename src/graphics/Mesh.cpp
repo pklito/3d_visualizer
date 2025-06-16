@@ -34,7 +34,7 @@ void Model::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,co
 			_render(renderer, &Renderer::renderHighlight, model_transform, normal_transform, GL_TRIANGLES);
 			return;
 		case PL_TRIANGLES_SHADELESS:
-			_render(renderer, &Renderer::renderModel, model_transform, normal_transform, GL_TRIANGLES);
+			_render(renderer, &Renderer::renderModelShadeless, model_transform, normal_transform, GL_TRIANGLES);
 			return;
 		case PL_TRIANGLES_OVERLAY:
 			_render(renderer, &Renderer::renderOverlay, model_transform, normal_transform, GL_TRIANGLES);
