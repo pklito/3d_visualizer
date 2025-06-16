@@ -20,6 +20,9 @@ class VertexData{
 
 //I've decided to put a wrapper over GL_[RENDER] types because i want to pass relevant choices to my renderer without adding infinitely many and conflicting parameters
 typedef enum {
+    //pass to models to have them use their own pipeline.
+    PL_OVERRIDDEN = -2,
+    PL_NONE = -1,
     PL_TRIANGLES = GL_TRIANGLES,
     PL_LINES = GL_LINES,
     PL_LINE_STRIP = GL_LINE_STRIP,
@@ -86,7 +89,7 @@ public:
     
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) = 0;
     //applies transforms on the render, changes the set render_mode
-    virtual void render(Renderer& renderer, RenderPipeline renderformat = PL_TRIANGLES ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1));
+    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_TRIANGLES ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1));
     virtual void _render(Renderer& renderer, RenderFunc(render_func) = &Renderer::renderModel,
                         const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) = 0;
 
@@ -134,6 +137,7 @@ class ObjModel : public Model{
 
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) override;
     //applies transforms on the render, changes the set render_mode
+    //virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_TRIANGLES ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) override;
     virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
 
     
@@ -202,6 +206,7 @@ public:
     virtual void addModel(Model* model);
     virtual void addCopy(const Model* const model);
     // virtual void render(Renderer& renderer, RenderFunc(render_func) = Renderer::renderModel) override;
+    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_TRIANGLES ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) override;
     virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
     //virtual void buildGUI() override;
 

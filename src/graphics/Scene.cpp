@@ -94,7 +94,7 @@ void Scene::handleInputs(Renderer& renderer){
 
 void Scene::render(Renderer& renderer){
     for(Model* model : models){
-        model->render(renderer);
+        model->doRenderPipeline(renderer);
     }
     int i = 0;
     for(Model* model : const_models){
@@ -102,11 +102,11 @@ void Scene::render(Renderer& renderer){
             i++;
             continue;
         }
-        model->render(renderer);
+        model->doRenderPipeline(renderer);
     }
 
     if (selected_model >= 0 && selected_model < models.size() && highlight_selected_model){
-        models[selected_model]->render(renderer, PL_TRIANGLES_HIGHLIGHT);
+        models[selected_model]->doRenderPipeline(renderer, PL_TRIANGLES_HIGHLIGHT);
     }
 }
 

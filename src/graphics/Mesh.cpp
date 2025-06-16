@@ -21,7 +21,7 @@ std::string extractFileName(const std::string& filedir) {
 	return filedir.substr(start, end);
 }
 
-void Model::render(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform){
+void Model::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform){
 	//Default thing to do when calling render
 	switch(renderformat){
 		case PL_TRIANGLES:
@@ -38,6 +38,14 @@ void Model::render(Renderer& renderer, RenderPipeline renderformat ,const glm::m
 			return;
 		case PL_TRIANGLES_OVERLAY:
 			_render(renderer, &Renderer::renderOverlay, model_transform, normal_transform, GL_TRIANGLES);
+			return;
+		case PL_NONE:
+			return;
+		case PL_OVERRIDDEN:
+			//switch to own pipeline if it doesn't cause infinite recursion
+			if(this->render_pipeline != PL_OVERRIDDEN){
+				doRenderPipeline(renderer, this->render_pipeline, model_transform, normal_transform);
+			}
 			return;
 	}
 }
@@ -416,12 +424,22 @@ void GroupModel::addCopy(const Model* const model){
 
 void GroupModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
 	if(render_mode == -1){
-		render_mode = PL_TO_GL(render_pipeline);
+		render_mode = PL_TO_GL(this->render_pipeline);
 	}
 	for(Model* model : models){
 		model->_render(renderer, renderer_func, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation(), render_mode);
 	}
 }
+
+void GroupModel::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform){
+	if(renderformat == PL_OVERRIDDEN){
+		renderformat = this->render_pipeline;
+	}
+	for(Model* model : models){
+		model->doRenderPipeline(renderer, renderformat, model_transform, normal_transform);
+	}
+}
+
 
 GroupModel* demoFoxHat(){
 	Model* mesh = new ObjModel("resources\\fox.obj", "resources\\UVMap.png");
