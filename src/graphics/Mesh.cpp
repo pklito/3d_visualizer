@@ -436,7 +436,7 @@ void GroupModel::doRenderPipeline(Renderer& renderer, RenderPipeline renderforma
 		renderformat = this->render_pipeline;
 	}
 	for(Model* model : models){
-		model->doRenderPipeline(renderer, renderformat, model_transform, normal_transform);
+		model->doRenderPipeline(renderer, renderformat, model_transform * getFullTransformation(), normal_transform * getFullNormalTransformation());
 	}
 }
 
