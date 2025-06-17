@@ -63,11 +63,13 @@ protected:
 	void applyWorldNormalTransformation(const glm::mat4 &transformation_inv);
 	void applyModelNormalTransformation(const glm::mat4 &transformation_inv);
 
+public:
     void setWorldTransformation(const glm::mat4 &transformation);
 	void setModelTransformation(const glm::mat4 &transformation);
 	void setWorldNormalTransformation(const glm::mat4 &transformation_inv);
 	void setModelNormalTransformation(const glm::mat4 &transformation_inv);
 
+protected:
     void translate(GLfloat x_trans, GLfloat y_trans, GLfloat z_trans, bool isWorld = false);
 	void rotate(GLfloat theta_angle, int mode, bool isWorld = false);
 	void scale(GLfloat x_scale, GLfloat y_scale, GLfloat z_scale, bool isWorld = false);

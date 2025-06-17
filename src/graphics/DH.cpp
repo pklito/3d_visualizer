@@ -33,12 +33,12 @@ void Kinematics::createMeshes(){
     for(auto tuple : dh_params){
         current_matrix = current_matrix * DH::createTransformation(tuple[0], tuple[1], tuple[2], tuple[3]);
         Model* axis = demoAxis();
-        axis->setScale(glm::vec3(0.1f,0.1f,0.1f));
+        axis->setScale(vec3(0.1f,0.1f,0.1f));
+        axis->setWorldTransformation(current_matrix);
         axis->setRenderPipeline(PL_MESH_SHADELESS);
         vec4 position = current_matrix * glm::vec4(0,0,0,1);
         Logger::getInstance().log(LOG_DEBUG, glm::to_string(position));
 
-        axis->setPosition(vec3(position[0], position[1], position[2]));
         addModel(axis);
     }
 }
