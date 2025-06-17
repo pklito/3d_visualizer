@@ -2,6 +2,7 @@
 #include "graphics/MeshEx.h"
 #include "graphics/Spider.h"
 #include <Logger.h>
+#include "graphics/DH.h"
 
 Scene::Scene() : camera(){
         Model* grid1 = new Primitive(PRIM_GRID);
@@ -43,6 +44,9 @@ void Scene::setupDemo(){
     stair->setPosition(glm::vec3(-0.4,0.0,0));
     stair->setFloatParam("stepNumber", 1);
     models.push_back(stair);
+
+	Kinematics* kinematics = new Kinematics({{0,0,0,0},{0,0,1,0}});
+    models.push_back(kinematics);
     
 }
 
