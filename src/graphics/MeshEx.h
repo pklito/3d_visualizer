@@ -47,6 +47,7 @@ public:
 };
 
 ConfigableGroupModel* demoAxis(float bar_radius = 0.1, float bar_length = 0.5, float arrow_radius = 0.2, float size = 1.);
+ConfigableGroupModel* prismaticAxis(float bar_radius = 0.1, float bar_length = 0.5, float arrow_radius = 0.2, float size = 1., float dash_radius = 0.05, glm::vec2 dash_on_off = {0.2,0.4}, glm::ivec2 range = {-2, 5});
 ConfigableGroupModel* stairModel(float stair_height = 0.17, float stair_length = 0.29);
 ConfigableGroupModel* arrow(float bar_radius = 0.1, float bar_length = 0.5, float arrow_radius = 0.2, float size = 1.);
 

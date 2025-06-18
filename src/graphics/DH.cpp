@@ -47,19 +47,23 @@ void Kinematics::createMeshes(){
 
     for(auto joint : joint_appearances){
         Model* model = nullptr;
-        if(joint.joint_model == JOINT_AXIS){
-            model = demoAxis();
-        }
-        else if (joint.joint_model == JOINT_SPHERE){
-            model = new Primitive(PRIM_SPHERE);
-        }
-        else if (joint.joint_model == JOINT_CUBE){
-            model = new Primitive(PRIM_CUBE);
-        }
-
-        if(model == nullptr){
-            Logger::getInstance().log(LOG_ERROR, "Joint model type " + std::to_string(joint.joint_model) + " not implemented!");
-            return;
+        switch(joint.joint_model){
+            case JOINT_AXIS:
+                model = demoAxis();
+                break;
+            case JOINT_PRISMATIC:
+                model = prismaticAxis();
+                break;
+            case JOINT_SPHERE:
+                model = new Primitive(PRIM_SPHERE);
+                break;
+            case JOINT_CUBE:
+                model = new Primitive(PRIM_CUBE);
+                break;
+            default:
+                Logger::getInstance().log(LOG_ERROR, "Joint model type " + std::to_string(joint.joint_model) + " not implemented!");
+                model = new Primitive(PRIM_SPHERE);
+                break;
         }
 
         model->setColor(joint.joint_color);

@@ -153,6 +153,20 @@ ConfigableGroupModel* demoAxis(float bar_radius, float bar_length, float arrow_r
     return group;
 }
 
+ConfigableGroupModel* prismaticAxis(float bar_radius, float bar_length, float arrow_radius, float size, float dash_radius, glm::vec2 dash_on_off, glm::ivec2 range){
+    ConfigableGroupModel* axis = demoAxis(bar_radius, bar_length, arrow_radius, size);
+    
+    for(int i = range[0]; i < range[1]; i++){
+        Model* cylinder = new Primitive(PRIM_CYLINDER);
+        cylinder->setColor(glm::vec4(0,0.1f,0.6f,1.0f));
+        cylinder->setScale({dash_radius, dash_on_off[0], dash_radius});
+        cylinder->setAnglesDegrees({0,90,0});
+        cylinder->setPosition({0, 0, (i * (dash_on_off[0] + dash_on_off[1]))});
+        axis->addModel(cylinder);
+    }
+    return axis;
+}
+
 ConfigableGroupModel* stairModel(float stair_height, float stair_length) {
     ConfigableGroupModel* group = new ConfigableGroupModel({
         new Primitive(PRIM_CUBE),

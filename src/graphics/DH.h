@@ -10,14 +10,15 @@ public:
 
 class Kinematics : public GroupModel{
 //modified DH
-private:
+protected:
     std::vector<glm::vec4> dh_params;
 public:
 
     typedef enum{
         JOINT_AXIS = 0,
         JOINT_SPHERE = 1,
-        JOINT_CUBE = 2
+        JOINT_PRISMATIC = 2,
+        JOINT_CUBE = 3
     } JointModelType;
 
     class JointVisual{
@@ -42,3 +43,7 @@ public:
 
 };
 
+class SpiderLeg : public Kinematics{
+    SpiderLeg(float leg_direction = 0, float body_radius = 0.15f, float hip_x = 0.05f, float hip_y = -0.01f, float thigh = 0.1f, float shin = 0.1f);
+
+};
