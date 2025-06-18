@@ -52,23 +52,9 @@ void Scene::IKDemo(){
     stair->setPosition(glm::vec3(-0.4,0.0,0));
     models.push_back(stair);
 
-    for(int i = 0; i < 6; i ++){
-	    Kinematics* kinematics = new Kinematics({{0,glm::radians(-90.0f),0,glm::radians(30 + 60.0f * i)},
-                                            {0.15f,0,-0.01f,glm::radians(0.0f)},
-                                            {0.05,glm::radians(-90.0f),0,-0.6},
-                                            {0.1f,0,0,1.3}, 
-                                            {0.1f,0,0,0}
-                                        },
-                                        {
-                                            Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
-                                            Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
-                                            Kinematics::JointVisual(Kinematics::JOINT_PRISMATIC, 0.03),
-                                            Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
-                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.03, 0, glm::vec4(0.6f,0.6f,0.6f,1.0f))
-                                        });
-
-        models.push_back(kinematics);
-    }
+    Spider* spider = new Spider();
+    models.push_back(spider);
+    
 }
 
 void Scene::addModel(Model* model){

@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "Mesh.h"
+#include "MeshEx.h"
 class DH {
 public:
     static glm::mat4 createTransformation(float a, float alpha, float d, float theta);
@@ -44,6 +45,13 @@ public:
 };
 
 class SpiderLeg : public Kinematics{
+public:
     SpiderLeg(float leg_direction = 0, float body_radius = 0.15f, float hip_x = 0.05f, float hip_y = -0.01f, float thigh = 0.1f, float shin = 0.1f);
+    void setAngles(float hip, float leg1, float leg2);
+    glm::vec3 getAngles();
+};
 
+class Spider : public ConfigableGroupModel{
+public:
+    Spider(float body_radius = 0.15f, float hip_x = 0.05f, float hip_y = -0.01f, float thigh = 0.1f, float shin = 0.1f);
 };
