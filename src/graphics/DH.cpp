@@ -53,6 +53,9 @@ void Kinematics::createMeshes(){
         else if (joint.joint_model == JOINT_SPHERE){
             model = new Primitive(PRIM_SPHERE);
         }
+        else if (joint.joint_model == JOINT_CUBE){
+            model = new Primitive(PRIM_CUBE);
+        }
 
         if(model == nullptr){
             Logger::getInstance().log(LOG_ERROR, "Joint model type " + std::to_string(joint.joint_model) + " not implemented!");
@@ -61,7 +64,10 @@ void Kinematics::createMeshes(){
 
         model->setColor(joint.joint_color);
         addModel(model);
-        addModel(new Primitive(PRIM_CYLINDER));
+        Model* cylinder = new Primitive(PRIM_CUBE);
+        cylinder->setColor(joint.rod_color);
+        cylinder->setRenderPipeline(PL_LINES);  //also should be defined.
+        addModel(cylinder);
     }
     // Delete the last cylinder
     models.pop_back();

@@ -16,7 +16,8 @@ public:
 
     typedef enum{
         JOINT_AXIS = 0,
-        JOINT_SPHERE = 1
+        JOINT_SPHERE = 1,
+        JOINT_CUBE = 2
     } JointModelType;
 
     class JointVisual{
