@@ -15,6 +15,8 @@ private:
 public:
     Kinematics(const std::vector<glm::vec4>& dh_params = std::vector<glm::vec4>());
     void createMeshes();
+    void updateMeshes();
+    virtual void buildGUI() override;
 
 };
 
