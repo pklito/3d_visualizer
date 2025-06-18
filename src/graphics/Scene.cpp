@@ -44,11 +44,19 @@ void Scene::setupDemo(){
     stair->setPosition(glm::vec3(-0.4,0.0,0));
     stair->setFloatParam("stepNumber", 1);
     models.push_back(stair);
+    
+}
 
-	Kinematics* kinematics = new Kinematics({{0,glm::radians(-90.0f),0,glm::radians(150.0f)},
-                                            {0.15f,0,-0.01f,glm::radians(10.0f)},
-                                            {0.05,glm::radians(-90.0f),0,glm::radians(10.0f)},
-                                            {0.1f,0,0,0}, 
+void Scene::IKDemo(){
+    ConfigableGroupModel* stair = stairModel();
+    stair->setPosition(glm::vec3(-0.4,0.0,0));
+    models.push_back(stair);
+    
+    for(int i = 0; i < 6; i ++){
+	    Kinematics* kinematics = new Kinematics({{0,glm::radians(-90.0f),0,glm::radians(30 + 60.0f * i)},
+                                            {0.15f,0,-0.01f,glm::radians(0.0f)},
+                                            {0.05,glm::radians(-90.0f),0,-0.6},
+                                            {0.1f,0,0,1.3}, 
                                             {0.1f,0,0,0}
                                         },
                                         {
@@ -59,8 +67,8 @@ void Scene::setupDemo(){
                                             Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.04, 0, glm::vec4(0.6f,0.6f,0.6f,1.0f))
                                         });
 
-    models.push_back(kinematics);
-    
+        models.push_back(kinematics);
+    }
 }
 
 void Scene::addModel(Model* model){

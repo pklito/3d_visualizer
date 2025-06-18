@@ -18,6 +18,7 @@ Camera camera;
     public:
     Scene();
     void setupDemo();
+    void IKDemo();
 
     Model* getSelectedModel();
 
