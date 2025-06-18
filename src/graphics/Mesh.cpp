@@ -118,6 +118,7 @@ void ObjModel::destroy(){
 }
 
 void GroupModel::destroy(){
+	// kinematics class assumes this only destroys the models. do refactoring if adding anything here.
 	for(Model* model : models){
 		model->destroy();
 	}

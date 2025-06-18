@@ -1,6 +1,8 @@
 #include "DH.h"
 #include "MeshEx.h"
 #include "Logger.h"
+#include <glm/gtx/string_cast.hpp>
+
 using namespace glm;
 mat4 DH::createTransformation(float a, float alpha, float d, float theta){
     //a and alpha i-1, d and theta d. this is MODIFIED DH
@@ -20,31 +22,64 @@ mat4 DH::forwardKinematics(const std::vector<glm::vec4>& dh_params){
     return result;
 }
 
-Kinematics::Kinematics(const std::vector<glm::vec4>& dh_params) : GroupModel(){
+Kinematics::Kinematics(const std::vector<glm::vec4>& dh_params, const std::vector<JointVisual>& visuals) : GroupModel(){
     this->dh_params = dh_params;
+    if(visuals.size() != dh_params.size()){
+        if(visuals.size() != 0){
+            Logger::getInstance().log(LOG_WARNING, "Kinematics joint visuals and DH param array sizes don't match, ignoring visual preferences. [visuals ~ dh" + std::to_string(visuals.size()) + " ~ " + std::to_string(dh_params.size()) + "]");
+        }
+        createVisualPreferences();
+    }
     createMeshes();
     updateMeshes();
 }
 
-#include <glm/gtx/string_cast.hpp>
-
-void Kinematics::createMeshes(){
-    setRenderPipeline(PL_OVERRIDDEN);
-    for(auto tuple : dh_params){
-        addModel(demoAxis());
+void Kinematics::createVisualPreferences(){
+    this->joint_appearances = {};
+    for(auto _ : dh_params){
+        this->joint_appearances.push_back({JOINT_AXIS, 0.1f, 0.1f, glm::vec4(1,1,1,1), glm::vec4(0.3f,0.3f,0.4f,1.0f)});
     }
 }
 
+void Kinematics::createMeshes(){
+    setRenderPipeline(PL_OVERRIDDEN);
+
+    for(auto joint : joint_appearances){
+        Model* model = nullptr;
+        if(joint.joint_model == JOINT_AXIS){
+            model = demoAxis();
+        }
+        else if (joint.joint_model == JOINT_SPHERE){
+            model = new Primitive(PRIM_SPHERE);
+        }
+
+        if(model == nullptr){
+            Logger::getInstance().log(LOG_ERROR, "Joint model type " + std::to_string(joint.joint_model) + " not implemented!");
+            return;
+        }
+
+        model->setColor(joint.joint_color);
+        addModel(model);
+    }
+}
+
+void Kinematics::deleteMeshes(){
+    GroupModel::destroy();
+    models.clear();
+}
+
 void Kinematics::updateMeshes(){
-    int i = 0;
+    
     mat4 current_matrix = mat4(1);
-    for(auto tuple : dh_params){
+    for(int i = 0; i < dh_params.size(); i ++){
+        glm::vec4 tuple = dh_params[i];
+        Model* axis = this->models[i];
+        const JointVisual& visuals = this->joint_appearances[i];
+
         current_matrix = current_matrix * DH::createTransformation(tuple[0], tuple[1], tuple[2], tuple[3]);
-        Model* axis = this->models[i++];
-        axis->setScale(vec3(0.1f,0.1f,0.1f));
+        axis->setScale(vec3(visuals.joint_scale));
         axis->setWorldTransformation(current_matrix);
         axis->setRenderPipeline(PL_MESH_SHADELESS);
-        vec4 position = current_matrix * glm::vec4(0,0,0,1);
     }
 }
 
@@ -81,4 +116,10 @@ void Kinematics::buildGUI(){
     if(changed)
         updateMeshes();
 
+}
+
+void Kinematics::updateVisualPreferences(){
+    deleteMeshes();
+    createMeshes();
+    updateMeshes();
 }
