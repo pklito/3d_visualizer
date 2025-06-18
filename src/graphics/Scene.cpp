@@ -77,10 +77,12 @@ void Scene::cycleSelectedModel(int amount){
     if (models.size() == 0){
         return;
     }
+
     selected_model += amount;
-    selected_model %= models.size();
-    selected_model += models.size();
-    selected_model %= models.size();
+
+    selected_model %= (int)models.size();
+    selected_model += (int)models.size();
+    selected_model %= (int)models.size();
 }
 
 Camera* Scene::getActiveCamera(){
