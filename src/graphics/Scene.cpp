@@ -50,6 +50,13 @@ void Scene::setupDemo(){
                                             {0.05,glm::radians(-90.0f),0,glm::radians(10.0f)},
                                             {0.1f,0,0,0}, 
                                             {0.1f,0,0,0}
+                                        },
+                                        {
+                                            Kinematics::JointVisual(),
+                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.02),
+                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.02),
+                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.02),
+                                            Kinematics::JointVisual()
                                         });
 
     models.push_back(kinematics);

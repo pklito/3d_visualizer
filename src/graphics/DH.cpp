@@ -24,6 +24,7 @@ mat4 DH::forwardKinematics(const std::vector<glm::vec4>& dh_params){
 
 Kinematics::Kinematics(const std::vector<glm::vec4>& dh_params, const std::vector<JointVisual>& visuals) : GroupModel(){
     this->dh_params = dh_params;
+    this->joint_appearances = visuals;
     if(visuals.size() != dh_params.size()){
         if(visuals.size() != 0){
             Logger::getInstance().log(LOG_WARNING, "Kinematics joint visuals and DH param array sizes don't match, ignoring visual preferences. [visuals ~ dh" + std::to_string(visuals.size()) + " ~ " + std::to_string(dh_params.size()) + "]");
@@ -69,7 +70,7 @@ void Kinematics::deleteMeshes(){
 }
 
 void Kinematics::updateMeshes(){
-    
+    // Logger::getInstance().log(LOG_DEBUG, std::to_string(models.size()) + " models, " + std::to_string(dh_params.size()) + " dh, and jv: " + std::to_string(joint_appearances.size()));
     mat4 current_matrix = mat4(1);
     for(int i = 0; i < dh_params.size(); i ++){
         glm::vec4 tuple = dh_params[i];
