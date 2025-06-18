@@ -45,7 +45,7 @@ void Scene::setupDemo(){
     stair->setFloatParam("stepNumber", 1);
     models.push_back(stair);
 
-	Kinematics* kinematics = new Kinematics({{0,0,0,glm::radians(150.0f)},
+	Kinematics* kinematics = new Kinematics({{0,glm::radians(-90.0f),0,glm::radians(150.0f)},
                                             {0.15f,0,-0.01f,glm::radians(10.0f)},
                                             {0.05,glm::radians(-90.0f),0,glm::radians(10.0f)},
                                             {0.1f,0,0,0}, 
