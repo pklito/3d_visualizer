@@ -61,7 +61,10 @@ void Kinematics::createMeshes(){
 
         model->setColor(joint.joint_color);
         addModel(model);
+        addModel(new Primitive(PRIM_CYLINDER));
     }
+    // Delete the last cylinder
+    models.pop_back();
 }
 
 void Kinematics::deleteMeshes(){
@@ -74,13 +77,23 @@ void Kinematics::updateMeshes(){
     mat4 current_matrix = mat4(1);
     for(int i = 0; i < dh_params.size(); i ++){
         glm::vec4 tuple = dh_params[i];
-        Model* axis = this->models[i];
+        Model* axis = this->models[i*2];
         const JointVisual& visuals = this->joint_appearances[i];
 
+        //joint
         current_matrix = current_matrix * DH::createTransformation(tuple[0], tuple[1], tuple[2], tuple[3]);
         axis->setScale(vec3(visuals.joint_scale));
         axis->setWorldTransformation(current_matrix);
         axis->setRenderPipeline(PL_MESH_SHADELESS);
+
+        //cylinder
+        if(i == dh_params.size() - 1){
+            continue;
+        }
+        Model* cylinder = this->models[i*2 + 1];
+        cylinder->setScale(vec3(visuals.rod_radius,dh_params[i+1][0],visuals.rod_radius));
+        cylinder->setAnglesDegrees(glm::vec3(0,0,90));
+        cylinder->setWorldTransformation(current_matrix * glm::translate(glm::vec3(dh_params[i+1][0]/2,0,0)));
     }
 }
 

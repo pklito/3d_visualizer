@@ -26,7 +26,7 @@ public:
         float rod_radius;
         glm::vec4 joint_color;
         glm::vec4 rod_color;
-        JointVisual(JointModelType model = JOINT_AXIS, float joint_scale = 0.1f, float rod_radius = 0.05f,glm::vec4 joint_color = glm::vec4(1.0f), glm::vec4 rod_color = glm::vec4(0.3,0.3,0.4,1.0f)) : 
+        JointVisual(JointModelType model = JOINT_AXIS, float joint_scale = 0.1f, float rod_radius = 0.005f,glm::vec4 joint_color = glm::vec4(1.0f), glm::vec4 rod_color = glm::vec4(1.0f)) : 
         joint_model(model), joint_scale(joint_scale), rod_radius(rod_radius), joint_color(joint_color), rod_color(rod_color){};
     };
     std::vector<JointVisual> joint_appearances;

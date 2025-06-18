@@ -53,10 +53,10 @@ void Scene::setupDemo(){
                                         },
                                         {
                                             Kinematics::JointVisual(),
-                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.02),
-                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.02),
-                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.02),
-                                            Kinematics::JointVisual()
+                                            Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
+                                            Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
+                                            Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
+                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.04, 0, glm::vec4(0.6f,0.6f,0.6f,1.0f))
                                         });
 
     models.push_back(kinematics);
