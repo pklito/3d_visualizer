@@ -16,7 +16,7 @@ Renderer::Renderer(GLFWwindow* window, int width, int height) : tex_shader("reso
 																no_tex_shader("resources/default.vert", "resources/default_no_tex.frag"), 
 																color_shader("resources/default.vert", "resources/color.frag"),
 																highlight_shader("resources/highlight.vert", "resources/highlight.frag"),
-																background_color(0.07f, 0.13f, 0.17f, 1.0f)
+																background_color(42.0f/256.0f, 145.0f/256.0f, 229.0f/256.0f, 1.0f)
 , width(width), height(height), window(window){
 	// Specify the viewport of OpenGL in the Window
 	// In this case the viewport goes from x = 0, y = 0, to x = 800, y = 800
