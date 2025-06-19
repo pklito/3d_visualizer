@@ -40,8 +40,8 @@ Spider::Spider(float body_radius, float hip_x , float hip_y , float thigh , floa
 
     }, {
         NEW_CONFIG(float, "hip", 0), // can do it this way too
-        NEW_CONFIG(float, "leg1", 0.6 ),
-        NEW_CONFIG(float, "leg2", -1.2)
+        NEW_CONFIG(float, "leg1", -0.6 ),
+        NEW_CONFIG(float, "leg2", 1.2)
     }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
         for(auto model : models){
             SpiderLeg* leg = dynamic_cast<SpiderLeg*>(model);
