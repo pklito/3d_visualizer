@@ -49,6 +49,13 @@ public:
     SpiderLeg(float leg_direction = 0, float body_radius = 0.15f, float hip_x = 0.05f, float hip_y = -0.01f, float thigh = 0.1f, float shin = 0.1f);
     void setAngles(float hip, float leg1, float leg2);
     glm::vec3 getAngles();
+
+    void setLegLengths(float hip_x, float hip_y, float thigh, float shin);
+    void setLegLengths(const glm::vec4& lengths);
+    glm::vec4 getLegLengths();
+    
+    void setBodySize(float body_radius);
+    float getBodySize();
 };
 
 class Spider : public ConfigableGroupModel{
