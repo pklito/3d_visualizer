@@ -19,6 +19,12 @@ SpiderLeg::SpiderLeg(float leg_direction, float body_radius, float hip_x , float
 {
 }
 
+SpiderLeg::SpiderLeg(const glm::vec2& leg_xy, float hip_x, float hip_y, float thigh , float shin) : SpiderLeg(atan2(leg_xy.x, leg_xy.y), sqrt(leg_xy.x * leg_xy.x + leg_xy.y * leg_xy.y), hip_x, hip_y,thigh,shin)
+{
+    
+}
+
+
 void SpiderLeg::setAngles(float hip, float leg1, float leg2){
     this->dh_params[1][3] = hip;
     this->dh_params[2][3] = leg1;
@@ -90,3 +96,36 @@ Spider::Spider(float body_radius, float hip_x , float hip_y , float thigh , floa
         updateModels();
         setName("Spider");
     }
+
+Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x , float hip_y , float thigh , float shin) : ConfigableGroupModel({
+    new SpiderLeg(glm::radians(30.0f), body_radius, hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::radians(90.0f), body_radius, hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::radians(150.0f), body_radius, hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::radians(210.0f), body_radius, hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::radians(270.0f), body_radius, hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::radians(330.0f), body_radius, hip_x, hip_y, thigh, shin)
+
+}, {
+    NEW_CONFIG(float, "body radius", body_radius),
+    NEW_CONFIG(float, "hip_x", hip_x),
+    NEW_CONFIG(float, "hip_y", hip_y),
+    NEW_CONFIG(float, "thigh length", thigh),
+    NEW_CONFIG(float, "shin length", shin)
+}, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
+    for(auto model : models){
+        SpiderLeg* leg = dynamic_cast<SpiderLeg*>(model);
+        if(leg == nullptr)
+            continue;
+        float body_radius = GET_CONFIG_VARIABLE(float, params["body radius"]);
+        float hip_x = GET_CONFIG_VARIABLE(float, params["hip_x"]);
+        float hip_y = GET_CONFIG_VARIABLE(float, params["hip_y"]);
+        float thigh = GET_CONFIG_VARIABLE(float, params["thigh length"]);
+        float shin = GET_CONFIG_VARIABLE(float, params["shin length"]);
+
+        leg->setBodySize(body_radius);
+        leg->setLegLengths(hip_x, hip_y, thigh, shin);
+    }
+}) {
+    updateModels();
+    setName("Spider");
+}
