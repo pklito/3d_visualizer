@@ -161,7 +161,7 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
         if(i % 3 == 1){
             x += center_body_offset;
         }
-        if(i > 3)
+        if(i >= 3)
             x *= -1;
 
         leg->setBodyXY(glm::vec2(x, y_poses[i%3]));
