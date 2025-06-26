@@ -10,8 +10,8 @@ SpiderLeg::SpiderLeg(float leg_direction, float body_radius, float hip_x , float
                                             {shin,0,0,0}
                                         },
                                         {
-                                            Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
-                                            Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
+                                            Kinematics::JointVisual(Kinematics::JOINT_CUBE, 0.01),
+                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.02),
                                             Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
                                             Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
                                             Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.03, 0, glm::vec4(0.6f,0.6f,0.6f,1.0f))
@@ -125,12 +125,13 @@ Spider::Spider(float body_radius, float hip_x , float hip_y , float thigh , floa
     }
 
 Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x , float hip_y , float thigh , float shin) : ConfigableGroupModel({
-    new SpiderLeg(glm::vec2(body_rect.x, body_rect.y), hip_x, hip_y, thigh, shin),
-    new SpiderLeg(glm::vec2(body_rect.x + center_leg_offsets, 0), hip_x, hip_y, thigh, shin),
-    new SpiderLeg(glm::vec2(body_rect.x, -body_rect.y), hip_x, hip_y, thigh, shin),
-    new SpiderLeg(glm::vec2(-body_rect.x, body_rect.y), hip_x, hip_y, thigh, shin),
-    new SpiderLeg(glm::vec2(-body_rect.x - center_leg_offsets, 0), hip_x, hip_y, thigh, shin),
-    new SpiderLeg(glm::vec2(-body_rect.x, -body_rect.y), hip_x, hip_y, thigh, shin)
+    new SpiderLeg(glm::vec2(0.5 * body_rect.x, 0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::vec2(0.5 * body_rect.x + center_leg_offsets, 0), hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::vec2(0.5 * body_rect.x, -0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::vec2(-0.5 * body_rect.x, 0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::vec2(-0.5 * body_rect.x - center_leg_offsets, 0), hip_x, hip_y, thigh, shin),
+    new SpiderLeg(glm::vec2(-0.5 * body_rect.x, -0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
+    new Primitive(PRIM_SPHERE)
 
 }, {
     NEW_CONFIG(glm::vec2, "body dimensions", body_rect),
@@ -141,7 +142,6 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
     NEW_CONFIG(float, "shin length", shin)
 }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
     
-    int i = 0;
 
     glm::vec2 dimensions = GET_CONFIG_VARIABLE(glm::vec2, params["body dimensions"]);
     float center_body_offset = GET_CONFIG_VARIABLE(float, params["center offset"]);
@@ -150,14 +150,15 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
     float thigh = GET_CONFIG_VARIABLE(float, params["thigh length"]);
     float shin = GET_CONFIG_VARIABLE(float, params["shin length"]);
 
-    float y_poses[] = {dimensions.y, 0, -dimensions.y};
+    float y_poses[] = {dimensions.y * 0.5, 0, -dimensions.y * 0.5};
 
-    for(auto model : models){
+    for(int i = 0; i < 6; i ++){
+        Model* model = models[i];
         SpiderLeg* leg = dynamic_cast<SpiderLeg*>(model);
         if(leg == nullptr)
             continue;
 
-        float x = dimensions.x;
+        float x = dimensions.x * 0.5;
         if(i % 3 == 1){
             x += center_body_offset;
         }
@@ -166,9 +167,13 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
 
         leg->setBodyXY(glm::vec2(x, y_poses[i%3]));
         leg->setLegLengths(hip_x, hip_y, thigh, shin);
-
-        i++;
     }
+
+    Model* body = models[6];
+    float a = dimensions[0] * 0.9;
+    float b = dimensions[1] * 0.9;
+    float c = min(dimensions[0], dimensions[1]) * 0.5f;
+    body->setScale(glm::vec3(b, c , a));
 }) {
     updateModels();
     setName("Spider");
