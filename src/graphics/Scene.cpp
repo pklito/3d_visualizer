@@ -52,7 +52,7 @@ void Scene::IKDemo(){
     stair->setPosition(glm::vec3(-0.4,0.0,0));
     models.push_back(stair);
 
-    Spider* spider = new Spider();
+    Spider* spider = new Spider(glm::vec2(0.1, 0.05), 0.01);
     models.push_back(spider);
     
 }

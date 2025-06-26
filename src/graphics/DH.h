@@ -47,7 +47,7 @@ public:
 class SpiderLeg : public Kinematics{
 public:
     SpiderLeg(float leg_direction = 0, float body_radius = 0.15f, float hip_x = 0.05f, float hip_y = -0.01f, float thigh = 0.1f, float shin = 0.1f);    //polar
-    SpiderLeg(const glm::vec2& leg_xy, float hip_x = 0.05f, float hip_y = -0.01f, float thigh = 0.1f, float shin = 0.1f);   //cartesian
+    SpiderLeg(const glm::vec2& body_xy, float hip_x = 0.05f, float hip_y = -0.01f, float thigh = 0.1f, float shin = 0.1f);   //cartesian
 
     void setAngles(float hip, float leg1, float leg2);
     glm::vec3 getAngles();
@@ -58,6 +58,13 @@ public:
     
     void setBodySize(float body_radius);
     float getBodySize();
+
+    void setBodyDirection(float leg_direction);
+    float getBodyDirection();
+    void setBodyDirectionDegrees(float leg_degrees);
+
+    void setBodyXY(const glm::vec2& body_xy);
+    glm::vec2 getBodyXY();
 };
 
 class Spider : public ConfigableGroupModel{
