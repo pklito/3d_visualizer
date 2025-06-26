@@ -220,3 +220,10 @@ public:
 
 GroupModel* demoFoxHat();
 
+class EmptyModel : public Model {
+public:
+    EmptyModel() {};
+    void _render(Renderer& renderer, RenderFunc(render_func) = &Renderer::renderModel,
+                        const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override {};
+    virtual Model* copy() const override {return new EmptyModel();};
+};

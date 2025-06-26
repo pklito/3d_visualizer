@@ -11,7 +11,7 @@ SpiderLeg::SpiderLeg(float leg_direction, float body_radius, float hip_x , float
                                         },
                                         {
                                             Kinematics::JointVisual(Kinematics::JOINT_CUBE, 0.01),
-                                            Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.02),
+                                            Kinematics::JointVisual(Kinematics::JOINT_CUBE, 0.015),
                                             Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
                                             Kinematics::JointVisual(Kinematics::JOINT_AXIS, 0.03),
                                             Kinematics::JointVisual(Kinematics::JOINT_SPHERE, 0.03, 0, glm::vec4(0.6f,0.6f,0.6f,1.0f))
@@ -131,7 +131,7 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
     new SpiderLeg(glm::vec2(-0.5 * body_rect.x, 0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
     new SpiderLeg(glm::vec2(-0.5 * body_rect.x - center_leg_offsets, 0), hip_x, hip_y, thigh, shin),
     new SpiderLeg(glm::vec2(-0.5 * body_rect.x, -0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
-    new Primitive(PRIM_SPHERE)
+    new Primitive(PRIM_CUBE)
 
 }, {
     NEW_CONFIG(glm::vec2, "body dimensions", body_rect),

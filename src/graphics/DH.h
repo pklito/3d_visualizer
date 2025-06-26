@@ -16,6 +16,7 @@ protected:
 public:
 
     typedef enum{
+        JOINT_NONE = -1,
         JOINT_AXIS = 0,
         JOINT_SPHERE = 1,
         JOINT_PRISMATIC = 2,

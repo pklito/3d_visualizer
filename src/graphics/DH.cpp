@@ -48,6 +48,9 @@ void Kinematics::createMeshes(){
     for(auto joint : joint_appearances){
         Model* model = nullptr;
         switch(joint.joint_model){
+            case JOINT_NONE:
+                model = new EmptyModel();
+                break;
             case JOINT_AXIS:
                 model = demoAxis();
                 break;
