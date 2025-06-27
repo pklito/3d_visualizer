@@ -79,20 +79,22 @@ void ObjModel::generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, G
     vbo.unbind();
 	ebo.unbind();
 }
-void ObjModel::setModel(const std::string& modeldir){
+ObjModel& ObjModel::setModel(const std::string& modeldir){
 	int i = 0;
 	if(modeldir.length() < 1){
 		std::cerr << "Invalid model file: " + modeldir << std::endl;
-		return;
+		return *this;
 	}
 	else {
 		i = 2;
 	}
     this->loadFile(modeldir);
     // Generates Vertex Array Object and binds it
+	return *this;
 }
-void Model::setTexture(const std::string& texture_dir){
+Model& Model::setTexture(const std::string& texture_dir){
     texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	return *this;
 }
 
 void ObjModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode) const{
@@ -132,13 +134,14 @@ void GroupModel::destroy(){
 //
 /// ----------------
 
-void ObjModel::loadFile(const std::string& file){
+ObjModel& ObjModel::loadFile(const std::string& file){
     std::ifstream ifile;
 
 	ifile.open(file.c_str());
     if(!ifile.is_open()){
         std::cerr << "Failed to open file: " + file << std::endl;
-        return;
+		return *this;
+        
     }
 	std::vector<FaceIdcs> faces;
 	std::vector<vec3> vertices;
@@ -259,6 +262,8 @@ void ObjModel::loadFile(const std::string& file){
     generateMesh(data_array, faces.size()*face_size*8, indices_array, faces.size() * indices_per_face);
     delete[] indices_array;
     delete[] data_array;
+
+	return *this;
 }
 
 //
@@ -360,9 +365,10 @@ void Model::setModelNormalTransformation(const mat4 &transformation_inv)
 //
 //
 
-void Model::setPosition(const glm::vec3& position){
+Model& Model::setPosition(const glm::vec3& position){
 	this->position = position;
 	updateTransform();
+	return *this;
 }
 
 /**
@@ -372,18 +378,22 @@ void Model::setPosition(const glm::vec3& position){
  * 
  * @param yaw_pitch_roll glm::vec3 in radians, contains yaw, pitch, roll.
  */
-void Model::setAngles(const glm::vec3& yaw_pitch_roll){
+Model& Model::setAngles(const glm::vec3& yaw_pitch_roll){
 	this->yaw_pitch_roll = yaw_pitch_roll;
 	updateTransform();
+	return *this;
 }
 
-void Model::setAnglesDegrees(const glm::vec3& yaw_pitch_roll){
+Model& Model::setAnglesDegrees(const glm::vec3& yaw_pitch_roll){
 	setAngles(glm::vec3(glm::pi<float>()/180.) * yaw_pitch_roll);
+	return *this;
 }
 
-void Model::setScale(const glm::vec3& scale){
+Model& Model::setScale(const glm::vec3& scale){
 	this->size = scale;
 	updateTransform();
+	return *this;
+
 }
 
 void Model::updateTransform(){
@@ -414,13 +424,16 @@ GroupModel::GroupModel(const GroupModel& _that){
 		addCopy(model);
 	}
 }
-void GroupModel::addModel(Model* model){
+GroupModel& GroupModel::addModel(Model* model){
 	models.push_back(model);
+	return *this;
+
 }
 
-void GroupModel::addCopy(const Model* const model){
+GroupModel& GroupModel::addCopy(const Model* const model){
 	Model* new_model = model->copy();
 	models.push_back(new_model);
+	return *this;
 }
 
 void GroupModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode) const{

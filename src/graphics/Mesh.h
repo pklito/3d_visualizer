@@ -82,10 +82,10 @@ protected:
 public:
     Model();
 
-    void setRenderPipeline(RenderPipeline pipeline) {render_pipeline = pipeline;};
-    void setTexture(const std::string& texturedir);
-    void setTexture(const Texture& texture) {this->texture = texture;};
-    bool hasTexture() {return texture.exists();};
+    Model& setRenderPipeline(RenderPipeline pipeline) {render_pipeline = pipeline; return *this;};
+    Model& setTexture(const std::string& texturedir);
+    Model& setTexture(const Texture& texture) {this->texture = texture;};
+    bool hasTexture() const {return texture.exists();};
     
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) = 0;
     //applies transforms on the render, changes the set render_mode
@@ -99,16 +99,16 @@ public:
     glm::mat4 getFullNormalTransformation() const;
 
     glm::vec4 getColor() const {return color;};
-    void setColor(const glm::vec4& color) {this->color = color;};
+    Model& setColor(const glm::vec4& color) {this->color = color; return *this;};
 
-    void setPosition(const glm::vec3& position);
-    void setAngles(const glm::vec3& orientation);
-    void setAnglesDegrees(const glm::vec3& yaw_pitch_roll);
-    void setScale(const glm::vec3& scale);
+    Model& setPosition(const glm::vec3& position);
+    Model& setAngles(const glm::vec3& orientation);
+    Model& setAnglesDegrees(const glm::vec3& yaw_pitch_roll);
+    Model& setScale(const glm::vec3& scale);
     glm::vec3 getPosition() const {return position;};
     glm::vec3 getAngles() const {return yaw_pitch_roll;};
     glm::vec3 getScale() const {return size;};
-    void setName(const std::string& name) {this->name = name;};
+    Model& setName(const std::string& name) {this->name = name; return *this;};
     std::string getName() const {return name;};
 
     virtual Model* copy() const = 0;
@@ -126,8 +126,8 @@ class ObjModel : public Model{
         void generateMesh(GLfloat* vertices_data, GLsizeiptr vertices_count, GLuint* indices, GLsizeiptr indices_count);
         
     public:
-    void setModel(const std::string& modeldir);
-    void loadFile(const std::string& file);
+    ObjModel& setModel(const std::string& modeldir);
+    ObjModel& loadFile(const std::string& file);
 
     ObjModel();
     ObjModel(const std::string& filedir);
@@ -201,8 +201,8 @@ public:
     GroupModel(const std::vector<Model*>& models);
     GroupModel(const GroupModel& _that);
 
-    virtual void addModel(Model* model);
-    virtual void addCopy(const Model* const model);
+    virtual GroupModel& addModel(Model* model);
+    virtual GroupModel& addCopy(const Model* const model);
     // virtual void render(Renderer& renderer, RenderFunc(render_func) = Renderer::renderModel) override;
     virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_OVERRIDDEN ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) const override;
     virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) const override;
