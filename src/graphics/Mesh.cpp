@@ -21,7 +21,7 @@ std::string extractFileName(const std::string& filedir) {
 	return filedir.substr(start, end);
 }
 
-void Model::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform){
+void Model::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform) const{
 	//Default thing to do when calling render
 	switch(renderformat){
 		case PL_MESH:
@@ -95,7 +95,7 @@ void Model::setTexture(const std::string& texture_dir){
     texture.generate(texture_dir, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
-void ObjModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void ObjModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode) const{
 	if(render_mode == -1){
 		render_mode = PL_TO_GL(this->render_pipeline);
 	}
@@ -265,12 +265,12 @@ void ObjModel::loadFile(const std::string& file){
 // Transforms
 //
 
-mat4 Model::getFullTransformation()
+mat4 Model::getFullTransformation() const
 {
 	return _world_transform * _model_transform;
 }
 
-mat4 Model::getFullNormalTransformation()
+mat4 Model::getFullNormalTransformation() const
 {
 	return _world_normal_transform * _model_normal_transform;
 }
@@ -423,7 +423,7 @@ void GroupModel::addCopy(const Model* const model){
 	models.push_back(new_model);
 }
 
-void GroupModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode){
+void GroupModel::_render(Renderer& renderer, RenderFunc(renderer_func), const glm::mat4& model_transform, const glm::mat4& normal_transform, GLuint render_mode) const{
 	if(render_mode == -1){
 		render_mode = PL_TO_GL(this->render_pipeline);
 	}
@@ -432,7 +432,7 @@ void GroupModel::_render(Renderer& renderer, RenderFunc(renderer_func), const gl
 	}
 }
 
-void GroupModel::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform){
+void GroupModel::doRenderPipeline(Renderer& renderer, RenderPipeline renderformat ,const glm::mat4& model_transform, const glm::mat4& normal_transform) const{
 	if(renderformat == PL_OVERRIDDEN){
 		renderformat = this->render_pipeline;
 	}
@@ -465,7 +465,7 @@ GroupModel* demoFoxHat(){
 //  GUI
 // - - - - 
 
-void Model::buildGUI(){
+void Model::buildGUI() {
 	//Update position without friend class
 
 	if(ImGui::DragFloat3("Position", glm::value_ptr(position), 0.001f, -100.0f, 100.0f)){
@@ -497,7 +497,7 @@ void Model::buildGUI(){
 	}
 }
 
-void ObjModel::buildGUI(){
+void ObjModel::buildGUI() {
 	Model::buildGUI();
 	ImGui::Separator();
 

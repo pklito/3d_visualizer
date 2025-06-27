@@ -89,25 +89,25 @@ public:
     
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) = 0;
     //applies transforms on the render, changes the set render_mode
-    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_OVERRIDDEN ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1));
+    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_OVERRIDDEN ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) const;
     virtual void _render(Renderer& renderer, RenderFunc(render_func) = &Renderer::renderModel,
-                        const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) = 0;
+                        const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) const = 0;
 
     virtual void destroy();
 
-    glm::mat4 getFullTransformation();
-    glm::mat4 getFullNormalTransformation();
+    glm::mat4 getFullTransformation() const;
+    glm::mat4 getFullNormalTransformation() const;
 
-    glm::vec4 getColor() {return color;};
+    glm::vec4 getColor() const {return color;};
     void setColor(const glm::vec4& color) {this->color = color;};
 
     void setPosition(const glm::vec3& position);
     void setAngles(const glm::vec3& orientation);
     void setAnglesDegrees(const glm::vec3& yaw_pitch_roll);
     void setScale(const glm::vec3& scale);
-    glm::vec3 getPosition() {return position;};
-    glm::vec3 getAngles() {return yaw_pitch_roll;};
-    glm::vec3 getScale() {return size;};
+    glm::vec3 getPosition() const {return position;};
+    glm::vec3 getAngles() const {return yaw_pitch_roll;};
+    glm::vec3 getScale() const {return size;};
     void setName(const std::string& name) {this->name = name;};
     std::string getName() const {return name;};
 
@@ -136,7 +136,7 @@ class ObjModel : public Model{
     // virtual void render(Renderer& renderer, RenderFunc(renderer_func) = Renderer::renderModel) override;
     //applies transforms on the render, changes the set render_mode
     //virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_TRIANGLES ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) override;
-    virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
+    virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) const override;
 
     
     virtual void buildGUI() override;
@@ -204,8 +204,8 @@ public:
     virtual void addModel(Model* model);
     virtual void addCopy(const Model* const model);
     // virtual void render(Renderer& renderer, RenderFunc(render_func) = Renderer::renderModel) override;
-    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_OVERRIDDEN ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) override;
-    virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override;
+    virtual void doRenderPipeline(Renderer& renderer, RenderPipeline renderformat = PL_OVERRIDDEN ,const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1)) const override;
+    virtual void _render(Renderer& renderer, RenderFunc(renderer_func) = &Renderer::renderModel, const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) const override;
     //virtual void buildGUI() override;
 
     virtual void destroy() override;
@@ -224,6 +224,6 @@ class EmptyModel : public Model {
 public:
     EmptyModel() {};
     void _render(Renderer& renderer, RenderFunc(render_func) = &Renderer::renderModel,
-                        const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) override {};
+                        const glm::mat4& model_transform = glm::mat4(1), const glm::mat4& normal_transform = glm::mat4(1), GLuint render_mode = -1) const override {};
     virtual Model* copy() const override {return new EmptyModel();};
 };
