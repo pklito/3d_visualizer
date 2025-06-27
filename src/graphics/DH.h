@@ -69,6 +69,13 @@ public:
 };
 
 class Spider : public ConfigableGroupModel{
+private:
+    SpiderLeg* fr;
+    SpiderLeg* fl;
+    SpiderLeg* mr;
+    SpiderLeg* ml;
+    SpiderLeg* br;
+    SpiderLeg* bl;
 public:
     Spider(float body_radius = 0.15f, float hip_x = 0.05f, float hip_y = -0.01f, float thigh = 0.1f, float shin = 0.1f);
     Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x = 0.05f, float hip_y = -0.01f, float thigh = 0.1f, float shin = 0.1f);

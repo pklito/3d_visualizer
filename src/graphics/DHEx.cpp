@@ -120,6 +120,14 @@ Spider::Spider(float body_radius, float hip_x , float hip_y , float thigh , floa
             leg->setLegLengths(hip_x, hip_y, thigh, shin);
         }
     }) {
+        
+    fr = dynamic_cast<SpiderLeg*>(models[0]);
+    mr = dynamic_cast<SpiderLeg*>(models[1]);
+    br = dynamic_cast<SpiderLeg*>(models[2]);
+    bl = dynamic_cast<SpiderLeg*>(models[3]);
+    ml = dynamic_cast<SpiderLeg*>(models[4]);
+    fl = dynamic_cast<SpiderLeg*>(models[5]);
+
         updateModels();
         setName("Spider");
     }
@@ -131,6 +139,8 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
     new SpiderLeg(glm::vec2(-0.5 * body_rect.x, 0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
     new SpiderLeg(glm::vec2(-0.5 * body_rect.x - center_leg_offsets, 0), hip_x, hip_y, thigh, shin),
     new SpiderLeg(glm::vec2(-0.5 * body_rect.x, -0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
+    new Primitive(PRIM_CUBE),
+    new Primitive(PRIM_CUBE),
     new Primitive(PRIM_CUBE)
 
 }, {
@@ -140,6 +150,8 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
     NEW_CONFIG(float, "hip_y", hip_y),
     NEW_CONFIG(float, "thigh length", thigh),
     NEW_CONFIG(float, "shin length", shin)
+
+    
 }, [](std::vector<Model*>& models, std::map<std::string, ConfigVariableBase*>& params) {
     
 
@@ -170,11 +182,24 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
     }
 
     Model* body = models[6];
+    Model* left_body = models[7];
+    Model* right_body = models[8];
+
     float a = dimensions[0] * 0.9;
     float b = dimensions[1] * 0.9;
     float c = min(dimensions[0], dimensions[1]) * 0.5f;
     body->setScale(glm::vec3(b, c , a));
+    left_body->setPosition(glm::vec3(a*0.5f, 0,0));
+    
 }) {
+    //assign legs i might use them later
+    fr = dynamic_cast<SpiderLeg*>(models[0]);
+    mr = dynamic_cast<SpiderLeg*>(models[1]);
+    br = dynamic_cast<SpiderLeg*>(models[2]);
+    fl = dynamic_cast<SpiderLeg*>(models[3]);
+    ml = dynamic_cast<SpiderLeg*>(models[4]);
+    bl = dynamic_cast<SpiderLeg*>(models[5]);
+    
     updateModels();
     setName("Spider");
 }
