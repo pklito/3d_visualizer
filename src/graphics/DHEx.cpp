@@ -139,9 +139,9 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
     new SpiderLeg(glm::vec2(-0.5 * body_rect.x, 0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
     new SpiderLeg(glm::vec2(-0.5 * body_rect.x - center_leg_offsets, 0), hip_x, hip_y, thigh, shin),
     new SpiderLeg(glm::vec2(-0.5 * body_rect.x, -0.5 * body_rect.y), hip_x, hip_y, thigh, shin),
-    new Primitive(PRIM_CUBE),
-    new Primitive(PRIM_CUBE),
-    new Primitive(PRIM_CUBE)
+    &(new Primitive(PRIM_CUBE))->setName("Body"),
+    (new GroupModel({&((new Primitive(PRIM_CUBE))->setAnglesDegrees(glm::vec3(45,0,0)))})),
+    (new GroupModel({&((new Primitive(PRIM_CUBE))->setAnglesDegrees(glm::vec3(45,0,0)))}))
 
 }, {
     NEW_CONFIG(glm::vec2, "body dimensions", body_rect),
@@ -189,7 +189,11 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
     float b = dimensions[1] * 0.9;
     float c = min(dimensions[0], dimensions[1]) * 0.5f;
     body->setScale(glm::vec3(b, c , a));
-    left_body->setPosition(glm::vec3(a*0.5f, 0,0));
+    left_body->setPosition(glm::vec3(0, 0, -a*0.5f));
+    left_body->setScale(glm::vec3(a,c,center_body_offset));
+    right_body->setPosition(glm::vec3(0, 0, a*0.5f));
+    right_body->setScale(glm::vec3(a,c,center_body_offset));
+
     
 }) {
     //assign legs i might use them later
@@ -199,7 +203,7 @@ Spider::Spider(const glm::vec2& body_rect, float center_leg_offsets, float hip_x
     fl = dynamic_cast<SpiderLeg*>(models[3]);
     ml = dynamic_cast<SpiderLeg*>(models[4]);
     bl = dynamic_cast<SpiderLeg*>(models[5]);
-    
+
     updateModels();
     setName("Spider");
 }
